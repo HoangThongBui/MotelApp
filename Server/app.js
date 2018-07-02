@@ -37,6 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //Route Implementation
+const AdminPageRoute = require('./APIs/routes/AdminHomepageRoute')
+AdminPageRoute(app)
 
 
 // catch 404 and forward to error handler
