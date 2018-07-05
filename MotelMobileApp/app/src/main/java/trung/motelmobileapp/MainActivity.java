@@ -3,6 +3,8 @@ package trung.motelmobileapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import trung.motelmobileapp.MyTools.Constant;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
