@@ -5,6 +5,7 @@ const RoomSchema = new mongoose.Schema({
     address: String,
     city: String,
     district: String,
+    ward: String,
     price: Number,
     description: String
 })
