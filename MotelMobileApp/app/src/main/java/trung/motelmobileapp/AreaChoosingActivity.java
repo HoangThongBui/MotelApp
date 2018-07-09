@@ -16,7 +16,7 @@ public class AreaChoosingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_area_choosing);
         spnCity = findViewById(R.id.spnCity);
-        final String[] cities = {"TP. Hồ Chí Minh", "Hà Nội"};
+        final String[] cities = {"TPHCM", "Hà Nội"};
         ArrayAdapter<String> spnAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, cities);
         spnCity.setAdapter(spnAdapter);
     }

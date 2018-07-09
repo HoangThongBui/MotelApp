@@ -2,18 +2,19 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    email: String,
+    fname: String,
+    lname: String,
+    email: {
+        type: String,
+        unique: true
+    },
     password: String,
     phone: String,
     status: {
         type: Boolean,
         default: true
     },
-    facebook: {
-        id: String,
-        name: String,
-        image: String
-    }
+    facebook: String
 }, {
     collection: 'users',
     max: 1000

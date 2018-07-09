@@ -11,9 +11,8 @@ exports.get_posts_by_city = async function (req, res) {
         for (var i = 0; i < postsOfCity.length; i++) {
             postsOfCity[i].user_id = await User.findById(postsOfCity[i].user_id);
         }
-        return res.send(postsOfCity);
+        return res.json(postsOfCity);
     } catch (error) {
-        console.log(error);
         res.send(error)
     }
 
