@@ -20,7 +20,7 @@ app.set("view engine", "ejs");
 
 //Database connection
 try {
-  mongoose.connect("mongodb://localhost:27017/hosteldb");
+  mongoose.connect("mongodb://localhost:27017/hoteldb");
 } catch (error) {
   console.log(error);
 }
@@ -34,6 +34,8 @@ app.use(express.static(path.join(__dirname, "public")));
 //Route Implementation
 const AdminPageRoute = require("./APIs/routes/AdminHomepageRoute");
 AdminPageRoute(app);
+const PostRoute = require("./APIs/routes/PostRoute");
+PostRoute(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
