@@ -11,6 +11,9 @@ const CommentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     }
+}, {
+    collection: 'comments',
+    max: 1000
 })
 
 module.exports = mongoose.model('Comment', CommentSchema)

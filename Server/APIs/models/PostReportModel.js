@@ -11,6 +11,9 @@ const PostReportSchema = new mongoose.Schema({
     default: Date.now()
   },
   report_status: Boolean
+}, {
+  collection: 'reports',
+  max: 1000
 });
 
 module.exports = mongoose.model("PostReport", PostReportSchema);

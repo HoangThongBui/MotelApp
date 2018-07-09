@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
         name: String,
         image: String
     }
+}, {
+    collection: 'users',
+    max: 1000
 })
 
 module.exports = mongoose.model('User', UserSchema)

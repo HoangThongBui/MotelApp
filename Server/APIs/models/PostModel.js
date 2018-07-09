@@ -7,10 +7,12 @@ const PostSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    room_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room'
-    },
+    address: String,
+    city: String,
+    district: String,
+    ward: String,
+    price: Number,
+    detail: String,
     status:{
         type: Boolean,
         default: false
@@ -19,6 +21,9 @@ const PostSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     }
+}, {
+    collection: 'posts',
+    max: 1000
 })
 
 module.exports = mongoose.model('Post', PostSchema)

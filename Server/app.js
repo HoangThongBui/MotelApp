@@ -9,7 +9,6 @@ var app = express();
 
 //Model implementation
 const User = require("./APIs/models/UserModel"),
-  Room = require("./APIs/models/RoomModel"),
   Post = require("./APIs/models/PostModel"),
   PostReport = require("./APIs/models/PostReportModel"),
   Comment = require("./APIs/models/CommentModel");
