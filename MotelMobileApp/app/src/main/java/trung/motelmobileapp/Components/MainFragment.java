@@ -62,8 +62,9 @@ public class MainFragment extends Fragment {
                                         posts.add(new PostDTO(
                                                 result.get(i).getAsJsonObject().get("_id").getAsString(),
                                                 result.get(i).getAsJsonObject().get("title").getAsString(),
-                                                new UserDTO(result.get(i).getAsJsonObject().get("user_id").getAsJsonObject().get("fname").getAsString() + " " +
-                                                        result.get(i).getAsJsonObject().get("user_id").getAsJsonObject().get("lname").getAsString()),
+                                                new UserDTO(result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("fname").getAsString() + " " +
+                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("lname").getAsString(),
+                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString()),
                                                 result.get(i).getAsJsonObject().get("address").getAsString(),
                                                 result.get(i).getAsJsonObject().get("city").getAsString(),
                                                 result.get(i).getAsJsonObject().get("district").getAsString(),
@@ -76,7 +77,7 @@ public class MainFragment extends Fragment {
 
                                     //render view
                                     mainRecyclerView = mainLayout.findViewById(R.id.rvMain);
-                                    MainFragmentRecyclerViewAdapter mrvAdapter = new MainFragmentRecyclerViewAdapter(posts);
+                                    GeneralPostRecyclerViewAdapter mrvAdapter = new GeneralPostRecyclerViewAdapter(posts);
                                     LinearLayoutManager llm = new LinearLayoutManager(getContext());
                                     llm.setOrientation(LinearLayoutManager.VERTICAL);
                                     mainRecyclerView.setLayoutManager(llm);

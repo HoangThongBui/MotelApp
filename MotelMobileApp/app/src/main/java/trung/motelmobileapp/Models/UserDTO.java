@@ -8,13 +8,13 @@ public class UserDTO implements Serializable{
     private String name;
     private String phone;
 
-    public UserDTO(String name) {
-        this.name = name;
-    }
-
     public UserDTO(String name, String phone) {
         this.name = name;
         this.phone = phone;
+    }
+
+    public UserDTO(String name) {
+        this.name = name;
     }
 
     public UserDTO(String id, String name, String phone) {

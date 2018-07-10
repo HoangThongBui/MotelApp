@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 var app = express();
 
 //Model implementation
-const User = require("./APIs/models/UserModel"),
+const 
+  User = require("./APIs/models/UserModel"),
   Post = require("./APIs/models/PostModel"),
   PostReport = require("./APIs/models/PostReportModel"),
   Comment = require("./APIs/models/CommentModel");
@@ -25,6 +26,7 @@ try {
   console.log(error);
 }
 
+//middlewares implementation
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,6 +38,8 @@ const AdminPageRoute = require("./APIs/routes/AdminHomepageRoute");
 AdminPageRoute(app);
 const PostRoute = require("./APIs/routes/PostRoute");
 PostRoute(app);
+const CommentRoute = require('./APIs/routes/CommentRoute');
+CommentRoute(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

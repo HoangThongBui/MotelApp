@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import trung.motelmobileapp.Models.PostDTO;
 import trung.motelmobileapp.R;
 
-public class MainFragmentRecyclerViewAdapter extends RecyclerView.Adapter<MainFragmentRecyclerViewAdapter.RecyclerViewHolder> {
+public class GeneralPostRecyclerViewAdapter extends RecyclerView.Adapter<GeneralPostRecyclerViewAdapter.RecyclerViewHolder> {
 
     private ArrayList<PostDTO> data = new ArrayList<>();
     private ItemClickListener<PostDTO> itemClickListener;
 
 
-    public MainFragmentRecyclerViewAdapter(ArrayList<PostDTO> data) {
+    public GeneralPostRecyclerViewAdapter(ArrayList<PostDTO> data) {
         this.data = data;
     }
 
@@ -31,12 +31,12 @@ public class MainFragmentRecyclerViewAdapter extends RecyclerView.Adapter<MainFr
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.main_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.general_post_item, parent, false);
         return new RecyclerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
         holder.txtTitle.setText(data.get(position).getTitle());
         String address =
                 data.get(position).getAddress() + ", Phường " +
@@ -48,7 +48,7 @@ public class MainFragmentRecyclerViewAdapter extends RecyclerView.Adapter<MainFr
             @Override
             public void onClick(View view) {
                 if (itemClickListener != null){
-                    itemClickListener.onClick(data.get(position));
+                    itemClickListener.onClick(data.get(holder.getAdapterPosition()));
                 }
             }
         });
