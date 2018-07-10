@@ -92,17 +92,40 @@ public class UnauthorizedProfileFragment extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isValidated(edtEmail.getText().toString(), edtPassword.getText().toString())){
+                String email = edtEmail.getText().toString();
+                String password = edtPassword.getText().toString();
+                if (isValidated(email, password)){
                     //Login API
-//                    Ion.with(getContext())
-//                       .load("", "")
-//                       .asString()
-//                       .setCallback(new FutureCallback<String>() {
-//                           @Override
-//                           public void onCompleted(Exception e, String result) {
-//
-//                           }
-//                       });
+                    Ion.with(getContext())
+                       .load("POST", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
+                                                    "/user/api/login/")
+                       .setBodyParameter("email", email)
+                       .setBodyParameter("password", password)
+                       .asString()
+                       .setCallback(new FutureCallback<String>() {
+                           @Override
+                           public void onCompleted(Exception e, String result) {
+                                if (e != null) {
+                                    Toast.makeText(getContext(), "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    switch (result){
+                                        case "No account!":
+                                            Toast.makeText(getContext(), "Tài khoản của bạn không tồn tại!", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case "Wrong password!":
+                                            Toast.makeText(getContext(), "Thông tin đăng nhập sai!", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        default:
+                                            Toast.makeText(getContext(), "Đăng nhập thành công!", Toast.LENGTH_LONG).show();
+                                            mySession.edit().putString("user_id", result).apply();
+                                            tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
+                                            tabAdapter.notifyDataSetChanged();
+                                            break;
+                                    }
+                                }
+                           }
+                       });
                 }
                 else {
                     Toast.makeText(getContext(),"Yêu cầu email phải đúng định dạng, password không được để trống!", Toast.LENGTH_SHORT).show();
