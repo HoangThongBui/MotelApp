@@ -42,4 +42,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         viewPager.setCurrentItem(1);
     }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing
+    }
 }

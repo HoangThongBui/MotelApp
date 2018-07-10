@@ -41,11 +41,16 @@ public class MainFragment extends Fragment {
         final LinearLayout mainLayout = (LinearLayout) inflater.inflate(R.layout.fragment_main, container, false);
         final ImageView loadingGif = mainLayout.findViewById(R.id.loadingGif);
         final TextView serverResult = mainLayout.findViewById(R.id.serverResult);
+        final LinearLayout mainGreeting = mainLayout.findViewById(R.id.main_greeting);
+        mainGreeting.setVisibility(View.GONE);
+        TextView mainGreetingCity = mainLayout.findViewById(R.id.main_greeting_city);
         Glide.with(getContext()).load(R.drawable.loading).into(loadingGif);
         try {
-            String city = getArguments().getString("City");
+            final String city = getArguments().getString("City");
+            mainGreetingCity.setText(city);
             Ion.with(getContext())
-                    .load("GET", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT + "/post/api/get_posts_by_city/" + city)
+                    .load("GET", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT + "/post/api/get_posts_by_city/")
+                    .setBodyParameter("city", city)
                     .asJsonArray()
                     .setCallback(new FutureCallback<JsonArray>() {
                         //get reponse json and render the result to view
@@ -54,44 +59,53 @@ public class MainFragment extends Fragment {
                             try {
                                 if (e != null) {
                                     e.printStackTrace();
-                                    serverResult.setText("Server connection error!");
+                                    serverResult.setText("Error while getting data!");
                                 } else {
-                                    //get data from json and put to arraylist
-                                    ArrayList<PostDTO> posts = new ArrayList<>();
-                                    for (int i = 0; i < result.size(); i++) {
-                                        posts.add(new PostDTO(
-                                                result.get(i).getAsJsonObject().get("_id").getAsString(),
-                                                result.get(i).getAsJsonObject().get("title").getAsString(),
-                                                new UserDTO(result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("fname").getAsString() + " " +
-                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("lname").getAsString(),
-                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString()),
-                                                result.get(i).getAsJsonObject().get("address").getAsString(),
-                                                result.get(i).getAsJsonObject().get("city").getAsString(),
-                                                result.get(i).getAsJsonObject().get("district").getAsString(),
-                                                result.get(i).getAsJsonObject().get("ward").getAsString(),
-                                                result.get(i).getAsJsonObject().get("price").getAsInt(),
-                                                result.get(i).getAsJsonObject().get("detail").getAsString(),
-                                                DateConverter.formattedDate(result.get(i).getAsJsonObject().get("request_date").getAsString())
-                                        ));
+                                    if (result.size() == 0){
+                                        String res = "Chưa có nhà trọ nào được đăng ở " + city + "." +
+                                                "\nĐến mục tìm kiếm để tìm nhà trọ ở những thành phố khác";
+                                        serverResult.setText(res);
                                     }
+                                    else {
+                                        mainGreeting.setVisibility(View.VISIBLE);
+                                        //get data from json and put to arraylist
+                                        ArrayList<PostDTO> posts = new ArrayList<>();
+                                        for (int i = 0; i < result.size(); i++) {
+                                            posts.add(new PostDTO(
+                                                    result.get(i).getAsJsonObject().get("_id").getAsString(),
+                                                    result.get(i).getAsJsonObject().get("title").getAsString(),
+                                                    new UserDTO(result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("fname").getAsString() + " " +
+                                                            result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("lname").getAsString(),
+                                                            result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString()),
+                                                    result.get(i).getAsJsonObject().get("address").getAsString(),
+                                                    result.get(i).getAsJsonObject().get("city").getAsString(),
+                                                    result.get(i).getAsJsonObject().get("district").getAsString(),
+                                                    result.get(i).getAsJsonObject().get("ward").getAsString(),
+                                                    result.get(i).getAsJsonObject().get("price").getAsInt(),
+                                                    result.get(i).getAsJsonObject().get("detail").getAsString(),
+                                                    DateConverter.formattedDate(result.get(i).getAsJsonObject().get("request_date").getAsString())
+                                            ));
 
-                                    //render view
-                                    mainRecyclerView = mainLayout.findViewById(R.id.rvMain);
-                                    GeneralPostRecyclerViewAdapter mrvAdapter = new GeneralPostRecyclerViewAdapter(posts);
-                                    LinearLayoutManager llm = new LinearLayoutManager(getContext());
-                                    llm.setOrientation(LinearLayoutManager.VERTICAL);
-                                    mainRecyclerView.setLayoutManager(llm);
-                                    mainRecyclerView.setAdapter(mrvAdapter);
-
-                                    //set item listener
-                                    mrvAdapter.setItemClickListener(new ItemClickListener<PostDTO>() {
-                                        @Override
-                                        public void onClick(PostDTO item) {
-                                            Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                                            intent.putExtra("Post", item);
-                                            startActivity(intent);
                                         }
-                                    });
+
+                                        //render view
+                                        mainRecyclerView = mainLayout.findViewById(R.id.rvMain);
+                                        GeneralPostRecyclerViewAdapter mrvAdapter = new GeneralPostRecyclerViewAdapter(posts);
+                                        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+                                        llm.setOrientation(LinearLayoutManager.VERTICAL);
+                                        mainRecyclerView.setLayoutManager(llm);
+                                        mainRecyclerView.setAdapter(mrvAdapter);
+
+                                        //set item listener
+                                        mrvAdapter.setItemClickListener(new ItemClickListener<PostDTO>() {
+                                            @Override
+                                            public void onClick(PostDTO item) {
+                                                Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+                                                intent.putExtra("Post", item);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
                                 }
                             } catch (Exception ex) {
                                 serverResult.setText(ex.toString());
