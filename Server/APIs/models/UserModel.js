@@ -14,7 +14,8 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    facebook: String
+    facebook: String,
+    role: String
 }, {
     collection: 'users',
     max: 1000

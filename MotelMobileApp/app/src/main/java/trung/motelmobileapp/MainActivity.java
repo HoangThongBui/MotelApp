@@ -1,5 +1,6 @@
 package trung.motelmobileapp;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +10,15 @@ import trung.motelmobileapp.Components.MainFragment;
 import trung.motelmobileapp.Components.ProfileFragment;
 import trung.motelmobileapp.Components.SearchFragment;
 import trung.motelmobileapp.Components.TabAdapter;
+import trung.motelmobileapp.Components.UnauthorizedProfileFragment;
+import trung.motelmobileapp.MyTools.Constant;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    TabAdapter tabAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,21 +27,28 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
-    private void init(){
+    private void init() {
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.account));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.home));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.magnifier));
-        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
-        tabAdapter.addFragment(new ProfileFragment(), "");
+        tabAdapter = new TabAdapter(getSupportFragmentManager());
+
+        tabAdapter.addFragment(new UnauthorizedProfileFragment(), "");
+        //Main tab
         MainFragment mainFragment = new MainFragment();
         Bundle cityInfo = new Bundle();
         cityInfo.putString("City", getIntent().getStringExtra("City"));
         mainFragment.setArguments(cityInfo);
         tabAdapter.addFragment(mainFragment, "");
+
+        //Search tab
         tabAdapter.addFragment(new SearchFragment(), "");
+
+        //viewpager setup
         viewPager.setAdapter(tabAdapter);
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         viewPager.setCurrentItem(1);

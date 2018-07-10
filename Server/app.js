@@ -40,6 +40,8 @@ const PostRoute = require("./APIs/routes/PostRoute");
 PostRoute(app);
 const CommentRoute = require('./APIs/routes/CommentRoute');
 CommentRoute(app);
+const UserRoute = require("./APIs/routes/UserRoute");
+UserRoute(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

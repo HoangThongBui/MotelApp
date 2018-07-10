@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="trung.motelmobileapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +21,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".AreaChoosingActivity" />
         <activity android:name=".PostDetailActivity" />
-        <activity android:name=".ErrorActivity"></activity>
+        <activity android:name=".ErrorActivity" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

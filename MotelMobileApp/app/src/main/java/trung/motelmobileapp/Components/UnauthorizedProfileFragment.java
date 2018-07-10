@@ -1,0 +1,119 @@
+package trung.motelmobileapp.Components;
+
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import trung.motelmobileapp.MyTools.Constant;
+import trung.motelmobileapp.R;
+import trung.motelmobileapp.RegisterActivity;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class UnauthorizedProfileFragment extends Fragment {
+
+    LinearLayout layout;
+    ViewPager viewPager;
+    TabAdapter tabAdapter;
+    SharedPreferences mySession;
+    String userId;
+    EditText edtEmail, edtPassword;
+    TextView registerLink;
+    Button btnLogin;
+
+    public UnauthorizedProfileFragment() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        layout = (LinearLayout) inflater.inflate(R.layout.fragment_unauthorized_profile, container, false);
+        edtEmail = layout.findViewById(R.id.txtEmail);
+        edtPassword = layout.findViewById(R.id.txtPassword);
+        btnLogin = layout.findViewById(R.id.btnLogin);
+        registerLink = layout.findViewById(R.id.registerLink);
+        viewPager = getActivity().findViewById(R.id.view_pager);
+        tabAdapter = (TabAdapter) viewPager.getAdapter();
+        mySession = getActivity().getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
+        if (mySession.contains("user_id")) {
+            userId = mySession.getString("user_id", "");
+            Ion.with(getContext())
+                    .load("GET", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
+                            "/user/api/check_user_status/" + userId)
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            if (e != null) {
+                                e.printStackTrace();
+                            } else {
+                                switch (result) {
+                                    case "User is active!":
+                                        tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
+                                        tabAdapter.notifyDataSetChanged();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    });
+        }
+
+        //set login and register event
+        registerLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), RegisterActivity.class));
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isValidated(edtEmail.getText().toString(), edtPassword.getText().toString())){
+                    //Login API
+//                    Ion.with(getContext())
+//                       .load("", "")
+//                       .asString()
+//                       .setCallback(new FutureCallback<String>() {
+//                           @Override
+//                           public void onCompleted(Exception e, String result) {
+//
+//                           }
+//                       });
+                }
+                else {
+                    Toast.makeText(getContext(),"Yêu cầu email phải đúng định dạng, password không được để trống!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        return layout;
+    }
+
+    private Boolean isValidated(String email, String password){
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches() && !password.isEmpty();
+    }
+
+}
