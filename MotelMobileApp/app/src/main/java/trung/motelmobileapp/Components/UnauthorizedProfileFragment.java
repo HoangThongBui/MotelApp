@@ -80,6 +80,9 @@ public class UnauthorizedProfileFragment extends Fragment {
                                         tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
                                         tabAdapter.notifyDataSetChanged();
                                         break;
+                                    case "User is banned!":
+                                        mySession.edit().clear().apply();
+                                        break;
                                     default:
                                         break;
                                 }
@@ -126,6 +129,9 @@ public class UnauthorizedProfileFragment extends Fragment {
                                     switch (result){
                                         case "No account!":
                                             Toast.makeText(getContext(), "Tài khoản của bạn không tồn tại!", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case "User is banned!":
+                                            Toast.makeText(getContext(), "Tài khoản của bạn đã bị khoá!", Toast.LENGTH_SHORT).show();
                                             break;
                                         case "Wrong password!":
                                             Toast.makeText(getContext(), "Thông tin đăng nhập sai!", Toast.LENGTH_SHORT).show();

@@ -26,6 +26,9 @@ exports.user_login = async function (req, res) {
         var password = req.body.password;
         var user = await User.findOne({ email });
         if (user){
+            if (!user.status){
+                res.send("User is banned!");
+            }
             if (password === user.password){
                 res.send(user._id.toString());
             }

@@ -9,11 +9,11 @@ var app = express();
 
 //Model implementation
 const
-  Room = require("./APIs/models/RoomModel"),
-  User = require("./APIs/models/UserModel"),
-  Post = require("./APIs/models/PostModel"),
-  PostReport = require("./APIs/models/PostReportModel"),
-  Comment = require("./APIs/models/CommentModel");
+  Room = require("./models/RoomModel"),
+  User = require("./models/UserModel"),
+  Post = require("./models/PostModel"),
+  PostReport = require("./models/PostReportModel"),
+  Comment = require("./models/CommentModel");
 
 // view engine setup (for web admin)
 app.set("views", [path.join(__dirname, "webadmin"),
@@ -35,7 +35,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 //Route Implementation
-const AdminPageRoute = require("./APIs/routes/AdminHomepageRoute");
+const AdminPageRoute = require("./WebAdminMVC/routes/AdminHomepageRoute");
 AdminPageRoute(app);
 const PostRoute = require("./APIs/routes/PostRoute");
 PostRoute(app);
