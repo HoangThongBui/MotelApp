@@ -11,4 +11,7 @@ module.exports = function(app){
 
     app.route('/user/api/register')
         .post(UserController.user_register);
+
+    app.route('/user/api/get_user_by_id/:id')
+        .get(UserController.get_user_by_id);    
 }

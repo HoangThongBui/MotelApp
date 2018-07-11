@@ -89,7 +89,6 @@ public class MainFragment extends Fragment {
                                                     ),
                                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));
-
                                         }
 
                                         //render view

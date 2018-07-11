@@ -20,6 +20,7 @@ exports.check_user_status = async function (req, res) {
 }
 
 exports.user_login = async function (req, res) {
+    await waitTimeOut();
     try {
         var email = req.body.email;
         var password = req.body.password;
@@ -64,7 +65,18 @@ exports.user_register = async function(req,res){
     }
 }
 
+exports.get_user_by_id = async function (req,res){
+    try {
+        var id = req.params.id;
+        var user = await User.findById(id, {status: 0, password: 0, role: 0});
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.send("Server internal error!")
+    }
+}
+
 //server waiting simulation
 function waitTimeOut(){
-    return new Promise((res,rej)=> {setTimeout(res, 3000)});
+    return new Promise((res,rej)=> {setTimeout(res, 1000)});
 }

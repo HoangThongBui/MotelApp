@@ -56,12 +56,20 @@
                     android:id="@+id/btnLogin"
                     android:layout_gravity="center"
                     android:background="@color/motelApp"
-                    android:textColor="@color/colorGrey"
+                    android:textColor="@color/colorWhite"
                     android:layout_marginTop="20dp"
                     android:text="Đăng nhập"
                     android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/login_gif"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

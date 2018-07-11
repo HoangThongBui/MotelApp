@@ -22,7 +22,12 @@
         <activity android:name=".AreaChoosingActivity" />
         <activity android:name=".PostDetailActivity" />
         <activity android:name=".ErrorActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".EditProfileActivity" />
+        <activity
+            android:name=".UserPostActivity"
+            android:label="@string/title_activity_user_post"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

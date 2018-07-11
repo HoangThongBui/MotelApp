@@ -11,13 +11,16 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -38,6 +41,7 @@ public class UnauthorizedProfileFragment extends Fragment {
     EditText edtEmail, edtPassword;
     TextView registerLink;
     Button btnLogin;
+    ImageView loginGif;
 
     public UnauthorizedProfileFragment() {
         // Required empty public constructor
@@ -56,6 +60,9 @@ public class UnauthorizedProfileFragment extends Fragment {
         viewPager = getActivity().findViewById(R.id.view_pager);
         tabAdapter = (TabAdapter) viewPager.getAdapter();
         mySession = getActivity().getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
+        loginGif = layout.findViewById(R.id.login_gif);
+        Glide.with(getContext()).load(R.drawable.loading).into(loginGif);
+        loginGif.setVisibility(View.GONE);
         if (mySession.contains("user_id")) {
             userId = mySession.getString("user_id", "");
             Ion.with(getContext())
@@ -95,6 +102,11 @@ public class UnauthorizedProfileFragment extends Fragment {
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
                 if (isValidated(email, password)){
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
+                    loginGif.setVisibility(View.VISIBLE);
+                    btnLogin.setVisibility(View.GONE);
                     //Login API
                     Ion.with(getContext())
                        .load("POST", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
@@ -105,6 +117,8 @@ public class UnauthorizedProfileFragment extends Fragment {
                        .setCallback(new FutureCallback<String>() {
                            @Override
                            public void onCompleted(Exception e, String result) {
+                               loginGif.setVisibility(View.GONE);
+                               btnLogin.setVisibility(View.VISIBLE);
                                 if (e != null) {
                                     Toast.makeText(getContext(), "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
                                 }
