@@ -11,8 +11,15 @@ exports.get_comments = async function (req, res) {
         for (var i = 0; i < comments.length; i++) {
             comments[i].user = await User.findById(comments[i].user, {password: 0});
         }
+        //only get comments of active user
+        var activeComments = [];
+        for (var i = 0; i < comments.length; i++){
+            if (comments[i].user.status){
+                activeComments.push(comments[i]);
+            }
+        }
         // await waitTimeOut();
-        res.json(comments);
+        res.json(activeComments);
     } catch (error) {
         res.send(error)
     }

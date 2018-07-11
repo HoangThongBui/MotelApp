@@ -27,7 +27,7 @@ public class DateConverter {
 
     //format to displaying date from ISO mongodb date
     public static String formattedDate(String dateStr){
-        SimpleDateFormat format = new SimpleDateFormat("EEE dd-MMM-yyyy HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         try {
             return format.format(fromISO8601UTC(dateStr));
         } catch (Exception e){

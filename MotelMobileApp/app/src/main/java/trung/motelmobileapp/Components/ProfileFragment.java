@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), UserPostActivity.class);
-                intent.putExtra("user_id", "");
+                intent.putExtra("User", user);
                 startActivity(intent);
             }
         });

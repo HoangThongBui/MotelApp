@@ -24,7 +24,22 @@ exports.get_posts_by_city = async function (req, res) {
 
 };
 
+exports.get_posts_by_user = async function (req,res) {
+    await waitTimeOut();
+    try {
+        var user_id = req.params.user_id;
+        var posts = await Post.find({user: user_id}).sort({request_date : -1});
+        for (var i = 0; i < posts.length; i++){
+            posts[i].room = await Room.findById(posts[i].room);
+        }
+        res.json(posts);
+    } catch (error) {
+        console.log(error);
+        res.send("Server internal error!");
+    }
+}
+
 //server waiting simulation
 function waitTimeOut(){
-    return new Promise((res,rej)=> {setTimeout(res, 3000)});
+    return new Promise((res,rej)=> {setTimeout(res, 1000)});
 }
