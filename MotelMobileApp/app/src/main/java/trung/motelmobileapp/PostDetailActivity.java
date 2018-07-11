@@ -48,15 +48,15 @@ public class PostDetailActivity extends AppCompatActivity {
         username.setText(displayingUsername);
         time.setText(postDetail.getRequest_date());
         phone.setText(postDetail.getUser().getPhone());
-        String displayingPrice = postDetail.getPrice() + " VNĐ/tháng";
+        String displayingPrice = postDetail.getRoom().getPrice() + " VNĐ/tháng";
         price.setText(displayingPrice);
         String displayingAddress =
-                postDetail.getAddress() + ", P." +
-                postDetail.getWard() + ", Q." +
-                postDetail.getDistrict() + ", " +
-                postDetail.getCity();
+                postDetail.getRoom().getAddress() + ", P." +
+                postDetail.getRoom().getWard() + ", Q." +
+                postDetail.getRoom().getDistrict() + ", " +
+                postDetail.getRoom().getCity();
         address.setText(displayingAddress);
-        detail.setText(postDetail.getDetail());
+        detail.setText(postDetail.getRoom().getDetail());
 
         //loading comments from server
         loadingCommentGif = findViewById(R.id.loading_comment_gif);

@@ -20,6 +20,7 @@ import com.koushikdutta.ion.Ion;
 import java.util.ArrayList;
 
 import trung.motelmobileapp.Models.PostDTO;
+import trung.motelmobileapp.Models.RoomDTO;
 import trung.motelmobileapp.Models.UserDTO;
 import trung.motelmobileapp.MyTools.Constant;
 import trung.motelmobileapp.MyTools.DateConverter;
@@ -77,12 +78,14 @@ public class MainFragment extends Fragment {
                                                     new UserDTO(result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("fname").getAsString() + " " +
                                                             result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("lname").getAsString(),
                                                             result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString()),
-                                                    result.get(i).getAsJsonObject().get("address").getAsString(),
-                                                    result.get(i).getAsJsonObject().get("city").getAsString(),
-                                                    result.get(i).getAsJsonObject().get("district").getAsString(),
-                                                    result.get(i).getAsJsonObject().get("ward").getAsString(),
-                                                    result.get(i).getAsJsonObject().get("price").getAsInt(),
-                                                    result.get(i).getAsJsonObject().get("detail").getAsString(),
+                                                    new RoomDTO(
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("address").getAsString(),
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("city").getAsString(),
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("district").getAsString(),
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("ward").getAsString(),
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("detail").getAsString()
+                                                    ),
                                                     DateConverter.formattedDate(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));
 
@@ -108,7 +111,8 @@ public class MainFragment extends Fragment {
                                     }
                                 }
                             } catch (Exception ex) {
-                                serverResult.setText(ex.toString());
+                                ex.printStackTrace();
+                                serverResult.setText("Data error!");
                             }
                             loadingGif.setVisibility(View.GONE); // hide loading gif
                         }

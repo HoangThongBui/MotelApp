@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 var app = express();
 
 //Model implementation
-const 
+const
+  Room = require("./APIs/models/RoomModel"),
   User = require("./APIs/models/UserModel"),
   Post = require("./APIs/models/PostModel"),
   PostReport = require("./APIs/models/PostReportModel"),

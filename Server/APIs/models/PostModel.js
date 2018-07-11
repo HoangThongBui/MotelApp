@@ -7,12 +7,10 @@ const PostSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    address: String,
-    city: String,
-    district: String,
-    ward: String,
-    price: Number,
-    detail: String,
+    room: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room'
+    },
     status:{
         type: Boolean,
         default: false

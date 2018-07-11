@@ -6,24 +6,14 @@ public class PostDTO implements Serializable{
     private String id;
     private String title;
     private UserDTO user;
-    private String address;
-    private String city;
-    private String district;
-    private String ward;
-    private int price;
-    private String detail;
+    private RoomDTO room;
     private String request_date;
 
-    public PostDTO(String id, String title, UserDTO user, String address, String city, String district, String ward, int price, String detail, String request_date) {
+    public PostDTO(String id, String title, UserDTO user, RoomDTO room, String request_date) {
         this.id = id;
         this.title = title;
         this.user = user;
-        this.address = address;
-        this.city = city;
-        this.district = district;
-        this.ward = ward;
-        this.price = price;
-        this.detail = detail;
+        this.room = room;
         this.request_date = request_date;
     }
 
@@ -51,52 +41,12 @@ public class PostDTO implements Serializable{
         this.user = user;
     }
 
-    public String getAddress() {
-        return address;
+    public RoomDTO getRoom() {
+        return room;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getWard() {
-        return ward;
-    }
-
-    public void setWard(String ward) {
-        this.ward = ward;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setRoom(RoomDTO room) {
+        this.room = room;
     }
 
     public String getRequest_date() {
@@ -112,13 +62,8 @@ public class PostDTO implements Serializable{
         return "PostDTO{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
-                ", user=" + user.getName() +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", district='" + district + '\'' +
-                ", ward='" + ward + '\'' +
-                ", price=" + price +
-                ", detail='" + detail + '\'' +
+                ", user=" + user +
+                ", room=" + room +
                 ", request_date='" + request_date + '\'' +
                 '}';
     }

@@ -39,10 +39,10 @@ public class GeneralPostRecyclerViewAdapter extends RecyclerView.Adapter<General
     public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
         holder.txtTitle.setText(data.get(position).getTitle());
         String address =
-                data.get(position).getAddress() + ", Phường " +
-                data.get(position).getWard() + ", Quận " +
-                data.get(position).getDistrict() + ", " +
-                data.get(position).getCity();
+                data.get(position).getRoom().getAddress() + ", Phường " +
+                data.get(position).getRoom().getWard() + ", Quận " +
+                data.get(position).getRoom().getDistrict() + ", " +
+                data.get(position).getRoom().getCity();
         holder.txtAddress.setText(address);
         holder.aPostInMain.setOnClickListener(new View.OnClickListener() {
             @Override
