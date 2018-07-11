@@ -84,8 +84,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                         result.get(i).getAsJsonObject().get("_id").getAsString(),
                                         result.get(i).getAsJsonObject().get("post").getAsString(),
                                         new UserDTO(
-                                                result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("fname").getAsString() + " " +
-                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("lname").getAsString()
+                                                result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("name").getAsString()
                                         ),
                                         result.get(i).getAsJsonObject().get("detail").getAsString(),
                                         DateConverter.formattedDate(result.get(i).getAsJsonObject().get("comment_time").getAsString())

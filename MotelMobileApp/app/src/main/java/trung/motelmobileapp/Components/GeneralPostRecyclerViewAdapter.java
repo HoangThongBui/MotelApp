@@ -44,6 +44,7 @@ public class GeneralPostRecyclerViewAdapter extends RecyclerView.Adapter<General
                 data.get(position).getRoom().getDistrict() + ", " +
                 data.get(position).getRoom().getCity();
         holder.txtAddress.setText(address);
+        holder.txtTime.setText(data.get(position).getRequest_date());
         holder.aPostInMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,14 +64,15 @@ public class GeneralPostRecyclerViewAdapter extends RecyclerView.Adapter<General
 
         TextView txtTitle;
         TextView txtAddress;
+        TextView txtTime;
         LinearLayout aPostInMain;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.main_title);
             txtAddress = itemView.findViewById(R.id.main_address);
+            txtTime = itemView.findViewById(R.id.main_time);
             aPostInMain = itemView.findViewById(R.id.a_post_in_main);
-
         }
     }
 }

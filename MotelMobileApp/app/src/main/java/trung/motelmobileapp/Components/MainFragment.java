@@ -75,9 +75,10 @@ public class MainFragment extends Fragment {
                                             posts.add(new PostDTO(
                                                     result.get(i).getAsJsonObject().get("_id").getAsString(),
                                                     result.get(i).getAsJsonObject().get("title").getAsString(),
-                                                    new UserDTO(result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("fname").getAsString() + " " +
-                                                            result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("lname").getAsString(),
-                                                            result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString()),
+                                                    new UserDTO(
+                                                            result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("name").getAsString(),
+                                                            result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString()
+                                                    ),
                                                     new RoomDTO(
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("address").getAsString(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("city").getAsString(),
@@ -86,7 +87,7 @@ public class MainFragment extends Fragment {
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("detail").getAsString()
                                                     ),
-                                                    DateConverter.formattedDate(result.get(i).getAsJsonObject().get("request_date").getAsString())
+                                                    DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));
 
                                         }

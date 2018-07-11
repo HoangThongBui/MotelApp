@@ -2,8 +2,7 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    fname: String,
-    lname: String,
+    name: String,
     email: {
         type: String,
         unique: true
@@ -15,7 +14,10 @@ const UserSchema = new mongoose.Schema({
         default: true
     },
     facebook: String,
-    role: String
+    role: {
+        type: String,
+        default: "user"
+    }
 }, {
     collection: 'users',
     max: 1000

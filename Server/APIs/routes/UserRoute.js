@@ -8,4 +8,7 @@ module.exports = function(app){
 
     app.route('/user/api/login')
         .post(UserController.user_login);
+
+    app.route('/user/api/register')
+        .post(UserController.user_register);
 }
