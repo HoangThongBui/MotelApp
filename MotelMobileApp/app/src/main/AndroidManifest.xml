@@ -27,7 +27,8 @@
         <activity
             android:name=".UserPostActivity"
             android:label="@string/title_activity_user_post"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".MakeNewPostActivity"></activity>
     </application>
 
 </manifest>

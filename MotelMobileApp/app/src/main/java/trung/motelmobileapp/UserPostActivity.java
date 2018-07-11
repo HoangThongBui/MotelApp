@@ -162,4 +162,8 @@ public class UserPostActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void clickToMakeNewPost(View view) {
+        startActivity(new Intent(getApplicationContext(), MakeNewPostActivity.class));
+    }
 }

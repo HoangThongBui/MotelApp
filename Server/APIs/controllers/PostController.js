@@ -8,7 +8,6 @@ const Room = mongoose.model("Room");
 exports.get_posts_by_city = async function (req, res) {
     try {
         var city = req.body.city;
-        city = "TPHCM";
         var roomsInCity = await Room.find({city}, {_id : 1});
         var posts = await Post.find({status: true, "room" : {"$in" : roomsInCity}}, {status : 0}).sort({request_date : -1});
         for (var i = 0; i < posts.length; i++){
