@@ -7,7 +7,8 @@ const RoomSchema = new mongoose.Schema({
     district: String,
     ward: String,
     price: Number,
-    detail: String
+    area: Number,
+    description: String
 }, {
     collection: 'rooms',
     max: 1000

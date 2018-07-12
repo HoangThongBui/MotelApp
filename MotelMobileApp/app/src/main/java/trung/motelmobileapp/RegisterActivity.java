@@ -57,8 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
             btnRegister.setVisibility(View.GONE);
             registerGif.setVisibility(View.VISIBLE);
             Ion.with(getApplicationContext())
-                .load("POST", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
-                                            "/user/api/register/")
+                .load("POST", Constant.WEB_SERVER + "/user/api/register/")
                 .setBodyParameter("email", txtEmail)
                 .setBodyParameter("name", txtName)
                 .setBodyParameter("phone", txtPhone)

@@ -8,7 +8,7 @@ const PostReportSchema = new mongoose.Schema({
   },
   report_time: {
     type: Date,
-    default: Date.now()
+    default: new Date()
   },
   report_status: Boolean
 }, {

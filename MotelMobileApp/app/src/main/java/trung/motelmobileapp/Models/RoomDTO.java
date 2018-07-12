@@ -8,15 +8,46 @@ public class RoomDTO implements Serializable {
     private String district;
     private String ward;
     private int price;
-    private String detail;
+    private int area;
+    private String description;
 
-    public RoomDTO(String address, String city, String district, String ward, int price, String detail) {
+    public RoomDTO(String address, String city, String district, String ward, int price, int area, String description) {
         this.address = address;
         this.city = city;
         this.district = district;
         this.ward = ward;
         this.price = price;
-        this.detail = detail;
+        this.area = area;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "RoomDTO{" +
+                "address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
+                ", ward='" + ward + '\'' +
+                ", price=" + price +
+                ", area=" + area +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
     }
 
     public String getAddress() {
@@ -59,23 +90,4 @@ public class RoomDTO implements Serializable {
         this.price = price;
     }
 
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    @Override
-    public String toString() {
-        return "RoomDTO{" +
-                "address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", district='" + district + '\'' +
-                ", ward='" + ward + '\'' +
-                ", price=" + price +
-                ", detail='" + detail + '\'' +
-                '}';
-    }
 }

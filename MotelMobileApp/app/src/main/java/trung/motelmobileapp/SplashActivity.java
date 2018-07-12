@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Ion.with(getApplicationContext())
-                   .load("GET","http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT)
+                   .load("GET", Constant.WEB_SERVER)
                    .asString()
                    .setCallback(new FutureCallback<String>() {
                        @Override

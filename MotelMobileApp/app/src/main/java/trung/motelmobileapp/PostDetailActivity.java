@@ -24,7 +24,7 @@ import trung.motelmobileapp.MyTools.DateConverter;
 
 public class PostDetailActivity extends AppCompatActivity {
 
-    private TextView title, username, time, phone, price, address, detail;
+    private TextView title, username, time, phone, price, address, area, detail;
     private RecyclerView commentRecyclerView;
     private ImageView loadingCommentGif;
 
@@ -40,6 +40,7 @@ public class PostDetailActivity extends AppCompatActivity {
         time = findViewById(R.id.post_time);
         phone = findViewById(R.id.post_phone);
         price = findViewById(R.id.post_price);
+        area = findViewById(R.id.post_area);
         address = findViewById(R.id.post_address);
         detail = findViewById(R.id.post_detail);
 
@@ -56,14 +57,16 @@ public class PostDetailActivity extends AppCompatActivity {
                 postDetail.getRoom().getDistrict() + ", " +
                 postDetail.getRoom().getCity();
         address.setText(displayingAddress);
-        detail.setText(postDetail.getRoom().getDetail());
+        String displayingArea = postDetail.getRoom().getArea() + " m2";
+        area.setText(displayingArea);
+        detail.setText(postDetail.getRoom().getDescription());
 
         //loading comments from server
         loadingCommentGif = findViewById(R.id.loading_comment_gif);
         Glide.with(getApplicationContext()).load(R.drawable.loading).into(loadingCommentGif);
         final TextView loadingCommentResult = findViewById(R.id.loading_comment_result);
         Ion.with(getApplicationContext())
-           .load("GET","http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT + "/comment/api/get_comments/" + postDetail.getId())
+           .load("GET",Constant.WEB_SERVER + "/comment/api/get_comments/" + postDetail.getId())
            .asJsonArray()
            .setCallback(new FutureCallback<JsonArray>() {
                @Override

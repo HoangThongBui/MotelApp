@@ -1,5 +1,6 @@
 package trung.motelmobileapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 
 import trung.motelmobileapp.Components.GeneralPostRecyclerViewAdapter;
 import trung.motelmobileapp.Components.ItemClickListener;
+import trung.motelmobileapp.Components.UserPostRecyclerViewAdapter;
 import trung.motelmobileapp.Models.PostDTO;
 import trung.motelmobileapp.Models.RoomDTO;
 import trung.motelmobileapp.Models.UserDTO;
@@ -36,11 +38,8 @@ import trung.motelmobileapp.MyTools.DateConverter;
 public class UserPostActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    LinearLayout userPosts;
     ImageView userPostGif;
     UserDTO user;
-    ArrayList<PostDTO> confirmedPosts, unconfirmedPosts;
-    Button btnConfirmed,btnUnconfirmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,32 +47,25 @@ public class UserPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_post);
         user = (UserDTO) getIntent().getSerializableExtra("User");
         userPostGif = findViewById(R.id.user_posts_gif);
-        userPosts = findViewById(R.id.user_posts);
         recyclerView = findViewById(R.id.rv_user_posts);
-        btnConfirmed = findViewById(R.id.btnConfirmed);
-        btnUnconfirmed = findViewById(R.id.btnUnconfirmed);
         Glide.with(this).load(R.drawable.loading).into(userPostGif);
-        userPosts.setVisibility(View.GONE);
 
         //Load user post
         Ion.with(this)
-           .load("GET", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
-                                    "/post/api/get_posts_by_user/" + user.getId())
+           .load("GET", Constant.WEB_SERVER + "/post/api/get_posts_by_user/" + user.getId())
            .asJsonArray()
            .setCallback(new FutureCallback<JsonArray>() {
                @Override
                public void onCompleted(Exception e, JsonArray result) {
                    userPostGif.setVisibility(View.GONE);
-                   userPosts.setVisibility(View.VISIBLE);
                     if (e != null){
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        confirmedPosts = new ArrayList<>();
-                        unconfirmedPosts = new ArrayList<>();
+                        ArrayList<PostDTO> userPosts = new ArrayList<>();
                         for (int i = 0 ; i < result.size(); i++){
-                            PostDTO post = new PostDTO(
+                            userPosts.add( new PostDTO(
                                     result.get(i).getAsJsonObject().get("_id").getAsString(),
                                     result.get(i).getAsJsonObject().get("title").getAsString(),
                                     user,
@@ -83,27 +75,22 @@ public class UserPostActivity extends AppCompatActivity {
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("district").getAsString(),
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("ward").getAsString(),
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
-                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("detail").getAsString()
+                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("area").getAsInt(),
+                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString()
                                     ),
                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString()),
-                                    result.get(i).getAsJsonObject().get("status").getAsBoolean()
-                            );
-                            if (post.isConfirmed()){
-                                confirmedPosts.add(post);
-                            }
-                            else {
-                                unconfirmedPosts.add(post);
-                            }
+                                    result.get(i).getAsJsonObject().get("status").getAsString()
+                            ));
+                        }
+
+                        if(userPosts.isEmpty()){
+                            Toast.makeText(getApplicationContext(), "Bạn chưa có bài đăng nào!",Toast.LENGTH_SHORT).show();
                         }
 
                         //render 2 views
-                        btnConfirmed.setTextColor(getResources().getColor(R.color.colorWhite));
-                        btnConfirmed.setBackgroundColor(getResources().getColor(R.color.motelApp));
-                        btnUnconfirmed.setTextColor(getResources().getColor(R.color.colorBlack));
-                        btnUnconfirmed.setBackgroundColor(getResources().getColor(R.color.colorGrey));
                         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                         llm.setOrientation(LinearLayoutManager.VERTICAL);
-                        GeneralPostRecyclerViewAdapter dataAdapter = new GeneralPostRecyclerViewAdapter(confirmedPosts);
+                        UserPostRecyclerViewAdapter dataAdapter = new UserPostRecyclerViewAdapter(userPosts);
                         recyclerView.setLayoutManager(llm);
                         recyclerView.setAdapter(dataAdapter);
                         dataAdapter.setItemClickListener(new ItemClickListener<PostDTO>() {
@@ -123,47 +110,18 @@ public class UserPostActivity extends AppCompatActivity {
         finish();
     }
 
-    public void clickToLoadConfirmedPost(View view) {
-        btnConfirmed.setTextColor(getResources().getColor(R.color.colorWhite));
-        btnConfirmed.setBackgroundColor(getResources().getColor(R.color.motelApp));
-        btnUnconfirmed.setTextColor(getResources().getColor(R.color.colorBlack));
-        btnUnconfirmed.setBackgroundColor(getResources().getColor(R.color.colorGrey));
-        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        GeneralPostRecyclerViewAdapter dataAdapter = new GeneralPostRecyclerViewAdapter(confirmedPosts);
-        recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(dataAdapter);
-        dataAdapter.setItemClickListener(new ItemClickListener<PostDTO>() {
-            @Override
-            public void onClick(PostDTO item) {
-                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
-                intent.putExtra("Post", item);
-                startActivity(intent);
-            }
-        });
-    }
-
-    public void clickToLoadUnconfirmedPost(View view) {
-        btnUnconfirmed.setTextColor(getResources().getColor(R.color.colorWhite));
-        btnUnconfirmed.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-        btnConfirmed.setTextColor(getResources().getColor(R.color.colorBlack));
-        btnConfirmed.setBackgroundColor(getResources().getColor(R.color.colorGrey));
-        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        GeneralPostRecyclerViewAdapter dataAdapter = new GeneralPostRecyclerViewAdapter(unconfirmedPosts);
-        recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(dataAdapter);
-        dataAdapter.setItemClickListener(new ItemClickListener<PostDTO>() {
-            @Override
-            public void onClick(PostDTO item) {
-                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
-                intent.putExtra("Post", item);
-                startActivity(intent);
-            }
-        });
-    }
-
     public void clickToMakeNewPost(View view) {
-        startActivity(new Intent(getApplicationContext(), MakeNewPostActivity.class));
+        startActivityForResult(new Intent(getApplicationContext(), MakeNewPostActivity.class), 1);
+    }
+
+    //re-render if make new post
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1){
+            if (resultCode == Activity.RESULT_OK){
+                recreate();
+            }
+        }
     }
 }

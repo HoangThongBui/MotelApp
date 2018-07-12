@@ -50,7 +50,7 @@ public class MainFragment extends Fragment {
             final String city = getArguments().getString("City");
             mainGreetingCity.setText(city);
             Ion.with(getContext())
-                    .load("GET", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT + "/post/api/get_posts_by_city/")
+                    .load("GET", Constant.WEB_SERVER + "/post/api/get_posts_by_city/")
                     .setBodyParameter("city", city)
                     .asJsonArray()
                     .setCallback(new FutureCallback<JsonArray>() {
@@ -85,7 +85,8 @@ public class MainFragment extends Fragment {
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("district").getAsString(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("ward").getAsString(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
-                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("detail").getAsString()
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("area").getAsInt(),
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString()
                                                     ),
                                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));

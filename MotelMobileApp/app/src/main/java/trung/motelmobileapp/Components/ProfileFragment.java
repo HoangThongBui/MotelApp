@@ -57,8 +57,7 @@ public class ProfileFragment extends Fragment {
         //Get user data
         final String userId = mySession.getString("user_id", "");
         Ion.with(getContext())
-           .load("GET","http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
-                                    "/user/api/get_user_by_id/" + userId)
+           .load("GET",Constant.WEB_SERVER + "/user/api/get_user_by_id/" + userId)
            .asJsonObject()
            .setCallback(new FutureCallback<JsonObject>() {
                @Override

@@ -66,8 +66,7 @@ public class UnauthorizedProfileFragment extends Fragment {
         if (mySession.contains("user_id")) {
             userId = mySession.getString("user_id", "");
             Ion.with(getContext())
-                    .load("GET", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
-                            "/user/api/check_user_status/" + userId)
+                    .load("GET", Constant.WEB_SERVER + "/user/api/check_user_status/" + userId)
                     .asString()
                     .setCallback(new FutureCallback<String>() {
                         @Override
@@ -112,8 +111,7 @@ public class UnauthorizedProfileFragment extends Fragment {
                     btnLogin.setVisibility(View.GONE);
                     //Login API
                     Ion.with(getContext())
-                       .load("POST", "http://" + Constant.WEBSERVER_IP_ADDRESS + ":" + Constant.WEBSERVER_PORT +
-                                                    "/user/api/login/")
+                       .load("POST", Constant.WEB_SERVER + "/user/api/login/")
                        .setBodyParameter("email", email)
                        .setBodyParameter("password", password)
                        .asString()

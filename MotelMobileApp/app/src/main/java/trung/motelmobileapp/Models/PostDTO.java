@@ -8,7 +8,7 @@ public class PostDTO implements Serializable{
     private UserDTO user;
     private RoomDTO room;
     private String request_date;
-    private boolean confirmed;
+    private String status;
 
     public PostDTO(String id, String title, UserDTO user, RoomDTO room, String request_date) {
         this.id = id;
@@ -18,21 +18,21 @@ public class PostDTO implements Serializable{
         this.request_date = request_date;
     }
 
-    public PostDTO(String id, String title, UserDTO user, RoomDTO room, String request_date, boolean confirmed) {
+    public PostDTO(String id, String title, UserDTO user, RoomDTO room, String request_date, String status) {
         this.id = id;
         this.title = title;
         this.user = user;
         this.room = room;
         this.request_date = request_date;
-        this.confirmed = confirmed;
+        this.status = status;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
+    public String getStatus() {
+        return status;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getId() {

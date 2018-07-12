@@ -12,12 +12,11 @@ const PostSchema = new mongoose.Schema({
         ref: 'Room'
     },
     status:{
-        type: Boolean,
-        default: false
+        type: String,
+        default: "u"
     },
     request_date: {
-        type: Date,
-        default: Date.now()
+        type: Date
     }
 }, {
     collection: 'posts',
