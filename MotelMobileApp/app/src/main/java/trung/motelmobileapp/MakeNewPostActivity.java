@@ -20,7 +20,7 @@ import trung.motelmobileapp.MyTools.Constant;
 
 public class MakeNewPostActivity extends AppCompatActivity {
 
-    EditText edtTitle,edtAddress,edtCity,edtDistrict,edtWard,edtPrice,edtArea,edtDescription;
+    EditText edtTitle, edtAddress, edtCity, edtDistrict, edtWard, edtPrice, edtArea, edtDescription;
     Button btnAddPost;
     ImageView addingGif;
     String validationError = "";
@@ -50,130 +50,137 @@ public class MakeNewPostActivity extends AppCompatActivity {
         finish();
     }
 
-    public void clickToMakeNewPost(View view) {
-        String title = edtTitle.getText().toString().trim();
-        String address = edtAddress.getText().toString().trim();
-        String city = edtCity.getText().toString().trim();
-        String district = edtDistrict.getText().toString().trim();
-        String ward = edtWard.getText().toString().trim();
-        String price = edtPrice.getText().toString();
-        String area = edtArea.getText().toString();
-        String description = edtDescription.getText().toString();
-        String user_id = mySession.getString("user_id", "");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_ID_FOR_ADD_POST) {
+            if (resultCode == Activity.RESULT_OK) {
+                String title = edtTitle.getText().toString().trim();
+                String address = edtAddress.getText().toString().trim();
+                String city = edtCity.getText().toString().trim();
+                String district = edtDistrict.getText().toString().trim();
+                String ward = edtWard.getText().toString().trim();
+                String price = edtPrice.getText().toString();
+                String area = edtArea.getText().toString();
+                String description = edtDescription.getText().toString();
+                String user_id = mySession.getString("user_id", "");
 
-        if ((isValidated(title,address,city,district,ward,price,area,description))){
-//            Toast.makeText(getApplicationContext(), "Good!", Toast.LENGTH_LONG).show();
-            btnAddPost.setVisibility(View.GONE);
-            addingGif.setVisibility(View.VISIBLE);
-            Ion.with(getApplicationContext())
-               .load("POST", Constant.WEB_SERVER + "/post/api/make_new_post/")
-               .setBodyParameter("user_id", user_id)
-               .setBodyParameter("title", title)
-               .setBodyParameter("address", address)
-               .setBodyParameter("city", city)
-               .setBodyParameter("district", district)
-               .setBodyParameter("ward", ward)
-               .setBodyParameter("price", price)
-               .setBodyParameter("area", area)
-               .setBodyParameter("description", description)
-               .asString()
-               .setCallback(new FutureCallback<String>() {
-                   @Override
-                   public void onCompleted(Exception e, String result) {
-                       btnAddPost.setVisibility(View.VISIBLE);
-                       addingGif.setVisibility(View.GONE);
-                       if (e != null){
-                           e.printStackTrace();
-                           Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                       }
-                       else {
-                            switch (result){
-                                case "Added new post!":
-                                    Toast.makeText(getApplicationContext(), "Bạn đã đăng một " +
-                                            "nhà trọ mới! Chúng tôi sẽ liên hệ để xét duyệt trong " +
-                                            "thời gian sớm nhất.", Toast.LENGTH_LONG).show();
-                                    setResult(Activity.RESULT_OK);
-                                    finish();
-                                    break;
-                                default:
-                                    Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                                    break;
-                            }
-                       }
-                   }
-               });
-        }
-        else {
-            Toast.makeText(getApplicationContext(), validationError, Toast.LENGTH_LONG).show();
-            validationError = "";
+                if ((isValidated(title, address, city, district, ward, price, area, description))) {
+                    btnAddPost.setVisibility(View.GONE);
+                    addingGif.setVisibility(View.VISIBLE);
+                    Ion.with(getApplicationContext())
+                            .load("POST", Constant.WEB_SERVER + "/post/api/make_new_post/")
+                            .setBodyParameter("user_id", user_id)
+                            .setBodyParameter("title", title)
+                            .setBodyParameter("address", address)
+                            .setBodyParameter("city", city)
+                            .setBodyParameter("district", district)
+                            .setBodyParameter("ward", ward)
+                            .setBodyParameter("price", price)
+                            .setBodyParameter("area", area)
+                            .setBodyParameter("description", description)
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    btnAddPost.setVisibility(View.VISIBLE);
+                                    addingGif.setVisibility(View.GONE);
+                                    if (e != null) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        switch (result) {
+                                            case "Added new post!":
+                                                Toast.makeText(getApplicationContext(), "Bạn đã đăng một " +
+                                                        "nhà trọ mới! Chúng tôi sẽ liên hệ để xét duyệt trong " +
+                                                        "thời gian sớm nhất.", Toast.LENGTH_LONG).show();
+                                                setResult(Activity.RESULT_OK);
+                                                finish();
+                                                break;
+                                            default:
+                                                Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
+                } else {
+                    Toast.makeText(getApplicationContext(), validationError, Toast.LENGTH_LONG).show();
+                    validationError = "";
+                }
+            }
         }
     }
 
+    public void clickToMakeNewPost(View view) {
+        startActivityForResult(new Intent(getApplicationContext(), ConfirmActivity.class), Constant.REQUEST_ID_FOR_ADD_POST);
+    }
+
     private boolean isValidated(String title, String address, String city, String district,
-                                String ward, String price, String area, String description){
+                                String ward, String price, String area, String description) {
         return checkTitle(title) && checkAddress(address) && checkCity(city) &&
                 checkDistrict(district) && checkWard(ward) && checkPrice(price) &&
                 checkArea(area) && checkDescription(description);
     }
 
-    private boolean checkTitle(String title){
-        if (!title.isEmpty()){
+    private boolean checkTitle(String title) {
+        if (!title.isEmpty()) {
             return true;
         }
         validationError += "Tiêu đề bài đăng không được để trống!";
         return false;
     }
 
-    private boolean checkAddress(String address){
-        if (!address.isEmpty()){
+    private boolean checkAddress(String address) {
+        if (!address.isEmpty()) {
             return true;
         }
         validationError += "Số nhà và đường không được để trống!";
         return false;
     }
 
-    private boolean checkCity(String city){
-        if (!city.isEmpty()){
+    private boolean checkCity(String city) {
+        if (!city.isEmpty()) {
             return true;
         }
         validationError += "Thành phố không được để trống!";
         return false;
     }
 
-    private boolean checkDistrict(String district){
-        if (!district.isEmpty()){
+    private boolean checkDistrict(String district) {
+        if (!district.isEmpty()) {
             return true;
         }
         validationError += "Quận không được để trống!";
         return false;
     }
 
-    private boolean checkWard(String ward){
-        if (!ward.isEmpty()){
+    private boolean checkWard(String ward) {
+        if (!ward.isEmpty()) {
             return true;
         }
         validationError += "Phường không được để trống!";
         return false;
     }
 
-    private boolean checkPrice(String price){
-        if (!price.isEmpty()){
+    private boolean checkPrice(String price) {
+        if (!price.isEmpty()) {
             return true;
         }
         validationError += "Giá không được để trống!";
         return false;
     }
 
-    private boolean checkArea(String area){
-        if (!area.isEmpty()){
+    private boolean checkArea(String area) {
+        if (!area.isEmpty()) {
             return true;
         }
         validationError += "Diện tích không được để trống!";
         return false;
     }
 
-    private boolean checkDescription(String description){
-        if (!description.isEmpty()){
+    private boolean checkDescription(String description) {
+        if (!description.isEmpty()) {
             return true;
         }
         validationError += "Miêu tả không được để trống!";

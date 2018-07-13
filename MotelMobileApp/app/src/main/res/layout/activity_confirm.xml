@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="150dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    tools:context=".ConfirmActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Bạn có chắc không?"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/colorGrey"
+        android:layout_marginTop="20dp"
+        />
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/btnYes"
+            android:onClick="clickToYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Có"
+            android:textColor="@color/colorWhite"
+            android:background="@color/motelApp"
+            />
+
+        <Button
+            android:id="@+id/btnNo"
+            android:onClick="clickToNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Không"
+
+            android:textColor="@color/colorWhite"
+            android:background="@color/motelApp"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

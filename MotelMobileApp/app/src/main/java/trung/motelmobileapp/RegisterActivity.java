@@ -1,5 +1,6 @@
 package trung.motelmobileapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,52 +47,64 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_ID_FOR_REGISTER){
+            if (resultCode == Activity.RESULT_OK){
+                String txtEmail = edtEmail.getText().toString();
+                String txtName = edtName.getText().toString();
+                String txtPhone = edtPhone.getText().toString();
+                String txtPassword = edtPassword.getText().toString();
+                String txtConfirm = edtConfirm.getText().toString();
+                Boolean isRuleChecked = chkRule.isChecked();
+                if (isValidated(txtEmail, txtName, txtPhone, txtPassword, txtConfirm, isRuleChecked)){
+                    btnRegister.setVisibility(View.GONE);
+                    registerGif.setVisibility(View.VISIBLE);
+                    Ion.with(getApplicationContext())
+                            .load("POST", Constant.WEB_SERVER + "/user/api/register/")
+                            .setBodyParameter("email", txtEmail)
+                            .setBodyParameter("name", txtName)
+                            .setBodyParameter("phone", txtPhone)
+                            .setBodyParameter("password", txtPassword)
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    btnRegister.setVisibility(View.VISIBLE);
+                                    registerGif.setVisibility(View.GONE);
+                                    if (e != null){
+                                        Toast.makeText(getApplicationContext(), "Lỗi kết nối!", Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        switch (result){
+                                            case "User existed!":
+                                                Toast.makeText(getApplicationContext(), "Email này đã tồn tại! Vui lòng chọn email khác.", Toast.LENGTH_LONG).show();
+                                                break;
+                                            case "Register successfully!":
+                                                Toast.makeText(getApplicationContext(), "Tài khoản được đăng ký thành công!", Toast.LENGTH_LONG).show();
+                                                finish();
+                                                break;
+                                            default:
+                                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), validateMessage, Toast.LENGTH_LONG).show();
+                    validateMessage = "";
+                }
+            }
+        }
+    }
+
     public void clickToRegister(View view) {
-        String txtEmail = edtEmail.getText().toString();
-        String txtName = edtName.getText().toString();
-        String txtPhone = edtPhone.getText().toString();
-        String txtPassword = edtPassword.getText().toString();
-        String txtConfirm = edtConfirm.getText().toString();
-        Boolean isRuleChecked = chkRule.isChecked();
-        if (isValidated(txtEmail, txtName, txtPhone, txtPassword, txtConfirm, isRuleChecked)){
-            btnRegister.setVisibility(View.GONE);
-            registerGif.setVisibility(View.VISIBLE);
-            Ion.with(getApplicationContext())
-                .load("POST", Constant.WEB_SERVER + "/user/api/register/")
-                .setBodyParameter("email", txtEmail)
-                .setBodyParameter("name", txtName)
-                .setBodyParameter("phone", txtPhone)
-                .setBodyParameter("password", txtPassword)
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String result) {
-                        btnRegister.setVisibility(View.VISIBLE);
-                        registerGif.setVisibility(View.GONE);
-                        if (e != null){
-                            Toast.makeText(getApplicationContext(), "Lỗi kết nối!", Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            switch (result){
-                                case "User existed!":
-                                    Toast.makeText(getApplicationContext(), "Email này đã tồn tại! Vui lòng chọn email khác.", Toast.LENGTH_LONG).show();
-                                    break;
-                                case "Register successfully!":
-                                    Toast.makeText(getApplicationContext(), "Tài khoản được đăng ký thành công!", Toast.LENGTH_LONG).show();
-                                    finish();
-                                    break;
-                                default:
-                                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                                    break;
-                            }
-                        }
-                    }
-                });
-        }
-        else {
-            Toast.makeText(getApplicationContext(), validateMessage, Toast.LENGTH_LONG).show();
-            validateMessage = "";
-        }
+        startActivityForResult(
+                new Intent(getApplicationContext(), ConfirmActivity.class),
+                Constant.REQUEST_ID_FOR_REGISTER);
     }
 
     private boolean isValidated(String email, String name, String phone, String password, String confirm, boolean check){

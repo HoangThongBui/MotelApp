@@ -114,90 +114,107 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     public void clickToSavePost(View view) {
-        String title = edtTitle.getText().toString().trim();
-        String address = edtAddress.getText().toString().trim();
-        String city = edtCity.getText().toString().trim();
-        String district = edtDistrict.getText().toString().trim();
-        String ward = edtWard.getText().toString().trim();
-        String price = edtPrice.getText().toString();
-        String area = edtArea.getText().toString();
-        String description = edtDescription.getText().toString();
-        if ((isValidated(title, address, city, district, ward, price, area, description))) {
-            btnEdit.setVisibility(View.GONE);
-            btnDelete.setVisibility(View.GONE);
-            editPostGif.setVisibility(View.VISIBLE);
-
-            Ion.with(getApplicationContext())
-                    .load("PUT", Constant.WEB_SERVER + "/post/api/edit_post_by_id/" + postId)
-                    .setBodyParameter("room_id", postDetail.getRoom().getId())
-                    .setBodyParameter("title", title)
-                    .setBodyParameter("address", address)
-                    .setBodyParameter("city", city)
-                    .setBodyParameter("district", district)
-                    .setBodyParameter("ward", ward)
-                    .setBodyParameter("price", price)
-                    .setBodyParameter("area", area)
-                    .setBodyParameter("description", description)
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String result) {
-                            editPostGif.setVisibility(View.GONE);
-                            btnEdit.setVisibility(View.VISIBLE);
-                            btnDelete.setVisibility(View.VISIBLE);
-                            if (e != null) {
-                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                            } else {
-                                switch (result) {
-                                    case "Updated!":
-                                        Toast.makeText(getApplicationContext(), "Bạn đã cập nhật bài đăng thành công!",
-                                                Toast.LENGTH_SHORT).show();
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                    });
-        } else {
-            Toast.makeText(getApplicationContext(), validationError, Toast.LENGTH_LONG).show();
-            validationError = "";
-        }
+        startActivityForResult(new Intent(getApplicationContext(), ConfirmActivity.class), Constant.REQUEST_ID_FOR_UPDATE_POST);
     }
 
     public void clickToDelete(View view) {
-        btnEdit.setVisibility(View.GONE);
-        btnDelete.setVisibility(View.GONE);
-        editPostGif.setVisibility(View.VISIBLE);
-        Ion.with(getApplicationContext())
-                .load("DELETE", Constant.WEB_SERVER + "/post/api/delete_post_by_id/" + postId)
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String result) {
-                        btnEdit.setVisibility(View.VISIBLE);
-                        btnDelete.setVisibility(View.VISIBLE);
-                        editPostGif.setVisibility(View.GONE);
-                        if (e != null) {
-                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            switch (result) {
-                                case "Deleted!":
-                                    Toast.makeText(getApplicationContext(), "Bạn đã xoá bài đăng thành công!",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent backToMain = new Intent(getApplicationContext(), MainActivity.class);
-                                    backToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(backToMain);
-                                    finish();
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
+        startActivityForResult(new Intent(getApplicationContext(), ConfirmActivity.class), Constant.REQUEST_ID_FOR_DELETE_POST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Constant.REQUEST_ID_FOR_UPDATE_POST:
+                if (resultCode == Activity.RESULT_OK) {
+                    String title = edtTitle.getText().toString().trim();
+                    String address = edtAddress.getText().toString().trim();
+                    String city = edtCity.getText().toString().trim();
+                    String district = edtDistrict.getText().toString().trim();
+                    String ward = edtWard.getText().toString().trim();
+                    String price = edtPrice.getText().toString();
+                    String area = edtArea.getText().toString();
+                    String description = edtDescription.getText().toString();
+                    if ((isValidated(title, address, city, district, ward, price, area, description))) {
+                        btnEdit.setVisibility(View.GONE);
+                        btnDelete.setVisibility(View.GONE);
+                        editPostGif.setVisibility(View.VISIBLE);
+
+                        Ion.with(getApplicationContext())
+                                .load("PUT", Constant.WEB_SERVER + "/post/api/edit_post_by_id/" + postId)
+                                .setBodyParameter("room_id", postDetail.getRoom().getId())
+                                .setBodyParameter("title", title)
+                                .setBodyParameter("address", address)
+                                .setBodyParameter("city", city)
+                                .setBodyParameter("district", district)
+                                .setBodyParameter("ward", ward)
+                                .setBodyParameter("price", price)
+                                .setBodyParameter("area", area)
+                                .setBodyParameter("description", description)
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String result) {
+                                        editPostGif.setVisibility(View.GONE);
+                                        btnEdit.setVisibility(View.VISIBLE);
+                                        btnDelete.setVisibility(View.VISIBLE);
+                                        if (e != null) {
+                                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            switch (result) {
+                                                case "Updated!":
+                                                    Toast.makeText(getApplicationContext(), "Bạn đã cập nhật bài đăng thành công!",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    setResult(Activity.RESULT_OK);
+                                                    finish();
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(getApplicationContext(), validationError, Toast.LENGTH_LONG).show();
+                        validationError = "";
                     }
-                });
+                }
+                break;
+            case Constant.REQUEST_ID_FOR_DELETE_POST:
+                if (resultCode == Activity.RESULT_OK) {
+                    btnEdit.setVisibility(View.GONE);
+                    btnDelete.setVisibility(View.GONE);
+                    editPostGif.setVisibility(View.VISIBLE);
+                    Ion.with(getApplicationContext())
+                            .load("DELETE", Constant.WEB_SERVER + "/post/api/delete_post_by_id/" + postId)
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    btnEdit.setVisibility(View.VISIBLE);
+                                    btnDelete.setVisibility(View.VISIBLE);
+                                    editPostGif.setVisibility(View.GONE);
+                                    if (e != null) {
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        switch (result) {
+                                            case "Deleted!":
+                                                Toast.makeText(getApplicationContext(), "Bạn đã xoá bài đăng thành công!",
+                                                        Toast.LENGTH_SHORT).show();
+                                                Intent backToMain = new Intent(getApplicationContext(), MainActivity.class);
+                                                backToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                startActivity(backToMain);
+                                                finish();
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
+                }
+                break;
+        }
     }
 
     private boolean isValidated(String title, String address, String city, String district,

@@ -1,5 +1,6 @@
 package trung.motelmobileapp.Components;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import trung.motelmobileapp.ConfirmActivity;
 import trung.motelmobileapp.EditProfileActivity;
 import trung.motelmobileapp.Models.UserDTO;
 import trung.motelmobileapp.MyTools.Constant;
@@ -57,57 +59,60 @@ public class ProfileFragment extends Fragment {
         //Get user data
         final String userId = mySession.getString("user_id", "");
         Ion.with(getContext())
-           .load("GET",Constant.WEB_SERVER + "/user/api/get_user_by_id/" + userId)
-           .asJsonObject()
-           .setCallback(new FutureCallback<JsonObject>() {
-               @Override
-               public void onCompleted(Exception e, JsonObject result) {
-                   if (e != null){
-                       e.printStackTrace();
-                       Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                   }
-                   else {
-                        user = new UserDTO(
-                                result.get("_id").getAsString(),
-                                result.get("email").getAsString(),
-                                result.get("name").getAsString(),
-                                result.get("phone").getAsString()
-                        );
-
-                        profileName.setText(user.getName());
-                   }
-               }
-           });
+                .load("GET", Constant.WEB_SERVER + "/user/api/get_user_by_id/" + userId)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (e != null) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            user = new UserDTO(
+                                    result.get("_id").getAsString(),
+                                    result.get("email").getAsString(),
+                                    result.get("name").getAsString(),
+                                    result.get("phone").getAsString()
+                            );
+                            profileName.setText(user.getName());
+                        }
+                    }
+                });
 
         //set events
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mySession.edit().clear().apply();
-                Toast.makeText(getContext(), "Bạn đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
-                tabAdapter.replaceFragmentAtPosition(new UnauthorizedProfileFragment(), 0);
-                tabAdapter.notifyDataSetChanged();
+                startActivityForResult(new Intent(getActivity(), ConfirmActivity.class), Constant.REQUEST_ID_FOR_LOGOUT);
             }
         });
 
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                intent.putExtra("User", user);
-                startActivity(intent);
+                startActivity(new Intent(getActivity(), EditProfileActivity.class));
             }
         });
 
         btnUserPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), UserPostActivity.class);
-                intent.putExtra("User", user);
-                startActivity(intent);
+                startActivity(new Intent(getActivity(), UserPostActivity.class));
             }
         });
         return layout;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_ID_FOR_LOGOUT) {
+            if (resultCode == Activity.RESULT_OK) {
+                mySession.edit().clear().apply();
+                Toast.makeText(getContext(), "Bạn đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                tabAdapter.replaceFragmentAtPosition(new UnauthorizedProfileFragment(), 0);
+                tabAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 }

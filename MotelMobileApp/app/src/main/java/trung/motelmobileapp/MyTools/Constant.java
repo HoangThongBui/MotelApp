@@ -1,5 +1,7 @@
 package trung.motelmobileapp.MyTools;
 
+
+
 public class Constant {
     //Web server
     //    private static final String WEBSERVER_HOST = "10.0.2.2";
@@ -17,5 +19,9 @@ public class Constant {
     public static final int REQUEST_ID_FOR_EDIT_POST = 2;
     public static final int REQUEST_ID_ACCESS_COURSE_FINE_LOCATION = 3;
     public static final int REQUEST_ID_CHECK_CONNECTION_TO_SERVER = 4;
-
+    public static final int REQUEST_ID_FOR_REGISTER = 5;
+    public static final int REQUEST_ID_FOR_ADD_POST = 6;
+    public static final int REQUEST_ID_FOR_UPDATE_POST = 7;
+    public static final int REQUEST_ID_FOR_DELETE_POST = 8;
+    public static final int REQUEST_ID_FOR_LOGOUT = 9;
 }

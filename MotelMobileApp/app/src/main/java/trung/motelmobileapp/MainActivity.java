@@ -1,10 +1,14 @@
 package trung.motelmobileapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import trung.motelmobileapp.Components.MainFragment;
 import trung.motelmobileapp.Components.ProfileFragment;
@@ -19,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     TabLayout tabLayout;
     TabAdapter tabAdapter;
+    SharedPreferences mySession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
+        mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.account));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.home));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.magnifier));

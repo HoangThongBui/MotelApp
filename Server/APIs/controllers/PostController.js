@@ -123,7 +123,6 @@ exports.get_post_by_id = async function (req,res) {
 }
 
 exports.make_a_new_post = async function (req, res) {
-    await waitTimeOut();
     try {
         var newRoom = new Room({
             address: req.body.address,
@@ -150,7 +149,6 @@ exports.make_a_new_post = async function (req, res) {
 }
 
 exports.search_post = async function (req, res) {
-    await waitTimeOut();
     try {
         var follow_price = req.body.follow_price === 'true';
         var min_price = req.body.min_price;
