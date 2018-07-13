@@ -27,6 +27,14 @@ public class PostDTO implements Serializable{
         this.status = status;
     }
 
+    public PostDTO(String id, String title, RoomDTO room, String request_date, String status) {
+        this.id = id;
+        this.title = title;
+        this.room = room;
+        this.request_date = request_date;
+        this.status = status;
+    }
+
     public String getStatus() {
         return status;
     }

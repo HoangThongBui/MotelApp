@@ -6,10 +6,162 @@
     android:orientation="vertical"
     tools:context=".Components.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tìm phòng trọ theo yêu cầu"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            />
+
+        <CheckBox
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/chk_following_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/motelApp"
+            android:text="Tìm theo giá"
+            />
+
+        <LinearLayout
+            android:id="@+id/price_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+            <EditText
+                android:id="@+id/filter_min_price"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Nhỏ nhất"
+                android:inputType="number"
+                android:backgroundTint="@color/motelApp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                />
+
+            <EditText
+                android:id="@+id/filter_max_price"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Lớn nhất"
+                android:backgroundTint="@color/motelApp"
+                android:inputType="number"
+                />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:layout_gravity="center"
+            android:id="@+id/chk_following_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/motelApp"
+            android:text="Tìm theo diện tích"
+            />
+
+        <LinearLayout
+            android:id="@+id/area_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+            <EditText
+                android:id="@+id/filter_min_area"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Nhỏ nhất"
+                android:backgroundTint="@color/motelApp"
+                android:inputType="number"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                />
+
+            <EditText
+                android:id="@+id/filter_max_area"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:hint="Lớn nhất"
+                android:backgroundTint="@color/motelApp"
+                android:inputType="number"
+                />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/motelApp"
+            android:text="Tìm ngay"
+            android:textColor="@color/colorWhite"
+            />
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/search_gif"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello Search" />
+        android:orientation="vertical"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:id="@+id/btnSearchAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@color/motelApp"
+            android:textColor="@color/colorWhite"
+            android:text="Tìm lại" />
+
+    </LinearLayout>
+
+    <!-- TODO: Update blank fragment layout -->
 
 </LinearLayout>

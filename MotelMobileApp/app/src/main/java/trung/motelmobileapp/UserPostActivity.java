@@ -39,20 +39,21 @@ public class UserPostActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ImageView userPostGif;
-    UserDTO user;
+    SharedPreferences mySession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_post);
-        user = (UserDTO) getIntent().getSerializableExtra("User");
         userPostGif = findViewById(R.id.user_posts_gif);
         recyclerView = findViewById(R.id.rv_user_posts);
+        mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
         Glide.with(this).load(R.drawable.loading).into(userPostGif);
+        String userId = mySession.getString("user_id", "");
 
         //Load user post
         Ion.with(this)
-           .load("GET", Constant.WEB_SERVER + "/post/api/get_posts_by_user/" + user.getId())
+           .load("GET", Constant.WEB_SERVER + "/post/api/get_posts_by_user/" + userId)
            .asJsonArray()
            .setCallback(new FutureCallback<JsonArray>() {
                @Override
@@ -68,7 +69,6 @@ public class UserPostActivity extends AppCompatActivity {
                             userPosts.add( new PostDTO(
                                     result.get(i).getAsJsonObject().get("_id").getAsString(),
                                     result.get(i).getAsJsonObject().get("title").getAsString(),
-                                    user,
                                     new RoomDTO(
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("address").getAsString(),
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("city").getAsString(),
@@ -97,7 +97,7 @@ public class UserPostActivity extends AppCompatActivity {
                             @Override
                             public void onClick(PostDTO item) {
                                 Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
-                                intent.putExtra("Post", item);
+                                intent.putExtra("Post", item.getId());
                                 startActivity(intent);
                             }
                         });
@@ -111,14 +111,14 @@ public class UserPostActivity extends AppCompatActivity {
     }
 
     public void clickToMakeNewPost(View view) {
-        startActivityForResult(new Intent(getApplicationContext(), MakeNewPostActivity.class), 1);
+        startActivityForResult(new Intent(getApplicationContext(), MakeNewPostActivity.class), Constant.REQUEST_ID_FOR_MAKE_NEW_POST);
     }
 
     //re-render if make new post
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
+        if (requestCode == Constant.REQUEST_ID_FOR_MAKE_NEW_POST){
             if (resultCode == Activity.RESULT_OK){
                 recreate();
             }

@@ -16,8 +16,8 @@ import trung.motelmobileapp.MyTools.Constant;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
+    ViewPager viewPager;
+    TabLayout tabLayout;
     TabAdapter tabAdapter;
 
     @Override
@@ -35,16 +35,22 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.magnifier));
         tabAdapter = new TabAdapter(getSupportFragmentManager());
 
+        //Profile tab
         tabAdapter.addFragment(new UnauthorizedProfileFragment(), "");
+
         //Main tab
         MainFragment mainFragment = new MainFragment();
-        Bundle cityInfo = new Bundle();
-        cityInfo.putString("City", getIntent().getStringExtra("City"));
-        mainFragment.setArguments(cityInfo);
+        Bundle locationInfo = new Bundle();
+        locationInfo.putDouble("Latitude", getIntent().getDoubleExtra("Latitude", 0));
+        locationInfo.putDouble("Longitude", getIntent().getDoubleExtra("Longitude", 0));
+
+        mainFragment.setArguments(locationInfo);
         tabAdapter.addFragment(mainFragment, "");
 
         //Search tab
-        tabAdapter.addFragment(new SearchFragment(), "");
+        SearchFragment searchFragment = new SearchFragment();
+        searchFragment.setArguments(locationInfo);
+        tabAdapter.addFragment(searchFragment, "");
 
         //viewpager setup
         viewPager.setAdapter(tabAdapter);

@@ -1,6 +1,11 @@
 package trung.motelmobileapp.Components;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
@@ -18,6 +24,8 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import trung.motelmobileapp.Models.PostDTO;
 import trung.motelmobileapp.Models.RoomDTO;
@@ -27,9 +35,14 @@ import trung.motelmobileapp.MyTools.DateConverter;
 import trung.motelmobileapp.PostDetailActivity;
 import trung.motelmobileapp.R;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment{
 
-    private RecyclerView mainRecyclerView;
+    RecyclerView mainRecyclerView;
+    Double lat;
+    Double lon;
+    LinearLayout mainLayout, mainGreeting;
+    TextView serverResult, txtGreeting;
+    ImageView loadingGif;
 
     public MainFragment() {
         // Required empty public constructor
@@ -39,19 +52,30 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final LinearLayout mainLayout = (LinearLayout) inflater.inflate(R.layout.fragment_main, container, false);
-        final ImageView loadingGif = mainLayout.findViewById(R.id.loadingGif);
-        final TextView serverResult = mainLayout.findViewById(R.id.serverResult);
-        final LinearLayout mainGreeting = mainLayout.findViewById(R.id.main_greeting);
+        mainLayout = (LinearLayout) inflater.inflate(R.layout.fragment_main, container, false);
+        loadingGif = mainLayout.findViewById(R.id.loadingGif);
+        serverResult = mainLayout.findViewById(R.id.serverResult);
+        mainGreeting = mainLayout.findViewById(R.id.main_greeting);
+        txtGreeting = mainLayout.findViewById(R.id.txt_main_greeting);
         mainGreeting.setVisibility(View.GONE);
-        TextView mainGreetingCity = mainLayout.findViewById(R.id.main_greeting_city);
         Glide.with(getContext()).load(R.drawable.loading).into(loadingGif);
+
+        //location here
+
         try {
-            final String city = getArguments().getString("City");
-            mainGreetingCity.setText(city);
+            String api;
+            lat = getArguments().getDouble("Latitude");
+            lon = getArguments().getDouble("Longitude");
+            if (lat != 0){
+                api = "/post/api/get_posts_nearby/";
+            }
+            else {
+                api = "/post/api/get_newest_posts/";
+            }
             Ion.with(getContext())
-                    .load("GET", Constant.WEB_SERVER + "/post/api/get_posts_by_city/")
-                    .setBodyParameter("city", city)
+                    .load("GET", Constant.WEB_SERVER + api)
+                    .setBodyParameter("lat", lat + "")
+                    .setBodyParameter("lon", lon + "")
                     .asJsonArray()
                     .setCallback(new FutureCallback<JsonArray>() {
                         //get reponse json and render the result to view
@@ -63,12 +87,16 @@ public class MainFragment extends Fragment {
                                     serverResult.setText("Error while getting data!");
                                 } else {
                                     if (result.size() == 0){
-                                        String res = "Chưa có nhà trọ nào được đăng ở " + city + "." +
+                                        String res = "Chưa có nhà trọ nào được đăng ở quanh đây " +
                                                 "\nĐến mục tìm kiếm để tìm nhà trọ ở những thành phố khác";
                                         serverResult.setText(res);
                                     }
                                     else {
                                         mainGreeting.setVisibility(View.VISIBLE);
+                                        //load newest posts if location undefined
+                                        if (lat == 0){
+                                            txtGreeting.setText("Nhà trọ mới nhất");
+                                        }
                                         //get data from json and put to arraylist
                                         ArrayList<PostDTO> posts = new ArrayList<>();
                                         for (int i = 0; i < result.size(); i++) {
@@ -105,7 +133,7 @@ public class MainFragment extends Fragment {
                                             @Override
                                             public void onClick(PostDTO item) {
                                                 Intent intent = new Intent(getActivity(), PostDetailActivity.class);
-                                                intent.putExtra("Post", item);
+                                                intent.putExtra("Post", item.getId());
                                                 startActivity(intent);
                                             }
                                         });

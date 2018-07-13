@@ -3,6 +3,7 @@ package trung.motelmobileapp.Models;
 import java.io.Serializable;
 
 public class RoomDTO implements Serializable {
+    private String id;
     private String address;
     private String city;
     private String district;
@@ -19,6 +20,25 @@ public class RoomDTO implements Serializable {
         this.price = price;
         this.area = area;
         this.description = description;
+    }
+
+    public RoomDTO(String id, String address, String city, String district, String ward, int price, int area, String description) {
+        this.id = id;
+        this.address = address;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.price = price;
+        this.area = area;
+        this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDescription() {

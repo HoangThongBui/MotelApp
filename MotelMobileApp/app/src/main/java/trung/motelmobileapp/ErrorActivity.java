@@ -1,11 +1,13 @@
 package trung.motelmobileapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.koushikdutta.async.future.FutureCallback;
@@ -39,7 +41,8 @@ public class ErrorActivity extends AppCompatActivity {
                     public void onCompleted(Exception e, String result) {
                         if (e == null) {
                             if (result.equals("Server is online!")){
-                                startActivity(new Intent(getApplicationContext(), AreaChoosingActivity.class));
+                                Toast.makeText(getApplicationContext(), "Kết nối thành công!", Toast.LENGTH_SHORT).show();
+                                setResult(Activity.RESULT_OK);
                                 finish();
                             }
                             else {
