@@ -134,7 +134,8 @@ public class PostDetailActivity extends AppCompatActivity {
                                                                 result.get(i).getAsJsonObject().get("_id").getAsString(),
                                                                 result.get(i).getAsJsonObject().get("post").getAsString(),
                                                                 new UserDTO(
-                                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("name").getAsString()
+                                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("name").getAsString(),
+                                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("image").getAsString()
                                                                 ),
                                                                 result.get(i).getAsJsonObject().get("detail").getAsString(),
                                                                 DateConverter.formattedDate(result.get(i).getAsJsonObject().get("comment_time").getAsString())
@@ -143,7 +144,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
                                                     //render comments
                                                     commentRecyclerView = findViewById(R.id.detail_comments);
-                                                    DetailCommentRecyclerViewAdapter dcrvAdapter = new DetailCommentRecyclerViewAdapter(comments);
+                                                    DetailCommentRecyclerViewAdapter dcrvAdapter = new DetailCommentRecyclerViewAdapter(comments, getApplicationContext());
                                                     LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                                                     llm.setOrientation(LinearLayoutManager.VERTICAL);
                                                     commentRecyclerView.setLayoutManager(llm);

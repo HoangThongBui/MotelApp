@@ -5,7 +5,7 @@ const User = mongoose.model('User');
 
 exports.check_user_status = async function (req, res) {
     try {
-        var id = req.params.id;  
+        var id = req.params.user_id;  
         var user = await User.findById(id, { password: 0 });
         if (user.status) {
             res.send("User is active!");
@@ -70,12 +70,27 @@ exports.user_register = async function(req,res){
 
 exports.get_user_by_id = async function (req,res){
     try {
-        var id = req.params.id;
+        var id = req.params.user_id;
         var user = await User.findById(id, {status: 0, password: 0, role: 0});
         res.json(user);
     } catch (error) {
         console.log(error);
-        res.send("Server internal error!")
+        res.send("Server internal error!");
+    }
+}
+
+exports.change_avatar = async function (req,res) {
+    try {
+        var id = req.params.user_id;
+        var image = '/images/users/' + req.file.filename;
+        var set = {
+            image
+        };
+        await User.findByIdAndUpdate(id, {"$set" : set});
+        res.send('Avatar changed!')    
+    } catch (error) {
+        console.log(error);
+        res.send("Server internal error!");
     }
 }
 

@@ -7,14 +7,11 @@ public class UserDTO implements Serializable{
     private String email;
     private String name;
     private String phone;
+    private String image;
 
-    public UserDTO(String name, String phone) {
+    public UserDTO(String name, String image) {
         this.name = name;
-        this.phone = phone;
-    }
-
-    public UserDTO(String name) {
-        this.name = name;
+        this.image = image;
     }
 
     public UserDTO(String id, String name, String phone) {
@@ -23,11 +20,20 @@ public class UserDTO implements Serializable{
         this.phone = phone;
     }
 
-    public UserDTO(String id, String email, String name, String phone) {
+    public UserDTO(String id, String email, String name, String phone, String image) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.phone = phone;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getId() {

@@ -9,7 +9,8 @@
     tools:context=".Components.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ImageView
+    <ImageButton
+        android:id="@+id/profile_image"
         android:layout_marginTop="50dp"
         android:background="@drawable/user"
         android:layout_width="150dp"
@@ -24,6 +25,7 @@
         android:textStyle="bold"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:text="Trung"
         android:textSize="30dp"/>
 
     <LinearLayout

@@ -16,10 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideContext;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import trung.motelmobileapp.ChangeAvatarActivity;
 import trung.motelmobileapp.ConfirmActivity;
 import trung.motelmobileapp.EditProfileActivity;
 import trung.motelmobileapp.Models.UserDTO;
@@ -32,7 +35,7 @@ public class ProfileFragment extends Fragment {
 
     LinearLayout layout;
     TextView profileName;
-    ImageButton btnEditProfile, btnUserPost;
+    ImageButton btnEditProfile, btnUserPost, profileImage;
     Button btnLogout;
     ViewPager viewPager;
     TabAdapter tabAdapter;
@@ -51,6 +54,7 @@ public class ProfileFragment extends Fragment {
         profileName = layout.findViewById(R.id.profile_name);
         btnEditProfile = layout.findViewById(R.id.btnEditProfile);
         btnUserPost = layout.findViewById(R.id.btnUserPost);
+        profileImage = layout.findViewById(R.id.profile_image);
         btnLogout = layout.findViewById(R.id.btnLogout);
         mySession = getActivity().getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
         viewPager = getActivity().findViewById(R.id.view_pager);
@@ -72,9 +76,17 @@ public class ProfileFragment extends Fragment {
                                     result.get("_id").getAsString(),
                                     result.get("email").getAsString(),
                                     result.get("name").getAsString(),
-                                    result.get("phone").getAsString()
+                                    result.get("phone").getAsString(),
+                                    result.get("image").getAsString()
                             );
+
                             profileName.setText(user.getName());
+
+                            if (!user.getImage().isEmpty()){
+                                Glide.with(getContext()).load(Constant.WEB_SERVER + user.getImage())
+                                        .into(profileImage);
+                                
+                            }
                         }
                     }
                 });
@@ -100,19 +112,39 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(getActivity(), UserPostActivity.class));
             }
         });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ChangeAvatarActivity.class);
+                intent.putExtra("Profile Image", user.getImage());
+                startActivityForResult(intent, Constant.REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR);
+            }
+        });
+
         return layout;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_ID_FOR_LOGOUT) {
-            if (resultCode == Activity.RESULT_OK) {
-                mySession.edit().clear().apply();
-                Toast.makeText(getContext(), "Bạn đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
-                tabAdapter.replaceFragmentAtPosition(new UnauthorizedProfileFragment(), 0);
-                tabAdapter.notifyDataSetChanged();
-            }
+        switch (requestCode){
+            case Constant.REQUEST_ID_FOR_LOGOUT :
+                if (resultCode == Activity.RESULT_OK) {
+                    mySession.edit().clear().apply();
+                    Toast.makeText(getContext(), "Bạn đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                    tabAdapter.replaceFragmentAtPosition(new UnauthorizedProfileFragment(), 0);
+                    tabAdapter.notifyDataSetChanged();
+                }
+                break;
+            case Constant.REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR:
+                if (resultCode == Activity.RESULT_OK) {
+                    Toast.makeText(getContext(), "Bạn đã đổi hình đại diện thành công!", Toast.LENGTH_SHORT).show();
+                    tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
+                    tabAdapter.notifyDataSetChanged();
+//                    getActivity().recreate();
+                }
+                break;
         }
     }
 }
