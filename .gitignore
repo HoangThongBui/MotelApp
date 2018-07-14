@@ -16,7 +16,7 @@
 bin/
 gen/
 out/
-images/
+public/images/
 
 # Gradle files
 .gradle/
