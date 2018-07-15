@@ -26,4 +26,5 @@ module.exports = function(app) {
 
     app.route('/post/api/delete_post_by_id/:post_id')
         .delete(PostController.delete_post_by_id);
+
 };

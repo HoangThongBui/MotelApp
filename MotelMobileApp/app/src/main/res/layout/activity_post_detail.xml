@@ -37,7 +37,7 @@
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="48dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -45,11 +45,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@drawable/home"
-                android:backgroundTint="@color/colorBlack" />
+           <android.support.v4.view.ViewPager
+               android:id="@+id/post_images"
+               android:layout_width="match_parent"
+               android:layout_height="300dp">
+
+           </android.support.v4.view.ViewPager>
 
             <TextView
                 android:id="@+id/post_user"
@@ -190,6 +191,55 @@
                 android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:padding="20dp"
+                android:layout_marginBottom="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:onClick="clickToGoToLogin"
+                    android:id="@+id/login_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="bạn phải đăng nhập trước khi bình luận"
+                    android:textAllCaps="true"
+                    android:textColor="@color/motelApp"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/comment_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/post_detail_comment_editor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:backgroundTint="@color/motelApp"
+                        android:hint="Bình luận về tin đăng này"
+                        />
+
+                    <Button
+                        android:onClick="clickToComment"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đăng"
+                        android:textColor="@color/colorWhite"
+                        android:background="@color/motelApp"
+                        />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
 
 
         </LinearLayout>

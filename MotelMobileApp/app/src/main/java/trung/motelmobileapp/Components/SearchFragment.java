@@ -183,7 +183,8 @@ public class SearchFragment extends Fragment {
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("ward").getAsString(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("area").getAsInt(),
-                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString()
+                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString(),
+                                                            new ArrayList<String>()
                                                     ),
                                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));
@@ -193,7 +194,7 @@ public class SearchFragment extends Fragment {
                                         }
 
                                         //render views
-                                        GeneralPostRecyclerViewAdapter searchAdapter = new GeneralPostRecyclerViewAdapter(posts);
+                                        GeneralPostRecyclerViewAdapter searchAdapter = new GeneralPostRecyclerViewAdapter(posts, getContext());
                                         LinearLayoutManager llm = new LinearLayoutManager(getContext());
                                         llm.setOrientation(LinearLayoutManager.VERTICAL);
                                         rvResult.setLayoutManager(llm);

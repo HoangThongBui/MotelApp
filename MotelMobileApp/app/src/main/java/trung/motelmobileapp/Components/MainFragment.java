@@ -20,10 +20,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,6 +102,11 @@ public class MainFragment extends Fragment{
                                         //get data from json and put to arraylist
                                         ArrayList<PostDTO> posts = new ArrayList<>();
                                         for (int i = 0; i < result.size(); i++) {
+                                            ArrayList<String> images = new ArrayList<>();
+                                            JsonArray roomImages = result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("images").getAsJsonArray();
+                                            for (JsonElement roomImage : roomImages) {
+                                                images.add(roomImage.getAsString());
+                                            }
                                             posts.add(new PostDTO(
                                                     result.get(i).getAsJsonObject().get("_id").getAsString(),
                                                     result.get(i).getAsJsonObject().get("title").getAsString(),
@@ -112,9 +119,7 @@ public class MainFragment extends Fragment{
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("city").getAsString(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("district").getAsString(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("ward").getAsString(),
-                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
-                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("area").getAsInt(),
-                                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString()
+                                                            images
                                                     ),
                                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));
@@ -122,7 +127,7 @@ public class MainFragment extends Fragment{
 
                                         //render view
                                         mainRecyclerView = mainLayout.findViewById(R.id.rvMain);
-                                        GeneralPostRecyclerViewAdapter mrvAdapter = new GeneralPostRecyclerViewAdapter(posts);
+                                        GeneralPostRecyclerViewAdapter mrvAdapter = new GeneralPostRecyclerViewAdapter(posts, getContext());
                                         LinearLayoutManager llm = new LinearLayoutManager(getContext());
                                         llm.setOrientation(LinearLayoutManager.VERTICAL);
                                         mainRecyclerView.setLayoutManager(llm);

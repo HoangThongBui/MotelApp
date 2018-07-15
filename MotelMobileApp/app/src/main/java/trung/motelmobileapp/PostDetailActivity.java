@@ -4,18 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -23,7 +29,7 @@ import com.koushikdutta.ion.Ion;
 import java.util.ArrayList;
 
 import trung.motelmobileapp.Components.DetailCommentRecyclerViewAdapter;
-import trung.motelmobileapp.Components.TabAdapter;
+import trung.motelmobileapp.Components.PostDetailImageSliderAdapter;
 import trung.motelmobileapp.Models.CommentDTO;
 import trung.motelmobileapp.Models.PostDTO;
 import trung.motelmobileapp.Models.RoomDTO;
@@ -37,8 +43,13 @@ public class PostDetailActivity extends AppCompatActivity {
     RecyclerView commentRecyclerView;
     ImageView loadingCommentGif;
     String postId;
+    PostDTO postDetail;
     FloatingActionButton btnToEditPost;
     SharedPreferences mySession;
+    ViewPager postImages;
+    LinearLayout commentLayout;
+    TextView loginRequest;
+    EditText commentArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +63,19 @@ public class PostDetailActivity extends AppCompatActivity {
         area = findViewById(R.id.post_area);
         address = findViewById(R.id.post_address);
         detail = findViewById(R.id.post_detail);
+        postImages = findViewById(R.id.post_images);
         btnToEditPost = findViewById(R.id.btnToEditPost);
+        commentRecyclerView = findViewById(R.id.detail_comments);
+        commentLayout = findViewById(R.id.comment_layout);
+        loginRequest = findViewById(R.id.login_request);
+        commentArea = findViewById(R.id.post_detail_comment_editor);
         mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
+        if (mySession.getString("user_id", "").isEmpty()){
+            commentLayout.setVisibility(View.GONE);
+        }
+        else {
+            loginRequest.setVisibility(View.GONE);
+        }
 
         //Get data
         postId = getIntent().getStringExtra("Post");
@@ -66,7 +88,11 @@ public class PostDetailActivity extends AppCompatActivity {
                         if (e != null) {
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                         } else {
-                            PostDTO postDetail = null;
+                            ArrayList<String> images = new ArrayList<>();
+                            JsonArray roomImages = result.get("room").getAsJsonObject().get("images").getAsJsonArray();
+                            for (JsonElement roomImage : roomImages) {
+                                images.add(roomImage.getAsString());
+                            }
                             postDetail = new PostDTO(
                                     result.get("_id").getAsString(),
                                     result.get("title").getAsString(),
@@ -82,7 +108,8 @@ public class PostDetailActivity extends AppCompatActivity {
                                             result.get("room").getAsJsonObject().get("ward").getAsString(),
                                             result.get("room").getAsJsonObject().get("price").getAsInt(),
                                             result.get("room").getAsJsonObject().get("area").getAsInt(),
-                                            result.get("room").getAsJsonObject().get("description").getAsString()
+                                            result.get("room").getAsJsonObject().get("description").getAsString(),
+                                            images
                                     ),
                                     DateConverter.getPassedTime(result.get("request_date").getAsString())
                             );
@@ -104,6 +131,7 @@ public class PostDetailActivity extends AppCompatActivity {
                             String displayingArea = postDetail.getRoom().getArea() + " m2";
                             area.setText(displayingArea);
                             detail.setText(postDetail.getRoom().getDescription());
+                            postImages.setAdapter(new PostDetailImageSliderAdapter(postDetail.getRoom().getImages(), getApplicationContext()));
 
                             //Only owner can edit post
                             if (!mySession.getString("user_id", "").equals(postDetail.getUser().getId())) {
@@ -143,7 +171,6 @@ public class PostDetailActivity extends AppCompatActivity {
                                                     }
 
                                                     //render comments
-                                                    commentRecyclerView = findViewById(R.id.detail_comments);
                                                     DetailCommentRecyclerViewAdapter dcrvAdapter = new DetailCommentRecyclerViewAdapter(comments, getApplicationContext());
                                                     LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                                                     llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -177,5 +204,51 @@ public class PostDetailActivity extends AppCompatActivity {
                 recreate();
             }
         }
+    }
+
+    public void clickToGoToLogin(View view) {
+        Intent backToMain = new Intent(getApplicationContext(), MainActivity.class);
+        backToMain.putExtra("Login Request", "Login");
+        backToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(backToMain);
+    }
+
+    public void clickToComment(View view) {
+        String comment = commentArea.getText().toString();
+        if(isCommentValidated(comment)){
+            String userId = mySession.getString("user_id", "");
+            String postId = postDetail.getId();
+            Ion.with(getApplicationContext())
+               .load("POST", Constant.WEB_SERVER + "/comment/api/post_a_comment/")
+               .setBodyParameter("post_id", postId)
+               .setBodyParameter("user_id", userId)
+               .setBodyParameter("detail", comment)
+               .asString()
+               .setCallback(new FutureCallback<String>() {
+                   @Override
+                   public void onCompleted(Exception e, String result) {
+                       if (e != null){
+                           Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                       }
+                       else {
+                           switch (result){
+                               case "Comment posted!":
+                                   recreate();
+                                   break;
+                               default:
+                                   Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                                   break;
+                           }
+                       }
+                   }
+               });
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Bình luận không được để trống!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean isCommentValidated(String comment){
+        return !comment.isEmpty();
     }
 }

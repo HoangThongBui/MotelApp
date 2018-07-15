@@ -1,6 +1,7 @@
 package trung.motelmobileapp.Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class RoomDTO implements Serializable {
     private String id;
@@ -11,8 +12,9 @@ public class RoomDTO implements Serializable {
     private int price;
     private int area;
     private String description;
+    private ArrayList<String> images;
 
-    public RoomDTO(String address, String city, String district, String ward, int price, int area, String description) {
+    public RoomDTO(String address, String city, String district, String ward, int price, int area, String description, ArrayList<String> images ){
         this.address = address;
         this.city = city;
         this.district = district;
@@ -20,6 +22,15 @@ public class RoomDTO implements Serializable {
         this.price = price;
         this.area = area;
         this.description = description;
+        this.images = images;
+    }
+
+    public RoomDTO(String address, String city, String district, String ward, ArrayList<String> images) {
+        this.address = address;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+        this.images = images;
     }
 
     public RoomDTO(String id, String address, String city, String district, String ward, int price, int area, String description) {
@@ -31,6 +42,14 @@ public class RoomDTO implements Serializable {
         this.price = price;
         this.area = area;
         this.description = description;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
     }
 
     public String getId() {

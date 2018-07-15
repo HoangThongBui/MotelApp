@@ -76,7 +76,8 @@ public class UserPostActivity extends AppCompatActivity {
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("ward").getAsString(),
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("area").getAsInt(),
-                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString()
+                                            result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString(),
+                                            new ArrayList<String>()
                                     ),
                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString()),
                                     result.get(i).getAsJsonObject().get("status").getAsString()

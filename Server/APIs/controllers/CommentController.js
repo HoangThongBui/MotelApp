@@ -25,6 +25,22 @@ exports.get_comments = async function (req, res) {
     }
 }
 
+exports.post_a_comment = async function (req,res) {
+    try {
+        var newComment = new Comment({
+            post: req.body.post_id,
+            user: req.body.user_id,
+            detail: req.body.detail,
+            comment_time: new Date()
+        })
+        await newComment.save();
+        res.send('Comment posted!');
+    } catch (error) {
+        console.log(error);
+        res.send("Server internal error!");
+    }
+}
+
 //server waiting simulation
 function waitTimeOut(){
     return new Promise((res,rej)=> {setTimeout(res, 3000)});
