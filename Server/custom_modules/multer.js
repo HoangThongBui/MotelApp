@@ -22,7 +22,6 @@ const multerConfig = {
             }
             else {
                 const extension = file.originalname.split('.')[1]//get extension
-                console.log(file);
                 next(null, 'rooms_image' + '_' + new Date().getTime() + '.' + extension); //custom file name
             }
         }
