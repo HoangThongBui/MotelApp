@@ -82,7 +82,8 @@ public class EditPostActivity extends AppCompatActivity {
                                     new UserDTO(
                                             result.get("user").getAsJsonObject().get("_id").getAsString(),
                                             result.get("user").getAsJsonObject().get("name").getAsString(),
-                                            result.get("user").getAsJsonObject().get("phone").getAsString()
+                                            result.get("user").getAsJsonObject().get("phone").getAsString(),
+                                            result.get("user").getAsJsonObject().get("image").getAsString()
                                     ),
                                     new RoomDTO(
                                             result.get("room").getAsJsonObject().get("_id").getAsString(),

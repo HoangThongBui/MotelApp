@@ -23,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -169,6 +170,11 @@ public class SearchFragment extends Fragment {
                                         searchResult.setVisibility(View.VISIBLE);
                                         ArrayList<PostDTO> posts = new ArrayList<>();
                                         for (int i = 0; i < result.size(); i++) {
+                                            ArrayList<String> images = new ArrayList<>();
+                                            JsonArray roomImages = result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("images").getAsJsonArray();
+                                            for (JsonElement roomImage : roomImages) {
+                                                images.add(roomImage.getAsString());
+                                            }
                                             posts.add(new PostDTO(
                                                     result.get(i).getAsJsonObject().get("_id").getAsString(),
                                                     result.get(i).getAsJsonObject().get("title").getAsString(),
@@ -184,7 +190,7 @@ public class SearchFragment extends Fragment {
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("price").getAsInt(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("area").getAsInt(),
                                                             result.get(i).getAsJsonObject().get("room").getAsJsonObject().get("description").getAsString(),
-                                                            new ArrayList<String>()
+                                                            images
                                                     ),
                                                     DateConverter.getPassedTime(result.get(i).getAsJsonObject().get("request_date").getAsString())
                                             ));

@@ -14,10 +14,11 @@ public class UserDTO implements Serializable{
         this.image = image;
     }
 
-    public UserDTO(String id, String name, String phone) {
+    public UserDTO(String id, String name, String phone, String image) {
         this.id = id;
         this.name = name;
         this.phone = phone;
+        this.image = image;
     }
 
     public UserDTO(String id, String email, String name, String phone, String image) {

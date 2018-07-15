@@ -1,13 +1,20 @@
 package trung.motelmobileapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +33,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonArray;
@@ -61,8 +70,12 @@ public class PostDetailActivity extends AppCompatActivity {
     LinearLayout commentLayout, commentPart;
     TextView loginRequest;
     EditText commentArea;
-    private GoogleMap map;
+    GoogleMap map;
     SupportMapFragment mapFragment;
+    LocationManager locationManager;
+    String locationProvider;
+    LatLng roomLocation, currentLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +97,11 @@ public class PostDetailActivity extends AppCompatActivity {
         commentArea = findViewById(R.id.post_detail_comment_editor);
         commentPart = findViewById(R.id.comment_area);
         mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
-        mapFragment =  (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if (mySession.getString("user_id", "").isEmpty()){
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (mySession.getString("user_id", "").isEmpty()) {
             commentLayout.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             loginRequest.setVisibility(View.GONE);
         }
 
@@ -114,7 +127,8 @@ public class PostDetailActivity extends AppCompatActivity {
                                     new UserDTO(
                                             result.get("user").getAsJsonObject().get("_id").getAsString(),
                                             result.get("user").getAsJsonObject().get("name").getAsString(),
-                                            result.get("user").getAsJsonObject().get("phone").getAsString()
+                                            result.get("user").getAsJsonObject().get("phone").getAsString(),
+                                            result.get("user").getAsJsonObject().get("image").getAsString()
                                     ),
                                     new RoomDTO(
                                             result.get("room").getAsJsonObject().get("address").getAsString(),
@@ -154,7 +168,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                 btnToEditPost.setVisibility(View.GONE);
                             }
 
-                            //
+                            //create map
                             mapFragment.getMapAsync(new OnMapReadyCallback() {
                                 @Override
                                 public void onMapReady(GoogleMap googleMap) {
@@ -162,14 +176,72 @@ public class PostDetailActivity extends AppCompatActivity {
                                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                                     try {
                                         List<Address> geocodeAddress = geocoder.getFromLocationName(postDetail.getRoom().getFullAddress(), 5);
-                                        LatLng roomLocation = new LatLng(geocodeAddress.get(0).getLatitude(), geocodeAddress.get(0).getLongitude());
+                                        roomLocation = new LatLng(geocodeAddress.get(0).getLatitude(), geocodeAddress.get(0).getLongitude());
                                         map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle()));
                                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(roomLocation, 16));
-                                    } catch (Exception e){
+                                        if (checkLocationPermission()) {
+                                            map.setMyLocationEnabled(true);
+                                            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                                                @Override
+                                                public boolean onMyLocationButtonClick() {
+                                                    currentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                                                    map.addMarker(new MarkerOptions().position(currentLocation)
+                                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_location)));
+                                                    LatLngBounds area;
+                                                    try {
+                                                        area = new LatLngBounds(currentLocation, roomLocation);
+                                                    } catch (Exception e){
+                                                        area = new LatLngBounds(roomLocation, currentLocation);
+                                                    }
+                                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(area.getCenter(), 10));
+                                                    return false;
+                                                }
+                                            });
+                                        }
+
+
+                                        //locating yourself if grant permission
+//                                        if (checkLocationPermission()){
+//                                            locationProvider = getBestEnabledLocationProvider();
+//                                            if (!locationProvider.equals("passive")){
+//                                                try {
+//                                                    locationManager.requestLocationUpdates(locationProvider, 0, 5000, new LocationListener() {
+//                                                        @Override
+//                                                        public void onLocationChanged(Location location) {
+//                                                            //zoom event to compare
+//                                                            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+//
+//                                                            map.addMarker(new MarkerOptions().position(currentLocation)
+//                                                                    .icon(BitmapDescriptorFactory.fromPath(Constant.WEB_SERVER + postDetail.getUser().getImage())));
+//                                                            LatLngBounds area = new LatLngBounds(roomLocation, currentLocation);
+//                                                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(area.getCenter(), 10));
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onProviderEnabled(String s) {
+//
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onProviderDisabled(String s) {
+//
+//                                                        }
+//                                                    });
+//                                                } catch (SecurityException e){
+//                                                    e.printStackTrace();
+//                                                }
+//                                            }
+//                                        }
+
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(getApplicationContext(), "Không xác định được vị trí trên bản đồ!", Toast.LENGTH_LONG).show();
                                     }
-
                                 }
                             });
 
@@ -255,41 +327,52 @@ public class PostDetailActivity extends AppCompatActivity {
 
     public void clickToComment(View view) {
         String comment = commentArea.getText().toString();
-        if(isCommentValidated(comment)){
+        if (isCommentValidated(comment)) {
             String userId = mySession.getString("user_id", "");
             String postId = postDetail.getId();
             Ion.with(getApplicationContext())
-               .load("POST", Constant.WEB_SERVER + "/comment/api/post_a_comment/")
-               .setBodyParameter("post_id", postId)
-               .setBodyParameter("user_id", userId)
-               .setBodyParameter("detail", comment)
-               .asString()
-               .setCallback(new FutureCallback<String>() {
-                   @Override
-                   public void onCompleted(Exception e, String result) {
-                       if (e != null){
-                           Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                       }
-                       else {
-                           switch (result){
-                               case "Comment posted!":
-                                   recreate();
-                                   break;
-                               default:
-                                   Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                                   break;
-                           }
-                       }
-                   }
-               });
-        }
-        else {
+                    .load("POST", Constant.WEB_SERVER + "/comment/api/post_a_comment/")
+                    .setBodyParameter("post_id", postId)
+                    .setBodyParameter("user_id", userId)
+                    .setBodyParameter("detail", comment)
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            if (e != null) {
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                switch (result) {
+                                    case "Comment posted!":
+                                        recreate();
+                                        break;
+                                    default:
+                                        Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        }
+                    });
+        } else {
             Toast.makeText(getApplicationContext(), "Bình luận không được để trống!", Toast.LENGTH_LONG).show();
         }
     }
 
-    private boolean isCommentValidated(String comment){
+    private boolean isCommentValidated(String comment) {
         return !comment.isEmpty();
     }
 
+    private boolean checkLocationPermission() {
+        return ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private String getBestEnabledLocationProvider() {
+        String bestProvider;
+        Criteria criteria = new Criteria();
+        bestProvider = locationManager.getBestProvider(criteria, true);
+        return bestProvider;
+    }
 }
