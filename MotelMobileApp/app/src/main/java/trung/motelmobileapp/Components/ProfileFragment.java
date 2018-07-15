@@ -17,12 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideContext;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import trung.motelmobileapp.ChangeAvatarActivity;
 import trung.motelmobileapp.ConfirmActivity;
 import trung.motelmobileapp.EditProfileActivity;
 import trung.motelmobileapp.Models.UserDTO;

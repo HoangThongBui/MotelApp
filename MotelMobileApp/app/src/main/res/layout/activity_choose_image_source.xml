@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="150dp"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:background="@color/colorWhite"
+    tools:context=".ChooseImageSourceActivity">
+
+    <TextView
+        android:gravity="center"
+        android:text="Chọn nguồn hình"
+        android:textColor="@color/colorGrey"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:background="@drawable/camera"
+            android:id="@+id/btnCamera"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="clickToCamera"
+            />
+
+        <ImageButton
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/gallery"
+            android:id="@+id/btnGallery"
+            android:onClick="clickToGallery"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

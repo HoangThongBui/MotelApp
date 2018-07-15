@@ -24,9 +24,12 @@ public class Constant {
     public static final int REQUEST_ID_FOR_UPDATE_POST = 7;
     public static final int REQUEST_ID_FOR_DELETE_POST = 8;
     public static final int REQUEST_ID_FOR_LOGOUT = 9;
-    public static final int REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR = 10;
+    public static final int REQUEST_ID_FOR_GO_TO_CHOOSE_IMAGE = 10;
     public static final int REQUEST_ID_FOR_CAMERA = 11;
     public static final int REQUEST_ID_FOR_GALLERY = 12;
     public static final int REQUEST_ID_FOR_STORAGE_PERMISSION = 13;
     public static final int REQUEST_ID_FOR_UPDATE_PROFILE = 14;
+
+    //Num of max image
+    public static final int MAX_POST_IMAGE = 3;
 }

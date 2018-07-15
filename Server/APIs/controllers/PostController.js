@@ -12,23 +12,6 @@ const Geocoder = require('node-geocoder')({
     formatter: null
 });
 
-// exports.get_posts_nearby = async function (req, res) {
-//     try {
-//         var city = 'TPHCM';
-//         var roomsInCity = await Room.find({city}, {_id : 1});
-//         var posts = await Post.find({status: "c", "room" : {"$in" : roomsInCity}}, {status : 0}).sort({request_date : -1});
-//         for (var i = 0; i < posts.length; i++){
-//             posts[i].room = await Room.findById(posts[i].room);
-//             posts[i].user = await User.findById(posts[i].user, {password : 0, status : 0, role : 0});
-//         }
-//         // await waitTimeOut();
-//         res.json(posts);
-//     } catch (error) {
-//         console.log(error);
-//         res.send("Server internal error!");
-//     }
-// };
-
 exports.get_newest_posts = async function (req, res) {
     try {
         var newestPosts = await Post.find({ status: "c" }).sort({ request_date: -1 });
@@ -105,10 +88,10 @@ exports.get_posts_by_user = async function (req, res) {
     }
 }
 
-exports.get_post_by_id = async function (req,res) {
+exports.get_post_by_id = async function (req, res) {
     try {
         var post = await Post.findById(req.params.post_id);
-        if (post.status === 'd'){
+        if (post.status === 'd') {
             res.json({});
         }
         else {
@@ -124,19 +107,26 @@ exports.get_post_by_id = async function (req,res) {
 
 exports.make_a_new_post = async function (req, res) {
     try {
+        var address = req.body.address;
+        var city = req.body.city;
+        var district = req.body.district;
+        var ward = req.body.ward;
+        var price = req.body.price;
+        var area = req.body.area;
+        var description = req.body.description
+        var title = req.body.title;
+        var user = req.body.user_id;
+        var images = [];
+        for (var i = 0; i < req.files.length; i++) {
+            images.push('/images/posts/' + req.files[i].filename);
+        }
         var newRoom = new Room({
-            address: req.body.address,
-            city: req.body.city,
-            district: req.body.district,
-            ward: req.body.ward,
-            price: req.body.price,
-            area: req.body.area,
-            description: req.body.description
+            address, city, district, ward, price, area, description, images
         })
         var newRoomId = (await newRoom.save())._id;
         var newPost = new Post({
-            title: req.body.title,
-            user: req.body.user_id,
+            title,
+            user,
             room: newRoomId,
             request_date: new Date()
         });
@@ -162,10 +152,10 @@ exports.search_post = async function (req, res) {
                 "$gte": min_price,
                 "$lte": max_price
             };
-            if (!filter.price.$gte){
+            if (!filter.price.$gte) {
                 delete filter.price.$gte;
             }
-            if (!filter.price.$lte){
+            if (!filter.price.$lte) {
                 delete filter.price.$lte;
             }
         }
@@ -174,10 +164,10 @@ exports.search_post = async function (req, res) {
                 "$gte": min_area,
                 "$lte": max_area
             };
-            if (!filter.area.$gte){
+            if (!filter.area.$gte) {
                 delete filter.area.$gte;
             }
-            if (!filter.area.$lte){
+            if (!filter.area.$lte) {
                 delete filter.area.$lte;
             }
         }
@@ -195,36 +185,51 @@ exports.search_post = async function (req, res) {
     }
 }
 
-exports.edit_post_by_id = async function (req,res) {
+exports.edit_post_by_id = async function (req, res) {
     try {
+        var address = req.body.address;
+        var city = req.body.city;
+        var district = req.body.district;
+        var ward = req.body.ward;
+        var price = req.body.price;
+        var area = req.body.area;
+        var description = req.body.description
+        var title = req.body.title;
         var updateRoomSet = {
-            address : req.body.address,
-            city : req.body.city,
-            district : req.body.district,
-            ward : req.body.ward,
-            price : req.body.price,
-            area : req.body.area,
-            description : req.body.description
+            address: req.body.address,
+            city: req.body.city,
+            district: req.body.district,
+            ward: req.body.ward,
+            price: req.body.price,
+            area: req.body.area,
+            description: req.body.description
         };
-        await Room.findByIdAndUpdate(req.body.room_id, {"$set": updateRoomSet});
+        if (req.files) {
+            var images = [];
+            for (var i = 0; i < req.files.length; i++) {
+                images.push('/images/posts/' + req.files[i].filename);
+            }
+            updateRoomSet["images"] = images;
+        }
+        await Room.findByIdAndUpdate(req.body.room_id, { "$set": updateRoomSet });
         var updatePostSet = {
-            title: req.body.title
+            title
         };
-        await Post.findByIdAndUpdate(req.params.post_id, {"$set" : updatePostSet});
+        await Post.findByIdAndUpdate(req.params.post_id, { "$set": updatePostSet });
         res.send("Updated!");
     } catch (error) {
         console.log(error);
         res.send("Server internal error!");
     }
-    
+
 }
 
-exports.delete_post_by_id = async function (req,res) {
+exports.delete_post_by_id = async function (req, res) {
     try {
         var deletePostSet = {
-            status : "d"
+            status: "d"
         };
-        await Post.findByIdAndUpdate(req.params.post_id, {"$set" : deletePostSet});
+        await Post.findByIdAndUpdate(req.params.post_id, { "$set": deletePostSet });
         res.send("Deleted!");
     } catch (error) {
         console.log(error);

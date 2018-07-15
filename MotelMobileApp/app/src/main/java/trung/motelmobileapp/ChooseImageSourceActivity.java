@@ -8,65 +8,43 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.os.StrictMode;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.koushikdutta.async.Util;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 import java.io.File;
+import java.util.Date;
 
 import trung.motelmobileapp.MyTools.Constant;
 
-public class ChangeAvatarActivity extends AppCompatActivity {
+public class ChooseImageSourceActivity extends AppCompatActivity {
 
-    String profileImage;
-    ImageButton newAvatar, btnCamera, btnGallery;
+    String imageChosen = "";
     Boolean storagePermission = false;
-    Button btnSave;
-    File image;
-    SharedPreferences mySession;
+    Intent result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         checkStoragePermission();
-        setContentView(R.layout.activity_change_avatar);
-        profileImage = getIntent().getStringExtra("Profile Image");
-        newAvatar = findViewById(R.id.change_avatar_image);
-        btnCamera = findViewById(R.id.btnCamera);
-        btnGallery = findViewById(R.id.btnGallery);
-        btnSave = findViewById(R.id.btnChange);
-        mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
-        Glide.with(this).load(Constant.WEB_SERVER + profileImage).into(newAvatar);
-        btnSave.setVisibility(View.GONE);
-    }
-
-    public void backToProfilePage(View view) {
-        setResult(Activity.RESULT_CANCELED);
-        finish();
+        setContentView(R.layout.activity_choose_image_source);
+        result = new Intent();
     }
 
     public void clickToGallery(View view) {
-        if (storagePermission){
+        if (storagePermission) {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, Constant.REQUEST_ID_FOR_GALLERY);
         } else {
@@ -78,15 +56,15 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     }
 
     public void clickToCamera(View view) {
-        if (storagePermission){
+        if (storagePermission) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             File picturePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                     .getAbsolutePath(), "/SweetMotel");
-            if (!picturePath.exists()){
+            if (!picturePath.exists()) {
                 picturePath.mkdir();
             }
-            image = new File(picturePath, "user_avatar.jpg");
-            Uri imageUri = Uri.fromFile(image);
+            imageChosen += picturePath.getAbsolutePath() + new Date().getTime() + ".jpg";
+            Uri imageUri = Uri.fromFile(new File(imageChosen));
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             makeAccessForFiles();
             startActivityForResult(intent, Constant.REQUEST_ID_FOR_CAMERA);
@@ -99,7 +77,7 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     }
 
     //Make URI sharing through intent available in Android >= 7
-    private void makeAccessForFiles(){
+    private void makeAccessForFiles() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
     }
@@ -107,32 +85,24 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        btnSave.setVisibility(View.VISIBLE);
-        switch (requestCode){
-            case Constant.REQUEST_ID_FOR_CAMERA:
-                switch (resultCode){
-                    case Activity.RESULT_OK:
-                        Glide.with(getApplicationContext()).load(image).into(newAvatar);
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        btnSave.setVisibility(View.GONE);
-                        break;
-                }
-                break;
-            case Constant.REQUEST_ID_FOR_GALLERY:
-                switch (resultCode){
-                    case Activity.RESULT_OK:
-                        image =  getFileFromURI(data.getData());
-                        Glide.with(getApplicationContext()).load(image).into(newAvatar);
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        btnSave.setVisibility(View.GONE);
-                        break;
-                }
+        if (resultCode == Activity.RESULT_CANCELED) {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+        } else {
+            switch (requestCode) {
+                case Constant.REQUEST_ID_FOR_CAMERA:
+                    break;
+                case Constant.REQUEST_ID_FOR_GALLERY:
+                    imageChosen = getFileFromURI(data.getData()).getAbsolutePath();
+                    break;
+            }
+            result.putExtra("Image File", imageChosen);
+            setResult(Activity.RESULT_OK, result);
+            finish();
         }
     }
 
-    private File getFileFromURI(Uri uri){
+    private File getFileFromURI(Uri uri) {
         String filePath;
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         if (cursor == null) {
@@ -166,20 +136,8 @@ public class ChangeAvatarActivity extends AppCompatActivity {
             if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 storagePermission = true;
             } else {
-                Toast.makeText(getApplicationContext(), "Cần quyền truy cập để cập nhật hình đại diện!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Cần quyền truy cập để lấy hình!", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    public void clickToChangeAvatar(View view) {
-        if (image != null){
-            Intent imageLink = new Intent();
-            imageLink.putExtra("Image Link", image.getAbsolutePath());
-            setResult(Activity.RESULT_OK, imageLink);
-            finish();
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
         }
     }
 }

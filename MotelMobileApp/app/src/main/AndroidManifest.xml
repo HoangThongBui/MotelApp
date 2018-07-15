@@ -38,7 +38,7 @@
         <activity
             android:name=".ConfirmActivity"
             android:theme="@style/Theme.AppCompat.Dialog"></activity>
-        <activity android:name=".ChangeAvatarActivity"></activity>
+        <activity android:name=".ChooseImageSourceActivity" android:theme="@style/Theme.AppCompat.Dialog"></activity>
     </application>
 
 </manifest>

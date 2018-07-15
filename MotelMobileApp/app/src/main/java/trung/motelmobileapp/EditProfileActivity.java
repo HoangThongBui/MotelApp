@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.Builders;
-import com.koushikdutta.ion.future.ResponseFuture;
 
 import java.io.File;
 
@@ -77,7 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         Builders.Any.M multipartBuilder = builder.setMultipartParameter("name", name)
                                                                  .setMultipartParameter("phone", phone);
                         if (newAvatar != null){
-                            multipartBuilder.setMultipartFile("avatar", "image/jpg" ,newAvatar);
+                            multipartBuilder.setMultipartFile("avatar",newAvatar);
                         }
                         multipartBuilder
                                 .asString()
@@ -106,11 +104,11 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            case Constant.REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR:
+            case Constant.REQUEST_ID_FOR_GO_TO_CHOOSE_IMAGE:
                 //update avatar link
                 if (resultCode == Activity.RESULT_OK){
                     if (data != null){
-                        newAvatar = new File(data.getStringExtra("Image Link"));
+                        newAvatar = new File(data.getStringExtra("Image File"));
                         Glide.with(getApplicationContext()).load(newAvatar).into(profileImage);
                     }
                 }
@@ -139,8 +137,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void clickToChooseNewAvatar(View view) {
-        Intent intent = new Intent(getApplicationContext(), ChangeAvatarActivity.class);
-        intent.putExtra("Profile Image", currentImage);
-        startActivityForResult(intent, Constant.REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR);
+        startActivityForResult(new Intent(getApplicationContext(), ChooseImageSourceActivity.class), Constant.REQUEST_ID_FOR_GO_TO_CHOOSE_IMAGE);
     }
 }

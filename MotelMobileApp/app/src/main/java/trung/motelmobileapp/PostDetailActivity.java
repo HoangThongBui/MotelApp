@@ -47,7 +47,7 @@ public class PostDetailActivity extends AppCompatActivity {
     FloatingActionButton btnToEditPost;
     SharedPreferences mySession;
     ViewPager postImages;
-    LinearLayout commentLayout;
+    LinearLayout commentLayout, commentPart;
     TextView loginRequest;
     EditText commentArea;
 
@@ -69,6 +69,7 @@ public class PostDetailActivity extends AppCompatActivity {
         commentLayout = findViewById(R.id.comment_layout);
         loginRequest = findViewById(R.id.login_request);
         commentArea = findViewById(R.id.post_detail_comment_editor);
+        commentPart = findViewById(R.id.comment_area);
         mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
         if (mySession.getString("user_id", "").isEmpty()){
             commentLayout.setVisibility(View.GONE);
@@ -111,7 +112,8 @@ public class PostDetailActivity extends AppCompatActivity {
                                             result.get("room").getAsJsonObject().get("description").getAsString(),
                                             images
                                     ),
-                                    DateConverter.getPassedTime(result.get("request_date").getAsString())
+                                    DateConverter.getPassedTime(result.get("request_date").getAsString()),
+                                    result.get("status").getAsString()
                             );
 
                             //Render view
@@ -136,6 +138,12 @@ public class PostDetailActivity extends AppCompatActivity {
                             //Only owner can edit post
                             if (!mySession.getString("user_id", "").equals(postDetail.getUser().getId())) {
                                 btnToEditPost.setVisibility(View.GONE);
+                            }
+
+                            if (postDetail.getStatus().equals("u")) {
+
+                                commentPart.setVisibility(View.GONE);
+                                return;
                             }
 
                             //loading comments from server

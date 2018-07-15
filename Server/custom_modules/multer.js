@@ -17,10 +17,13 @@ const multerConfig = {
         filename: (req, file, next) => {
             //split 2 situations
             if (req.params.user_id) {
-                const extension = file.mimetype.split('/')[1];//get extension
+                const extension = file.originalname.split('.')[1]//get extension
                 next(null, req.params.user_id + '_' + file.fieldname + '_' + new Date().getTime() + '.' + extension); //custom file name
             }
             else {
+                const extension = file.originalname.split('.')[1]//get extension
+                console.log(file);
+                next(null, 'rooms_image' + '_' + new Date().getTime() + '.' + extension); //custom file name
             }
         }
     })

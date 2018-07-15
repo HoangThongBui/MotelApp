@@ -84,8 +84,6 @@ exports.update_profile = async function (req,res) {
         var id = req.params.user_id;
         var name = req.body.name;
         var phone = req.body.phone;
-        console.log(req.body);
-        console.log(req.file);
         var set;
         if (req.file){
             var image = '/images/users/' + req.file.filename;
