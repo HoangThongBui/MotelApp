@@ -44,6 +44,10 @@ public class RoomDTO implements Serializable {
         this.description = description;
     }
 
+    public String getFullAddress(){
+        return this.address + ", Phuong " + this.ward + ", Quan " + this.getDistrict() + ", " + this.city;
+    }
+
     public ArrayList<String> getImages() {
         return images;
     }

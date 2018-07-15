@@ -30,16 +30,20 @@ exports.get_posts_nearby = async function (req, res) {
     try {
         var currentLat = req.body.lat;
         var currentLon = req.body.lon;
+        var confirmedPosts = await Post.find({status : "c"});
+        var roomsOfConfirmedPosts = [];
+        for (var i = 0; i < confirmedPosts.length; i++){
+            roomsOfConfirmedPosts.push(await Room.findById(confirmedPosts[i].room));
+        }                               
         var roomData = [];
-        var allRooms = await Room.find();
-        for (var i = 0; i < allRooms.length; i++) {
+        for (var i = 0; i < roomsOfConfirmedPosts.length; i++) {
             var geocodeResult = await Geocoder.geocode(
-                allRooms[i].address + ', ' +
-                'Phường ' + allRooms[i].ward + ', ' +
-                'Quận ' + allRooms[i].district + ', ' +
-                allRooms[i].city);
+                roomsOfConfirmedPosts[i].address + ', ' +
+                'Phường ' + roomsOfConfirmedPosts[i].ward + ', ' +
+                'Quận ' + roomsOfConfirmedPosts[i].district + ', ' +
+                roomsOfConfirmedPosts[i].city);
             roomData.push({
-                id: allRooms[i]._id.toString(),
+                id: roomsOfConfirmedPosts[i]._id.toString(),
                 geocode: {
                     lat: geocodeResult[0].latitude,
                     lon: geocodeResult[0].longitude
@@ -61,7 +65,7 @@ exports.get_posts_nearby = async function (req, res) {
         for (var i = 0; i < geoNearby.length; i++) {
             roomsNearby.push(geoNearby[i].i);
         }
-        var posts = await Post.find({ status: "c", "room": { "$in": roomsNearby } }, { status: 0 }).sort({ request_date: -1 });
+        var posts = await Post.find({"room": { "$in": roomsNearby } }, { status: 0 }).sort({ request_date: -1 });
         for (var i = 0; i < posts.length; i++) {
             posts[i].room = await Room.findById(posts[i].room);
             posts[i].user = await User.findById(posts[i].user, { password: 0, status: 0, role: 0 });

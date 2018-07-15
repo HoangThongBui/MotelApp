@@ -7,12 +7,6 @@
     tools:context=".Components.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ImageView
-        android:id="@+id/loadingGif"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:layout_width="60dp"
-        android:layout_height="60dp"/>
 
     <TextView
         android:id="@+id/serverResult"
@@ -40,7 +34,10 @@
 
     </LinearLayout>
 
-
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/refresh_main_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMain"
@@ -48,5 +45,9 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
+
+
 
 </LinearLayout>

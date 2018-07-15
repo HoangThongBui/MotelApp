@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
@@ -20,6 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,6 +36,8 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import trung.motelmobileapp.Components.DetailCommentRecyclerViewAdapter;
 import trung.motelmobileapp.Components.PostDetailImageSliderAdapter;
@@ -50,6 +61,8 @@ public class PostDetailActivity extends AppCompatActivity {
     LinearLayout commentLayout, commentPart;
     TextView loginRequest;
     EditText commentArea;
+    private GoogleMap map;
+    SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +84,7 @@ public class PostDetailActivity extends AppCompatActivity {
         commentArea = findViewById(R.id.post_detail_comment_editor);
         commentPart = findViewById(R.id.comment_area);
         mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
+        mapFragment =  (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mySession.getString("user_id", "").isEmpty()){
             commentLayout.setVisibility(View.GONE);
         }
@@ -140,8 +154,26 @@ public class PostDetailActivity extends AppCompatActivity {
                                 btnToEditPost.setVisibility(View.GONE);
                             }
 
-                            if (postDetail.getStatus().equals("u")) {
+                            //
+                            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                                @Override
+                                public void onMapReady(GoogleMap googleMap) {
+                                    map = googleMap;
+                                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                                    try {
+                                        List<Address> geocodeAddress = geocoder.getFromLocationName(postDetail.getRoom().getFullAddress(), 5);
+                                        LatLng roomLocation = new LatLng(geocodeAddress.get(0).getLatitude(), geocodeAddress.get(0).getLongitude());
+                                        map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle()));
+                                        map.moveCamera(CameraUpdateFactory.newLatLng(roomLocation));
+                                    } catch (Exception e){
+                                        e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(), "Không xác định được vị trí trên bản đồ!", Toast.LENGTH_LONG).show();
+                                    }
 
+                                }
+                            });
+
+                            if (postDetail.getStatus().equals("u")) {
                                 commentPart.setVisibility(View.GONE);
                                 return;
                             }
@@ -259,4 +291,5 @@ public class PostDetailActivity extends AppCompatActivity {
     private boolean isCommentValidated(String comment){
         return !comment.isEmpty();
     }
+
 }
