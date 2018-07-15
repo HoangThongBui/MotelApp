@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -45,18 +47,10 @@ public class MainActivity extends AppCompatActivity {
         tabAdapter.addFragment(new UnauthorizedProfileFragment(), "");
 
         //Main tab
-        MainFragment mainFragment = new MainFragment();
-        Bundle locationInfo = new Bundle();
-        locationInfo.putDouble("Latitude", getIntent().getDoubleExtra("Latitude", 0));
-        locationInfo.putDouble("Longitude", getIntent().getDoubleExtra("Longitude", 0));
-
-        mainFragment.setArguments(locationInfo);
-        tabAdapter.addFragment(mainFragment, "");
+        tabAdapter.addFragment(new MainFragment(), "");
 
         //Search tab
-        SearchFragment searchFragment = new SearchFragment();
-        searchFragment.setArguments(locationInfo);
-        tabAdapter.addFragment(searchFragment, "");
+        tabAdapter.addFragment(new SearchFragment(), "");
 
         //viewpager setup
         viewPager.setAdapter(tabAdapter);

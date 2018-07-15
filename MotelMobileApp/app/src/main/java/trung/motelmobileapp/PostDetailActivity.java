@@ -164,7 +164,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                         List<Address> geocodeAddress = geocoder.getFromLocationName(postDetail.getRoom().getFullAddress(), 5);
                                         LatLng roomLocation = new LatLng(geocodeAddress.get(0).getLatitude(), geocodeAddress.get(0).getLongitude());
                                         map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle()));
-                                        map.moveCamera(CameraUpdateFactory.newLatLng(roomLocation));
+                                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(roomLocation, 16));
                                     } catch (Exception e){
                                         e.printStackTrace();
                                         Toast.makeText(getApplicationContext(), "Không xác định được vị trí trên bản đồ!", Toast.LENGTH_LONG).show();
