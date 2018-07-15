@@ -45,7 +45,6 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     File image;
     SharedPreferences mySession;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,30 +173,10 @@ public class ChangeAvatarActivity extends AppCompatActivity {
 
     public void clickToChangeAvatar(View view) {
         if (image != null){
-            String userId = mySession.getString("user_id", "");
-            Ion.with(getApplicationContext())
-               .load("PUT",Constant.WEB_SERVER + "/user/api/change_avatar/" + userId)
-               .setMultipartFile("avatar", "image/jpg",image)
-               .asString()
-               .setCallback(new FutureCallback<String>() {
-                   @Override
-                   public void onCompleted(Exception e, String result) {
-                       if (e != null){
-                           Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                       }
-                       else {
-                           switch (result){
-                               case "Avatar changed!":
-                                   setResult(Activity.RESULT_OK);
-                                   finish();
-                                   break;
-                               default:
-                                   Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                                   break;
-                           }
-                       }
-                   }
-               });
+            Intent imageLink = new Intent();
+            imageLink.putExtra("Image Link", image.getAbsolutePath());
+            setResult(Activity.RESULT_OK, imageLink);
+            finish();
         }
         else {
             Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();

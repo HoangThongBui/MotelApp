@@ -15,7 +15,7 @@ module.exports = function(app){
 
     app.route('/user/api/get_user_by_id/:user_id')
         .get(UserController.get_user_by_id);
-    
-    app.route('/user/api/change_avatar/:user_id')
-        .put(Multer.single('avatar'),UserController.change_avatar);
+
+    app.route('/user/api/update_profile/:user_id')
+        .put(Multer.single('avatar'), UserController.update_profile);
 }

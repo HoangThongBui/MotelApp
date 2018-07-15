@@ -28,4 +28,5 @@ public class Constant {
     public static final int REQUEST_ID_FOR_CAMERA = 11;
     public static final int REQUEST_ID_FOR_GALLERY = 12;
     public static final int REQUEST_ID_FOR_STORAGE_PERMISSION = 13;
+    public static final int REQUEST_ID_FOR_UPDATE_PROFILE = 14;
 }

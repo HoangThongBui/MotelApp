@@ -18,7 +18,7 @@ const multerConfig = {
             //split 2 situations
             if (req.params.user_id) {
                 const extension = file.mimetype.split('/')[1];//get extension
-                next(null, req.params.user_id + '_' + file.fieldname + new Date().getTime() + '.' + extension); //custom file name
+                next(null, req.params.user_id + '_' + file.fieldname + '_' + new Date().getTime() + '.' + extension); //custom file name
             }
             else {
             }

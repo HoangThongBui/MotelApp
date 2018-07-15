@@ -79,13 +79,11 @@ public class ProfileFragment extends Fragment {
                                     result.get("phone").getAsString(),
                                     result.get("image").getAsString()
                             );
-
                             profileName.setText(user.getName());
-
                             if (!user.getImage().isEmpty()){
                                 Glide.with(getContext()).load(Constant.WEB_SERVER + user.getImage())
                                         .into(profileImage);
-                                
+
                             }
                         }
                     }
@@ -102,7 +100,11 @@ public class ProfileFragment extends Fragment {
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), EditProfileActivity.class));
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                intent.putExtra("Name", user.getName());
+                intent.putExtra("Phone", user.getPhone());
+                intent.putExtra("Profile Image", user.getImage());
+                startActivityForResult(intent, Constant.REQUEST_ID_FOR_UPDATE_PROFILE);
             }
         });
 
@@ -113,15 +115,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ChangeAvatarActivity.class);
-                intent.putExtra("Profile Image", user.getImage());
-                startActivityForResult(intent, Constant.REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR);
-            }
-        });
-
         return layout;
     }
 
@@ -129,20 +122,19 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
+            case Constant.REQUEST_ID_FOR_UPDATE_PROFILE:
+                if (resultCode == Activity.RESULT_OK){
+                    Toast.makeText(getContext(), "Bạn đã cập nhật hồ sơ thành công!", Toast.LENGTH_SHORT).show();
+                    tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
+                    tabAdapter.notifyDataSetChanged();
+                }
+                break;
             case Constant.REQUEST_ID_FOR_LOGOUT :
                 if (resultCode == Activity.RESULT_OK) {
                     mySession.edit().clear().apply();
                     Toast.makeText(getContext(), "Bạn đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
                     tabAdapter.replaceFragmentAtPosition(new UnauthorizedProfileFragment(), 0);
                     tabAdapter.notifyDataSetChanged();
-                }
-                break;
-            case Constant.REQUEST_ID_FOR_GO_TO_CHANGE_AVATAR:
-                if (resultCode == Activity.RESULT_OK) {
-                    Toast.makeText(getContext(), "Bạn đã đổi hình đại diện thành công!", Toast.LENGTH_SHORT).show();
-                    tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
-                    tabAdapter.notifyDataSetChanged();
-//                    getActivity().recreate();
                 }
                 break;
         }

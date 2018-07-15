@@ -79,15 +79,27 @@ exports.get_user_by_id = async function (req,res){
     }
 }
 
-exports.change_avatar = async function (req,res) {
+exports.update_profile = async function (req,res) {
     try {
         var id = req.params.user_id;
-        var image = '/images/users/' + req.file.filename;
-        var set = {
-            image
-        };
+        var name = req.body.name;
+        var phone = req.body.phone;
+        console.log(req.body);
+        console.log(req.file);
+        var set;
+        if (req.file){
+            var image = '/images/users/' + req.file.filename;
+            set = {
+                name, phone, image
+            }
+        }
+        else {
+            set = {
+                name, phone
+            }       
+        }
         await User.findByIdAndUpdate(id, {"$set" : set});
-        res.send('Avatar changed!')    
+        res.send("Profile updated!");
     } catch (error) {
         console.log(error);
         res.send("Server internal error!");
