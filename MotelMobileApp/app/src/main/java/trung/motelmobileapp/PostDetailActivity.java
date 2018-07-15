@@ -177,7 +177,8 @@ public class PostDetailActivity extends AppCompatActivity {
                                     try {
                                         List<Address> geocodeAddress = geocoder.getFromLocationName(postDetail.getRoom().getFullAddress(), 5);
                                         roomLocation = new LatLng(geocodeAddress.get(0).getLatitude(), geocodeAddress.get(0).getLongitude());
-                                        map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle()));
+                                        map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle())
+                                                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.house_marker)));
                                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(roomLocation, 16));
                                         if (checkLocationPermission()) {
                                             map.setMyLocationEnabled(true);
@@ -185,8 +186,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                                 @Override
                                                 public boolean onMyLocationButtonClick() {
                                                     currentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-                                                    map.addMarker(new MarkerOptions().position(currentLocation)
-                                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_location)));
+                                                    map.addMarker(new MarkerOptions().position(currentLocation));
                                                     LatLngBounds area;
                                                     try {
                                                         area = new LatLngBounds(currentLocation, roomLocation);
