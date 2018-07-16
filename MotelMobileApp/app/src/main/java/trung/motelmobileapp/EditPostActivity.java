@@ -204,7 +204,8 @@ public class EditPostActivity extends AppCompatActivity {
                             .setMultipartParameter("ward", ward)
                             .setMultipartParameter("price", price)
                             .setMultipartParameter("area", area)
-                            .setMultipartParameter("description", description);
+                            .setMultipartParameter("description", description)
+                            .setMultipartParameter("status", postDetail.getStatus());
 
                     ArrayList<String> editImages = new ArrayList<String>();
                     for (String imageLink : npiaAdapter.getImages()) {
@@ -232,6 +233,12 @@ public class EditPostActivity extends AppCompatActivity {
                                         switch (result) {
                                             case "Updated!":
                                                 Toast.makeText(getApplicationContext(), "Bạn đã cập nhật bài đăng thành công!",
+                                                        Toast.LENGTH_SHORT).show();
+                                                setResult(Activity.RESULT_OK);
+                                                finish();
+                                            case "Post already confirmed!":
+                                                Toast.makeText(getApplicationContext(), "Bài đăng của bạn đã được xác nhận. Vui " +
+                                                                "lòng cập nhật lại sau!",
                                                         Toast.LENGTH_SHORT).show();
                                                 setResult(Activity.RESULT_OK);
                                                 finish();

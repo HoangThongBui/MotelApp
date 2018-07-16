@@ -191,6 +191,11 @@ exports.search_post = async function (req, res) {
 
 exports.edit_post_by_id = async function (req, res) {
     try {
+        var editStatus = req.body.status;
+        var currentStatus = await Post.findById(req.params.post_id).status;
+        if (editStatus !== currentStatus){
+            res.send("Post already confirmed!");
+        }
         var address = req.body.address;
         var city = req.body.city;
         var district = req.body.district;
