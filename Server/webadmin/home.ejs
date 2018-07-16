@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <%include ./head/head%>
+    <%include ./head%>
         <title>Home Page</title>
 </head>
 
@@ -12,8 +12,36 @@
             <%include ./root%>
         </div>
         <div class="col-lg-10">
-            <!-- <div style="height: 1500px;"></div> -->
+            <h2 class="welcome-message">Xin chào, admin
+                <b style="color: chartreuse">
+                    <%=admin%>
+                </b>
+            </h2>
 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Tên nhà trọ</th>
+                        <th scope="col">Chủ Nhà</th>
+                        <th scope="col">Giá(VNĐ)</th>
+                        <th scope="col">Tình trạng</th>
+                        <th scope="col">Thời gian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%posts.forEach(function(post) {%>
+                        <tr>
+                            <td><%=post.title%></td>
+                            <td><%=post.user.name%></td>
+                            <td><%=post.room.price%></td>
+                            <td style="color: yellow">
+                                Đang chờ xử lý
+                            </td>
+                            <td><%=new Date(post.request_date).getTime()%></td>
+                        </tr>
+                        <%});%>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>

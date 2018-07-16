@@ -17,8 +17,7 @@ const
   Comment = require("./models/CommentModel");
 
 // view engine setup (for web admin)
-app.set("views", [path.join(__dirname, "webadmin"),
-                  path.join(__dirname,"webadmin/head")]);
+app.set("views", [path.join(__dirname, "webadmin")]);
 app.set("view engine", "ejs");
 
 //Database connection

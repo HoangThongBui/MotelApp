@@ -1,16 +1,46 @@
-function goToPage(page){
-    switch (page){
+
+function goToPage(page) {
+    switch (page) {
         case 'home':
-        location.href = '/admin/home';
-        break;
+            location.href = '/admin/home';
+            break;
         case 'user':
-        location.href = '/admin/user';
-        break;
+            location.href = '/admin/user';
+            break;
         case 'post':
-        location.href = '/admin/post';
-        break;
+            location.href = '/admin/post';
+            break;
         case 'report':
-        location.href = '/admin/report';
-        break;
+            location.href = '/admin/report';
+            break;
     }
+}
+
+function getPassedTime(postTime) {
+    var timeUnit;
+    var passedTime = parseInt((new Date().getTime() - postTime) / 1000);
+    if (passedTime < 60) {
+        return "Cách đây không lâu";
+    }
+    if (passedTime < 3600) {
+        timeUnit = parseInt(passedTime / 60);
+        return "Khoảng " + timeUnit + " phút trước";
+    }
+    if (passedTime < 86400) {
+        timeUnit = parseInt(passedTime / 3600);
+        return "Khoảng " + timeUnit + " giờ trước";
+    }
+    if (passedTime < 604800) {
+        timeUnit = parseInt(passedTime / 86400);
+        return "Khoảng " + timeUnit + " ngày trước";
+    }
+    if (passedTime < 2419200) {
+        timeUnit = parseInt(passedTime / 604800);
+        return "Khoảng " + timeUnit + " tuần trước";
+    }
+    if (passedTime < 29030400) {
+        timeUnit = parseInt(passedTime / 2419200);
+        return "Khoảng " + timeUnit + " tháng trước";
+    }
+    return "Cách đây rất lâu";
 }

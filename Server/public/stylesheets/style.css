@@ -25,3 +25,8 @@ a {
   border-bottom-width: 0.1px; */
 }
 
+.welcome-message {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
