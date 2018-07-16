@@ -1,39 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <%include ./head/head%>
-        <title>Home Page</title>
-</head>
-
-<body>
-    <div class="row layout">
-        <div class="col-lg-2 tab-bar">
-            <div class="row">
-                <button onclick="goToPage('home')"  class="col-lg-12 tab-element text-center">
-                    Home
-                </button>
-            </div>
-            <div class="row">
-                <button onclick="goToPage('user')" class="col-lg-12 tab-element text-center">
-                    Users
-                </button>
-            </div>
-            <div class="row">
-                <button onclick="goToPage('post')" class="col-lg-12 tab-element text-center">
-                    Posts
-                </button>
-            </div>
-            <div class="row">
-                <button onclick="goToPage('report')" class="col-lg-12 tab-element text-center">
-                    Report
-                </button>
-            </div>
-        </div>
-        <div class="col-lg-10">
-            Content here
-        </div>
+<div class="row">
+    <%if (page_type === 'home') {%>
+        <button onclick="goToPage('home')" class="col-lg-12 tab-element text-center" style="background: chartreuse">
+            Home
+        </button>
+        <%} else {%>
+            <button onclick="goToPage('home')" class="col-lg-12 tab-element text-center">
+                Home
+            </button>
+            <%}%>
+</div>
+<div class="row">
+    <%if (page_type === 'user') {%>
+        <button onclick="goToPage('user')" class="col-lg-12 tab-element text-center" style="background: chartreuse">
+            Users
+        </button>
+        <%} else {%>
+            <button onclick="goToPage('user')" class="col-lg-12 tab-element text-center">
+                Users
+            </button>
+            <%}%>
+</div>
+<div class="row">
+    <%if (page_type === 'post') {%>
+        <button onclick="goToPage('post')" class="col-lg-12 tab-element text-center" style="background: chartreuse">
+            Posts
+        </button>
+        <%} else {%>
+            <button onclick="goToPage('post')" class="col-lg-12 tab-element text-center">
+                Posts
+            </button>
+            <%}%>
+</div>
+<div class="row">
+    <%if (page_type === 'report') {%>
+        <button onclick="goToPage('report')" class="col-lg-12 tab-element text-center" style="background: chartreuse">
+            Report
+        </button>
+        <%} else {%>
+            <button onclick="goToPage('report')" class="col-lg-12 tab-element text-center">
+                Report
+            </button>
+            <%}%>
+</div>
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <%if (admin) {%>
+        Welcome, <b><%= admin%></b><br/>
+        <a href="/admin/logout">Log out</a>
+        <%}%>
     </div>
-</body>
-
-</html>
+</div>

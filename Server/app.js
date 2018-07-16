@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
+var session = require('express-session');
 
 var app = express();
 
@@ -33,11 +34,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(session({secret : "Admin is coming!"}));
+//checkSession
+
 
 //Route Implementation
 //admin
 const LoginRoute = require('./WebAdminMVC/routes/LoginRoute');
 LoginRoute(app);
+
+app.use(require('./custom_modules/session'));
+
 const HomepageRoute = require("./WebAdminMVC/routes/HomepageRoute");
 HomepageRoute(app);
 const UserpageRoute = require("./WebAdminMVC/routes/UserpageRoute");
