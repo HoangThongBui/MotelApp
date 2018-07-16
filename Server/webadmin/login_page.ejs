@@ -3,11 +3,33 @@
 
 <head>
     <%include ./head/head%>
-    <title>Login Page</title>
+        <title>Login Page</title>
 </head>
 
 <body>
-    Day la trang Login
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    <h1 class="login">Login</h1>
+                    <form action="/admin/login/" method="POST">
+                        <div class="form-group">
+                            <label for="inputEmailExample">Email</label>
+                            <input class="form-control" name="email" type="email" placeholder="Email" />
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmailExample">Password</label>
+                            <input class="form-control" name="password" type="password" placeholder="Password" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+            <%if (typeof(error) !== 'undefined') {%>
+                <script>alert('<%=error%>')</script>
+            <%}%>
+        </div>
+    </div>
 </body>
 
 </html>

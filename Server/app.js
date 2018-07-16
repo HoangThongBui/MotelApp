@@ -35,8 +35,21 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 //Route Implementation
-const AdminPageRoute = require("./WebAdminMVC/routes/AdminHomepageRoute");
-AdminPageRoute(app);
+//admin
+const LoginRoute = require('./WebAdminMVC/routes/LoginRoute');
+LoginRoute(app);
+const HomepageRoute = require("./WebAdminMVC/routes/HomepageRoute");
+HomepageRoute(app);
+const UserpageRoute = require("./WebAdminMVC/routes/UserpageRoute");
+UserpageRoute(app);
+const PostpageRoute = require("./WebAdminMVC/routes/PostpageRoute");
+PostpageRoute(app);
+const ReportpageRoute = require("./WebAdminMVC/routes/ReportpageRoute");
+ReportpageRoute(app);
+
+
+
+//user
 const PostRoute = require("./APIs/routes/PostRoute");
 PostRoute(app);
 const CommentRoute = require('./APIs/routes/CommentRoute');

@@ -1,8 +1,27 @@
-body {
+/* body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+} */
+
+/*root*/
+.layout {
+  width: 100%;
+  height: auto;
 }
+
+.tab-bar {
+  background: chartreuse;
+}
+
+.tab-element {
+  height: 100px;
+  background: greenyellow;
+  /* border-bottom-style: ridge;
+  border-bottom-color: black;
+  border-bottom-width: 0.1px; */
+}
+
