@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(session({secret : "Admin is coming!"}));
-//checkSession
+
 
 
 //Route Implementation
@@ -43,7 +43,9 @@ app.use(session({secret : "Admin is coming!"}));
 const LoginRoute = require('./WebAdminMVC/routes/LoginRoute');
 LoginRoute(app);
 
+//checkSession to protect route
 app.use(require('./custom_modules/session'));
+
 
 const HomepageRoute = require("./WebAdminMVC/routes/HomepageRoute");
 HomepageRoute(app);

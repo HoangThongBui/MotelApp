@@ -12,7 +12,76 @@
                     <%include ./root%>
                 </div>
         <div class="col-lg-10">
-            Content here
+            <h5 style="margin-top: 20px">Các admin hiện tại</h5>
+
+            <table class="table">
+                <thead>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Số điện thoại</th>
+                </thead>
+                <tbody>
+                    <%admins.forEach(function (admin) {%>
+                        <tr>
+                            <td><%=admin.name%></td>
+                            <td><%=admin.email%></td>
+                            <td><%=admin.phone%></td>
+                        </tr>
+                   <%});%>
+                </tbody>
+            </table>
+
+            <button class="btn-primary">
+                Thêm admin
+            </button>
+
+
+            <h5 style="margin-top: 100px">Những người dùng hiện tại</h5>
+            <%if (users.length !== 0) {%>
+                <table class="table">
+                <thead>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Điện thoại</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col"></th>
+                </thead>
+                <tbody>
+                    <%users.forEach(function (user) {%>
+                        <tr>
+                            <td><%=user.name%></td>
+                            <td><%=user.email%></td>
+                            <td><%=user.phone%></td>
+                            <td>
+                                <%if (user.status) {%>
+                                    <span style="color: chartreuse">Đang hoạt động</span>
+                                <%} else {%>
+                                    <span style="color: red">Đang bị chặn</span>
+                                <%}%>
+                            </td>
+                            <td>
+                            <%if (user.status) {%>
+                                <button onclick="location.href = '/admin/user/ban/<%=user._id%>'" class="btn-danger">
+                                    Chặn
+                                </button>
+                            <%} else {%>
+                                <button onclick="location.href = '/admin/user/unban/<%=user._id%>'" class="btn-success">
+                                    Bỏ chặn
+                                </button>
+                            <%}%>
+                        </td>
+                        </tr>
+                    <%});%>
+                </tbody>
+                </table>
+            <%} else {%>
+                <h6>Hiện tại chưa có người dùng nào.</h6>
+            <%}%>
+
+            <button class="btn-primary">
+                Tạo người dùng
+            </button>
+
         </div>
     </div>
 </body>
