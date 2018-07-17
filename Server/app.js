@@ -17,7 +17,8 @@ const
   Comment = require("./models/CommentModel");
 
 // view engine setup (for web admin)
-app.set("views", [path.join(__dirname, "webadmin")]);
+app.set("views", [path.join(__dirname, "webadmin"),
+                  path.join(__dirname, "webadmin/tools")]);
 app.set("view engine", "ejs");
 
 //Database connection
@@ -52,6 +53,8 @@ const PostpageRoute = require("./WebAdminMVC/routes/PostpageRoute");
 PostpageRoute(app);
 const ReportpageRoute = require("./WebAdminMVC/routes/ReportpageRoute");
 ReportpageRoute(app);
+const PostDetailRoute = require('./WebAdminMVC/routes/PostDetailRoute');
+PostDetailRoute(app);
 
 
 

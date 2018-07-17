@@ -17,9 +17,10 @@
                     <%=admin%>
                 </b>
             </h2>
-
-            <table class="table">
-                <thead>
+            <%if (posts.length !== 0) {%>
+            <h6 style="margin-left:  20px">Các bài đăng đang chờ duyệt</h6>
+            <table id="unconfirmed-home" class="table post-table">
+                <thead style="background: chartreuse">
                     <tr>
                         <th scope="col">Tên nhà trọ</th>
                         <th scope="col">Chủ Nhà</th>
@@ -29,19 +30,26 @@
                     </tr>
                 </thead>
                 <tbody>
+
+                    <!-- post id -->
+                    
                     <%posts.forEach(function(post) {%>
-                        <tr>
+                        <tr onclick="location.href = '/admin/post/<%=post._id%>'" class="post-item">
                             <td><%=post.title%></td>
                             <td><%=post.user.name%></td>
                             <td><%=post.room.price%></td>
                             <td style="color: yellow">
                                 Đang chờ xử lý
                             </td>
-                            <td><%=new Date(post.request_date).getTime()%></td>
+                            <td><%=post.request_date.toString().split('GMT')[0]%></td>
                         </tr>
                         <%});%>
                 </tbody>
             </table>
+            
+            <%} else {%>
+                <h6>Tất cả bài đăng đã được duyệt</h6>
+            <%}%>    
         </div>
     </div>
 </body>

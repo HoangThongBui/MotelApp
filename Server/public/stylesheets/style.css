@@ -30,3 +30,13 @@ a {
   margin-left: 20px;
 }
 
+.post-table {
+  margin-top: 40px;
+}
+
+
+
+.post-item:hover{
+   background: lightgrey;
+}
+
