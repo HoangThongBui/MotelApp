@@ -10,8 +10,8 @@ function goToPage(page) {
         case 'post':
             location.href = '/admin/post';
             break;
-        case 'report':
-            location.href = '/admin/report';
+        case 'post_report':
+            location.href = '/admin/post_report';
             break;
     }
 }

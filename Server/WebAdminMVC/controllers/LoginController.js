@@ -20,12 +20,17 @@ exports.login = async (req, res) => {
       res.render('login_page', { error: 'Admin not found!' });
     }
     else {
-      if (password === user.password) {
-        req.session.admin = user.name;
-        res.redirect('/admin/home');
+      if (user.role !== 'admin') {
+        res.render('login_page', { error: 'You are not admin!' });
       }
       else {
-        res.render('login_page', { error: 'Wrong password!' });
+        if (password === user.password) {
+          req.session.admin = user.name;
+          res.redirect('/admin/home');
+        }
+        else {
+          res.render('login_page', { error: 'Wrong password!' });
+        }
       }
     }
   } catch (error) {
@@ -34,7 +39,7 @@ exports.login = async (req, res) => {
 }
 
 exports.logout = async (req, res) => {
-    await req.session.destroy();
-    res.locals.admin = undefined;
-    res.redirect('/admin/login');
+  await req.session.destroy();
+  res.locals.admin = undefined;
+  res.redirect('/admin/login');
 }

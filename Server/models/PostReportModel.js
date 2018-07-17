@@ -12,7 +12,7 @@ const PostReportSchema = new mongoose.Schema({
   },
   report_status: Boolean
 }, {
-  collection: 'reports',
+  collection: 'post_reports',
   max: 1000
 });
 
