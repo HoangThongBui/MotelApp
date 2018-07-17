@@ -25,7 +25,8 @@ exports.login = async (req, res) => {
       }
       else {
         if (password === user.password) {
-          req.session.admin = user.name;
+          delete user.password;
+          req.session.admin = user;
           res.redirect('/admin/home');
         }
         else {

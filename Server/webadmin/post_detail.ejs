@@ -12,8 +12,73 @@
                     <%include ./root%>
                 </div>
         <div class="col-lg-10">
-            <%=post%>
-            Content here
+                <div class="row">
+                    <div class="col-lg-12" style="height: 200px;"></div>
+                </div>
+                <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-8">
+                            <h2 class="h2">
+                                Tên nhà trọ:
+                            </h2>
+                            <h6><%=post.title%></h6>
+                            <h2 class="h2">
+                                Địa chỉ:
+                            </h2>
+                            <h6><%=post.room.address%>, Phường <%=post.room.ward%>, Quận <%=post.room.district%>, <%=post.room.city%></h6>
+                            <h2 class="h2">Mô tả</h2>
+                            <h6><%=post.room.description%></h6>
+                            <h2 class="h2">Đăng bởi: </h2>
+                            <h6><%=post.user.name%></h6>
+                            <h2 class="h2">Trạng thái:</h2>
+                            <%switch (post.status) {
+                                case 'u': %>
+                                    <h6 style="color: yellow;">Đang chờ xử lý</h6>
+                                <%break; 
+                                case 'c':%>
+                                    <h6 style="color: chartreuse;">Đã được duyệt</h6>
+                                <%break; 
+                                case 'r': %>
+                                    <h6 style="color: red;">Đã bị từ chối</h6>
+                                <%break; 
+                                case 'd': %>
+                                     <h6 style="color: lightgrey;">Đã bị xoá</h6>
+                                <%break;}%>  
+                            <h2 class="h2">Thời gian đăng: </h2>
+                            <h6><%=post.request_date.toString().split('GMT')[0]%></h6>
+            
+                            <div class="row d-flex justify-content-around">
+                                    <%switch (post.status) {
+                                        case 'c':
+                                        case 'r':%>
+                                        <div style="margin-top: 40px" class="row">
+                                            <form action="/admin/post/delete/<%=post._id%>" method="POST">
+                                                <input type="hidden" name="admin_id" value="<%=admin._id%>"/>
+                                                <button class="btn-danger">Xoá</button>
+                                            </form>                                                    
+                                        </div>
+                                        <%break;
+                                        case 'u':%>
+                                        <div style="margin-top: 40px" class="row">
+                                            <form action="/admin/post/confirm/<%=post._id%>" method="POST">
+                                                <input type="hidden" name="admin_id" value="<%=admin._id%>"/>
+                                                <button class="btn-success">Duyệt</button>
+                                            </form>
+                                            <form action="/admin/post/reject/<%=post._id%>" method="POST">
+                                                <input type="hidden" name="admin_id" value="<%=admin._id%>"/>
+                                                <button  style="margin-left: 40px" class="btn-warning">Từ chối</button>
+                                            </form>
+                                            <form action="/admin/post/delete/<%=post._id%>" method="POST">
+                                                <input type="hidden" name="admin_id" value="<%=admin._id%>"/>
+                                                <button  style="margin-left: 40px" class="btn-danger">Xoá</button>        
+                                            </form>
+                                        </div>
+                                        <%break;%>
+                                    <%}%>
+                            </div>
+                        </div>
+                        <div class="col-lg-2"></div>
+                    </div>
         </div>
     </div>
 </body>
