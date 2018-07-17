@@ -258,6 +258,8 @@ public class EditPostActivity extends AppCompatActivity {
                     editPostGif.setVisibility(View.VISIBLE);
                     Ion.with(getApplicationContext())
                             .load("DELETE", Constant.WEB_SERVER + "/post/api/delete_post_by_id/" + postId)
+                            .setBodyParameter("user_id", postDetail.getUser().getId())
+                            .setBodyParameter("status", postDetail.getStatus())
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override

@@ -12,7 +12,56 @@
                     <%include ./root%>
                 </div>
         <div class="col-lg-10">
-            Content here
+            <%if (reports.length !== 0) {%>
+                <h2 style="margin-top: 20px">Báo cáo gần đây</h2>
+                <table class="table">
+                    <thead>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Bài đăng</th>
+                        <th scope="col">Từ</th>
+                        <th scope="col">Thành</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Thời gian</th>
+                    </thead>
+                    <tbody>
+                        <%reports.forEach(function(report) {%>
+                            <tr>
+                                <td><%=report.user.name%></td>
+                                <td><%=report.user.email%></td>
+                                <td onclick="location.href = '/admin/post/<%=report.post._id%>'"  class="report-post"><%=report.post.title%></td>
+                                <%switch (report.from) {
+                                    case 'u': %>
+                                        <td style="color: yellow;">Chờ</td>
+                                    <%break; 
+                                    case 'c':%>
+                                        <td style="color: chartreuse;">Duyệt</td>
+                                    <%break; 
+                                    case 'r': %>
+                                        <td style="color: red;">Từ chối</td>
+                                    <%break; }%>
+                                <%switch (report.to) {
+                                    case 'u': %>
+                                        <td style="color: yellow;">Chờ</td>
+                                    <%break; 
+                                    case 'c':%>
+                                        <td style="color: chartreuse;">Duyệt</td>
+                                    <%break; 
+                                    case 'r': %>
+                                        <td style="color: red;">Từ chối</td>
+                                    <%break; 
+                                    case 'd': %>
+                                         <td style="color: lightgrey;">Xoá</td>
+                                    <%break;}%>                            
+                                <td><%=report.description%></td>
+                                <td><%=report.report_time.toString().split('GMT')[0]%></td>
+                            </tr>
+                        <%});%>
+                    </tbody>
+                </table>
+            <% } else {%>
+                <h6 style="margin-top: 20px">Chưa có tương tác nào gần đây.</h6>
+            <%}%>
         </div>
     </div>
 </body>

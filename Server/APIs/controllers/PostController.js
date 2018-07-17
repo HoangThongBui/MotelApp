@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Post = mongoose.model("Post");
 const User = mongoose.model("User");
 const Room = mongoose.model("Room");
+const PostReport = mongoose.model("PostReport");
 const Geo = require('geo-nearby');
 const Geocoder = require('node-geocoder')({
     provider: 'google',
@@ -239,6 +240,16 @@ exports.delete_post_by_id = async function (req, res) {
             status: "d"
         };
         await Post.findByIdAndUpdate(req.params.post_id, { "$set": deletePostSet });
+        var report_time = new Date();
+        var newReport = new PostReport({
+            post : req.params.post_id,
+            user : req.body.user_id,
+            from : req.body.status,
+            to: "d",
+            description: "Người dùng xoá bài đăng!",
+            report_time
+        });
+        await newReport.save();
         res.send("Deleted!");
     } catch (error) {
         console.log(error);

@@ -39,9 +39,19 @@ app.use(session({secret : "Admin is coming!"}));
 
 
 //Route Implementation
+
+//user
+const PostRoute = require("./APIs/routes/PostRoute");
+PostRoute(app);
+const CommentRoute = require('./APIs/routes/CommentRoute');
+CommentRoute(app);
+const UserRoute = require("./APIs/routes/UserRoute");
+UserRoute(app);
+
 //admin
 const LoginRoute = require('./WebAdminMVC/routes/LoginRoute');
 LoginRoute(app);
+
 
 //checkSession to protect route
 app.use(require('./custom_modules/session'));
@@ -58,15 +68,6 @@ ReportpageRoute(app);
 const PostDetailRoute = require('./WebAdminMVC/routes/PostDetailRoute');
 PostDetailRoute(app);
 
-
-
-//user
-const PostRoute = require("./APIs/routes/PostRoute");
-PostRoute(app);
-const CommentRoute = require('./APIs/routes/CommentRoute');
-CommentRoute(app);
-const UserRoute = require("./APIs/routes/UserRoute");
-UserRoute(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
