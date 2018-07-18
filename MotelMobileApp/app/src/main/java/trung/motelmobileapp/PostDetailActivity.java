@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import java.util.List;
 import java.util.Locale;
 
 import trung.motelmobileapp.Components.DetailCommentRecyclerViewAdapter;
+import trung.motelmobileapp.Components.ItemClickListener;
 import trung.motelmobileapp.Components.PostDetailImageSliderAdapter;
 import trung.motelmobileapp.Models.CommentDTO;
 import trung.motelmobileapp.Models.PostDTO;
@@ -59,6 +61,7 @@ import trung.motelmobileapp.MyTools.DateConverter;
 
 public class PostDetailActivity extends AppCompatActivity {
 
+    ScrollView scroll;
     TextView title, username, time, phone, price, address, area, detail;
     RecyclerView commentRecyclerView;
     ImageView loadingCommentGif;
@@ -81,6 +84,7 @@ public class PostDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        scroll = findViewById(R.id.post_detail_scroll);
         title = findViewById(R.id.post_title);
         username = findViewById(R.id.post_user);
         time = findViewById(R.id.post_time);
@@ -91,7 +95,6 @@ public class PostDetailActivity extends AppCompatActivity {
         detail = findViewById(R.id.post_detail);
         postImages = findViewById(R.id.post_images);
         btnToEditPost = findViewById(R.id.btnToEditPost);
-        commentRecyclerView = findViewById(R.id.detail_comments);
         commentLayout = findViewById(R.id.comment_layout);
         loginRequest = findViewById(R.id.login_request);
         commentArea = findViewById(R.id.post_detail_comment_editor);
@@ -116,7 +119,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         if (e != null) {
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                         } else {
-                            if (result.toString().equals("{}")){
+                            if (result.toString().equals("{}")) {
                                 Toast.makeText(getApplicationContext(), "Bài đăng đã bị xoá hoặc từ chối!", Toast.LENGTH_SHORT).show();
                                 Intent backToMain = new Intent(getApplicationContext(), MainActivity.class);
                                 backToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -186,66 +189,28 @@ public class PostDetailActivity extends AppCompatActivity {
                                         List<Address> geocodeAddress = geocoder.getFromLocationName(postDetail.getRoom().getFullAddress(), 5);
                                         roomLocation = new LatLng(geocodeAddress.get(0).getLatitude(), geocodeAddress.get(0).getLongitude());
                                         map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle())
-                                                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.house_marker)));
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.house_marker)));
                                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(roomLocation, 16));
                                         if (checkLocationPermission()) {
-                                            map.setMyLocationEnabled(true);
-                                            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                                                @Override
-                                                public boolean onMyLocationButtonClick() {
-                                                    currentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-                                                    map.addMarker(new MarkerOptions().position(currentLocation));
-                                                    LatLngBounds area;
-                                                    try {
-                                                        area = new LatLngBounds(currentLocation, roomLocation);
-                                                    } catch (Exception e){
-                                                        area = new LatLngBounds(roomLocation, currentLocation);
+                                            if (!getBestEnabledLocationProvider().equals("passive")) {
+                                                map.setMyLocationEnabled(true);
+                                                map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                                                    @Override
+                                                    public boolean onMyLocationButtonClick() {
+                                                        currentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                                                        map.addMarker(new MarkerOptions().position(currentLocation));
+                                                        LatLngBounds area;
+                                                        try {
+                                                            area = new LatLngBounds(currentLocation, roomLocation);
+                                                        } catch (Exception e) {
+                                                            area = new LatLngBounds(roomLocation, currentLocation);
+                                                        }
+                                                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(area.getCenter(), 10));
+                                                        return false;
                                                     }
-                                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(area.getCenter(), 10));
-                                                    return false;
-                                                }
-                                            });
+                                                });
+                                            }
                                         }
-
-
-                                        //locating yourself if grant permission
-//                                        if (checkLocationPermission()){
-//                                            locationProvider = getBestEnabledLocationProvider();
-//                                            if (!locationProvider.equals("passive")){
-//                                                try {
-//                                                    locationManager.requestLocationUpdates(locationProvider, 0, 5000, new LocationListener() {
-//                                                        @Override
-//                                                        public void onLocationChanged(Location location) {
-//                                                            //zoom event to compare
-//                                                            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-//
-//                                                            map.addMarker(new MarkerOptions().position(currentLocation)
-//                                                                    .icon(BitmapDescriptorFactory.fromPath(Constant.WEB_SERVER + postDetail.getUser().getImage())));
-//                                                            LatLngBounds area = new LatLngBounds(roomLocation, currentLocation);
-//                                                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(area.getCenter(), 10));
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onStatusChanged(String s, int i, Bundle bundle) {
-//
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onProviderEnabled(String s) {
-//
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onProviderDisabled(String s) {
-//
-//                                                        }
-//                                                    });
-//                                                } catch (SecurityException e){
-//                                                    e.printStackTrace();
-//                                                }
-//                                            }
-//                                        }
-
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(getApplicationContext(), "Không xác định được vị trí trên bản đồ!", Toast.LENGTH_LONG).show();
@@ -257,51 +222,86 @@ public class PostDetailActivity extends AppCompatActivity {
                                 commentPart.setVisibility(View.GONE);
                                 return;
                             }
-
-                            //loading comments from server
-                            loadingCommentGif = findViewById(R.id.loading_comment_gif);
-                            Glide.with(getApplicationContext()).load(R.drawable.loading).into(loadingCommentGif);
-                            final TextView loadingCommentResult = findViewById(R.id.loading_comment_result);
-                            Ion.with(getApplicationContext())
-                                    .load("GET", Constant.WEB_SERVER + "/comment/api/get_comments/" + postId)
-                                    .asJsonArray()
-                                    .setCallback(new FutureCallback<JsonArray>() {
-                                        @Override
-                                        public void onCompleted(Exception e, JsonArray result) {
-                                            if (e != null) {
-                                                e.printStackTrace();
-                                                loadingCommentResult.setText(e.toString());
-                                            } else {
-                                                if (result.size() == 0) {
-                                                    loadingCommentResult.setText("Chưa có bình luận nào về bài đăng này.");
-                                                } else {
-                                                    loadingCommentResult.setVisibility(View.GONE);
-                                                    ArrayList<CommentDTO> comments = new ArrayList<>();
-                                                    for (int i = 0; i < result.size(); i++) {
-                                                        comments.add(new CommentDTO(
-                                                                result.get(i).getAsJsonObject().get("_id").getAsString(),
-                                                                result.get(i).getAsJsonObject().get("post").getAsString(),
-                                                                new UserDTO(
-                                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("name").getAsString(),
-                                                                        result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("image").getAsString()
-                                                                ),
-                                                                result.get(i).getAsJsonObject().get("detail").getAsString(),
-                                                                DateConverter.formattedDate(result.get(i).getAsJsonObject().get("comment_time").getAsString())
-                                                        ));
-                                                    }
-
-                                                    //render comments
-                                                    DetailCommentRecyclerViewAdapter dcrvAdapter = new DetailCommentRecyclerViewAdapter(comments, getApplicationContext());
-                                                    LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-                                                    llm.setOrientation(LinearLayoutManager.VERTICAL);
-                                                    commentRecyclerView.setLayoutManager(llm);
-                                                    commentRecyclerView.setAdapter(dcrvAdapter);
-                                                }
-                                            }
-                                            loadingCommentGif.setVisibility(View.GONE);
-                                        }
-                                    });
+                            loadComments();
                         }
+                    }
+                });
+    }
+
+    private void loadComments() {
+        //loading comments from server
+        loadingCommentGif = findViewById(R.id.loading_comment_gif);
+        Glide.with(getApplicationContext()).load(R.drawable.loading).into(loadingCommentGif);
+        final TextView loadingCommentResult = findViewById(R.id.loading_comment_result);
+        Ion.with(getApplicationContext())
+                .load("GET", Constant.WEB_SERVER + "/comment/api/get_comments/" + postId)
+                .asJsonArray()
+                .setCallback(new FutureCallback<JsonArray>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonArray result) {
+                        if (e != null) {
+                            e.printStackTrace();
+                            loadingCommentResult.setText(e.toString());
+                        } else {
+                            if (result.size() == 0) {
+                                loadingCommentResult.setVisibility(View.VISIBLE);
+                                loadingCommentResult.setText("Chưa có bình luận nào về bài đăng này.");
+                            } else {
+                                loadingCommentResult.setVisibility(View.GONE);
+                            }
+                            ArrayList<CommentDTO> comments = new ArrayList<>();
+                            for (int i = 0; i < result.size(); i++) {
+                                comments.add(new CommentDTO(
+                                        result.get(i).getAsJsonObject().get("_id").getAsString(),
+                                        result.get(i).getAsJsonObject().get("post").getAsString(),
+                                        new UserDTO(
+                                                result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("_id").getAsString(),
+                                                result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("name").getAsString(),
+                                                result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("phone").getAsString(),
+                                                result.get(i).getAsJsonObject().get("user").getAsJsonObject().get("image").getAsString()
+                                        ),
+                                        result.get(i).getAsJsonObject().get("detail").getAsString(),
+                                        DateConverter.formattedDate(result.get(i).getAsJsonObject().get("comment_time").getAsString())
+                                ));
+                            }
+                            //render comments
+                            Toast.makeText(getApplicationContext(), comments.size() + "", Toast.LENGTH_SHORT).show();
+                            commentRecyclerView = findViewById(R.id.detail_comments);
+                            DetailCommentRecyclerViewAdapter dcrvAdapter = new DetailCommentRecyclerViewAdapter(comments, getApplicationContext());
+                            LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                            llm.setOrientation(LinearLayoutManager.VERTICAL);
+                            commentRecyclerView.setLayoutManager(llm);
+                            commentRecyclerView.setAdapter(dcrvAdapter);
+
+                            //delete button
+                            dcrvAdapter.setCommentItemClickListener(new ItemClickListener<CommentDTO>() {
+                                @Override
+                                public void onClick(CommentDTO item) {
+                                    Ion.with(getApplicationContext())
+                                            .load("DELETE", Constant.WEB_SERVER + "/comment/api/delete_comment/" + item.getId())
+                                            .asString()
+                                            .setCallback(new FutureCallback<String>() {
+                                                @Override
+                                                public void onCompleted(Exception e, String result) {
+                                                    if (e != null) {
+                                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        switch (result) {
+                                                            case "Comment deleted!":
+                                                                loadComments();
+                                                                scroll.fullScroll(View.FOCUS_DOWN);
+                                                                break;
+                                                            default:
+                                                                Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                                                                break;
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                        loadingCommentGif.setVisibility(View.GONE);
                     }
                 });
     }
@@ -352,7 +352,8 @@ public class PostDetailActivity extends AppCompatActivity {
                             } else {
                                 switch (result) {
                                     case "Comment posted!":
-                                        recreate();
+                                        loadComments();
+                                        scroll.fullScroll(View.FOCUS_DOWN);
                                         break;
                                     default:
                                         Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();

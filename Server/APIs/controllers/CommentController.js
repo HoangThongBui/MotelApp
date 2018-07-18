@@ -41,6 +41,16 @@ exports.post_a_comment = async function (req,res) {
     }
 }
 
+exports.delete_comment = async (req,res) => {
+    try {
+        await Comment.findByIdAndRemove(req.params.comment_id);
+        res.send('Comment deleted!');
+    } catch (error) {
+        res.send(error);
+        console.log(error);
+    }
+}
+
 //server waiting simulation
 function waitTimeOut(){
     return new Promise((res,rej)=> {setTimeout(res, 3000)});

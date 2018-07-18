@@ -57,7 +57,7 @@ exports.user_register = async function(req,res){
                 email : req.body.email,
                 name: req.body.name,
                 password: req.body.password,
-                phone: req.body.phone,
+                phone: req.body.phone
             });
             await newUser.save();
             res.send("Register successfully!")

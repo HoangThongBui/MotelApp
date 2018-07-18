@@ -8,4 +8,7 @@ module.exports = function(app){
 
     app.route('/comment/api/post_a_comment/')
         .post(CommentController.post_a_comment);
+
+    app.route('/comment/api/delete_comment/:comment_id')
+        .delete(CommentController.delete_comment);
 }

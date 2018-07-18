@@ -1,6 +1,7 @@
 package trung.motelmobileapp.Components;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,14 +19,19 @@ import trung.motelmobileapp.Models.CommentDTO;
 import trung.motelmobileapp.MyTools.Constant;
 import trung.motelmobileapp.R;
 
-public class DetailCommentRecyclerViewAdapter extends RecyclerView.Adapter<DetailCommentRecyclerViewAdapter.RecyclerViewHolder>{
+public class DetailCommentRecyclerViewAdapter extends RecyclerView.Adapter<DetailCommentRecyclerViewAdapter.RecyclerViewHolder> {
 
     private ArrayList<CommentDTO> data = new ArrayList<>();
     private Context context;
+    private ItemClickListener<CommentDTO> commentItemClickListener;
 
     public DetailCommentRecyclerViewAdapter(ArrayList<CommentDTO> data, Context context) {
         this.data = data;
         this.context = context;
+    }
+
+    public void setCommentItemClickListener(ItemClickListener<CommentDTO> commentItemClickListener) {
+        this.commentItemClickListener = commentItemClickListener;
     }
 
     @NonNull
@@ -37,11 +43,28 @@ public class DetailCommentRecyclerViewAdapter extends RecyclerView.Adapter<Detai
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, int position) {
         holder.commentName.setText(data.get(position).getUser().getName());
         holder.commentTime.setText(data.get(position).getCommentTime());
         holder.commentDetail.setText(data.get(position).getDetail());
-        Glide.with(context).load(Constant.WEB_SERVER + data.get(position).getUser().getImage()).into(holder.commentImage);
+        if (!data.get(position).getUser().getImage().isEmpty()) {
+            Glide.with(context).load(Constant.WEB_SERVER + data.get(position).getUser().getImage()).into(holder.commentImage);
+        }
+        //check delete image;
+        SharedPreferences mySession = context.getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
+        if (!mySession.getString("user_id", "").equals(data.get(position).getUser().getId())){
+            holder.btnDelete.setVisibility(View.GONE);
+        }
+        else {
+            holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (commentItemClickListener != null){
+                        commentItemClickListener.onClick(data.get(holder.getAdapterPosition()));
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -51,13 +74,15 @@ public class DetailCommentRecyclerViewAdapter extends RecyclerView.Adapter<Detai
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         TextView commentName, commentTime, commentDetail;
-        ImageButton commentImage;
+        ImageButton commentImage, btnDelete;
+
         public RecyclerViewHolder(View itemView) {
             super(itemView);
             commentName = itemView.findViewById(R.id.comment_name);
             commentTime = itemView.findViewById(R.id.comment_time);
             commentDetail = itemView.findViewById(R.id.comment_detail);
             commentImage = itemView.findViewById(R.id.comment_image);
+            btnDelete = itemView.findViewById(R.id.btnDeleteComment);
         }
     }
 }
