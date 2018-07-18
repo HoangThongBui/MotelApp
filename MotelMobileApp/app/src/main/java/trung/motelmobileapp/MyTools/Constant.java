@@ -29,6 +29,7 @@ public class Constant {
     public static final int REQUEST_ID_FOR_GALLERY = 12;
     public static final int REQUEST_ID_FOR_STORAGE_PERMISSION = 13;
     public static final int REQUEST_ID_FOR_UPDATE_PROFILE = 14;
+    public static final int REQUEST_ID_FOR_DELETE_COMMENT = 15;
 
     //Num of max image
     public static final int MAX_POST_IMAGE = 3;

@@ -277,27 +277,9 @@ public class PostDetailActivity extends AppCompatActivity {
                             dcrvAdapter.setCommentItemClickListener(new ItemClickListener<CommentDTO>() {
                                 @Override
                                 public void onClick(CommentDTO item) {
-                                    Ion.with(getApplicationContext())
-                                            .load("DELETE", Constant.WEB_SERVER + "/comment/api/delete_comment/" + item.getId())
-                                            .asString()
-                                            .setCallback(new FutureCallback<String>() {
-                                                @Override
-                                                public void onCompleted(Exception e, String result) {
-                                                    if (e != null) {
-                                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        switch (result) {
-                                                            case "Comment deleted!":
-                                                                loadComments();
-                                                                scroll.fullScroll(View.FOCUS_DOWN);
-                                                                break;
-                                                            default:
-                                                                Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                                                                break;
-                                                        }
-                                                    }
-                                                }
-                                            });
+                                    Intent deleteCommentActivity = new Intent(getApplicationContext(), ConfirmActivity.class);
+                                    deleteCommentActivity.putExtra("comment_id", item.getId());
+                                    startActivityForResult(deleteCommentActivity, Constant.REQUEST_ID_FOR_DELETE_COMMENT);
                                 }
                             });
                         }
@@ -319,10 +301,36 @@ public class PostDetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_ID_FOR_EDIT_POST) {
-            if (resultCode == Activity.RESULT_OK) {
-                recreate();
-            }
+        switch (requestCode) {
+            case Constant.REQUEST_ID_FOR_EDIT_POST:
+                if (resultCode == Activity.RESULT_OK) {
+                    recreate();
+                }
+                break;
+            case Constant.REQUEST_ID_FOR_DELETE_COMMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Ion.with(getApplicationContext())
+                            .load("DELETE", Constant.WEB_SERVER + "/comment/api/delete_comment/" + item.getId())
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    if (e != null) {
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        switch (result) {
+                                            case "Comment deleted!":
+                                                loadComments();
+                                                scroll.fullScroll(View.FOCUS_DOWN);
+                                                break;
+                                            default:
+                                                Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
+                }
         }
     }
 
