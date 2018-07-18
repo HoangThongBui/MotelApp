@@ -265,7 +265,6 @@ public class PostDetailActivity extends AppCompatActivity {
                                 ));
                             }
                             //render comments
-                            Toast.makeText(getApplicationContext(), comments.size() + "", Toast.LENGTH_SHORT).show();
                             commentRecyclerView = findViewById(R.id.detail_comments);
                             DetailCommentRecyclerViewAdapter dcrvAdapter = new DetailCommentRecyclerViewAdapter(comments, getApplicationContext());
                             LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
@@ -309,8 +308,9 @@ public class PostDetailActivity extends AppCompatActivity {
                 break;
             case Constant.REQUEST_ID_FOR_DELETE_COMMENT:
                 if (resultCode == Activity.RESULT_OK) {
+                    String comment_id = data.getStringExtra("comment_id");
                     Ion.with(getApplicationContext())
-                            .load("DELETE", Constant.WEB_SERVER + "/comment/api/delete_comment/" + item.getId())
+                            .load("DELETE", Constant.WEB_SERVER + "/comment/api/delete_comment/" + comment_id)
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override

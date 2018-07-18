@@ -1,6 +1,7 @@
 package trung.motelmobileapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +17,11 @@ public class ConfirmActivity extends AppCompatActivity {
     }
 
     public void clickToYes(View view) {
-        setResult(Activity.RESULT_OK);
+        Intent data = new Intent();
+        if (!getIntent().getStringExtra("comment_id").isEmpty()){
+            data.putExtra("comment_id", getIntent().getStringExtra("comment_id"));
+        }
+        setResult(Activity.RESULT_OK, data);
         finish();
     }
 
