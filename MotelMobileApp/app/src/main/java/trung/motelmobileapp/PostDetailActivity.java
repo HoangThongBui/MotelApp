@@ -116,6 +116,14 @@ public class PostDetailActivity extends AppCompatActivity {
                         if (e != null) {
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                         } else {
+                            if (result.toString().equals("{}")){
+                                Toast.makeText(getApplicationContext(), "Bài đăng đã bị xoá hoặc từ chối!", Toast.LENGTH_SHORT).show();
+                                Intent backToMain = new Intent(getApplicationContext(), MainActivity.class);
+                                backToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(backToMain);
+                                finish();
+                                return;
+                            }
                             ArrayList<String> images = new ArrayList<>();
                             JsonArray roomImages = result.get("room").getAsJsonObject().get("images").getAsJsonArray();
                             for (JsonElement roomImage : roomImages) {

@@ -4,13 +4,14 @@ const Post = mongoose.model('Post');
 const Room = mongoose.model('Room');
 const User = mongoose.model('User');
 const PostReport = mongoose.model('PostReport');
+const address = require('../../custom_modules/host');
 
 exports.get_post_detail = async (req, res) => {
     try {
         var post = await Post.findById(req.params.post_id);
         post.room = await Room.findById(post.room);
         post.user = await User.findById(post.user);
-        res.render('post_detail', {post, page_type : "detail"});
+        res.render('post_detail', {post, page_type : "detail", address: address.web_server});
     } catch (error) {
         console.log(error);
     }

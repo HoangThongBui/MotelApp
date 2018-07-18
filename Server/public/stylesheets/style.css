@@ -43,3 +43,9 @@ a {
    background: lightgrey;
 }
 
+.room-images {
+  margin-left: 10px;
+  width: 300px;
+  height: 200px;
+}
+

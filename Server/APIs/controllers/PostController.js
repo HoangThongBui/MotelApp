@@ -96,7 +96,7 @@ exports.get_posts_by_user = async function (req, res) {
 exports.get_post_by_id = async function (req, res) {
     try {
         var post = await Post.findById(req.params.post_id);
-        if (post.status === 'd') {
+        if (post.status === 'd' || post.status === 'r') {
             res.json({});
         }
         else {
