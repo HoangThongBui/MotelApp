@@ -90,6 +90,7 @@ public class UserPostActivity extends AppCompatActivity {
 
                         //render 2 views
                         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                        //vertical orientation
                         llm.setOrientation(LinearLayoutManager.VERTICAL);
                         UserPostRecyclerViewAdapter dataAdapter = new UserPostRecyclerViewAdapter(userPosts);
                         recyclerView.setLayoutManager(llm);
@@ -97,6 +98,8 @@ public class UserPostActivity extends AppCompatActivity {
                         dataAdapter.setItemClickListener(new ItemClickListener<PostDTO>() {
                             @Override
                             public void onClick(PostDTO item) {
+
+                                //go to PostDetailActivity
                                 Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
                                 intent.putExtra("Post", item.getId());
                                 startActivity(intent);

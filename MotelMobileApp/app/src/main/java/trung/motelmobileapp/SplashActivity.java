@@ -38,6 +38,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
+
+        //request to check if server is online
         Ion.with(getApplicationContext())
                 .load("GET", Constant.WEB_SERVER)
                 .asString()
@@ -58,10 +60,12 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
+    //if server not online, go to ErrorActivity
     private void goToError() {
         startActivityForResult(new Intent(getApplicationContext(), ErrorActivity.class), Constant.REQUEST_ID_CHECK_CONNECTION_TO_SERVER);
     }
 
+    //if online, go to MainActivity
     private void run(){
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }

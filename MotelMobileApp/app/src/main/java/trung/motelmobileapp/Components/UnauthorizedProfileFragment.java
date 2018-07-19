@@ -65,6 +65,8 @@ public class UnauthorizedProfileFragment extends Fragment {
         loginGif.setVisibility(View.GONE);
         if (mySession.contains("user_id")) {
             userId = mySession.getString("user_id", "");
+
+            //check if user is still active
             Ion.with(getContext())
                     .load("GET", Constant.WEB_SERVER + "/user/api/check_user_status/" + userId)
                     .asString()
@@ -76,10 +78,12 @@ public class UnauthorizedProfileFragment extends Fragment {
                             } else {
                                 switch (result) {
                                     case "User is active!":
+                                        //if user is active, replace with authorized fragment
                                         tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
                                         tabAdapter.notifyDataSetChanged();
                                         break;
                                     case "User is banned!":
+                                        //if user is not active, clear pref.
                                         mySession.edit().clear().apply();
                                         break;
                                     default:
@@ -136,7 +140,10 @@ public class UnauthorizedProfileFragment extends Fragment {
                                             break;
                                         default:
                                             Toast.makeText(getContext(), "Đăng nhập thành công!", Toast.LENGTH_LONG).show();
+                                            //put user id to shared preference session
                                             mySession.edit().putString("user_id", result).apply();
+
+                                            //replace unauthorized with authorized fragment
                                             tabAdapter.replaceFragmentAtPosition(new ProfileFragment(), 0);
                                             tabAdapter.notifyDataSetChanged();
                                             break;

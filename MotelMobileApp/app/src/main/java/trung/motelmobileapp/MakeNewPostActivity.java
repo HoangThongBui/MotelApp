@@ -126,6 +126,7 @@ public class MakeNewPostActivity extends AppCompatActivity {
                         images.add(new FilePart("room_images" , new File(imageLink)));
                     }
 
+                    //make a new post
                     Ion.with(getApplicationContext())
                             .load("POST", Constant.WEB_SERVER + "/post/api/make_new_post/")
                             .setMultipartParameter("user_id", user_id)

@@ -71,6 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     String phone = edtPhone.getText().toString();
                     String userId = mySession.getString("user_id", "");
                     if (isValidated(name, phone)){
+
+                        //save profile
                         Builders.Any.B builder = Ion.with(getApplicationContext())
                                 .load("PUT", Constant.WEB_SERVER + "/user/api/update_profile/" + userId);
                         Builders.Any.M multipartBuilder = builder.setMultipartParameter("name", name)
@@ -137,6 +139,7 @@ public class EditProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    //choose new avatar, go to ChooseImageSourceActivity
     public void clickToChooseNewAvatar(View view) {
         startActivityForResult(new Intent(getApplicationContext(), ChooseImageSourceActivity.class), Constant.REQUEST_ID_FOR_GO_TO_CHOOSE_IMAGE);
     }

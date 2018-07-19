@@ -38,7 +38,9 @@ public class ChooseImageSourceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        //check permission
         checkStoragePermission();
+
         setContentView(R.layout.activity_choose_image_source);
         result = new Intent();
     }
@@ -67,6 +69,8 @@ public class ChooseImageSourceActivity extends AppCompatActivity {
             Uri imageUri = Uri.fromFile(new File(imageChosen));
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             makeAccessForFiles();
+
+            //open camera
             startActivityForResult(intent, Constant.REQUEST_ID_FOR_CAMERA);
         } else {
             requestPermissions(new String[]{
@@ -120,6 +124,7 @@ public class ChooseImageSourceActivity extends AppCompatActivity {
         int readPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         int writePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
+            //open permission dialog
             requestPermissions(new String[]{
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE

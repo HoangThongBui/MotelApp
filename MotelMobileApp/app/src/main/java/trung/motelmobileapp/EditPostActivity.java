@@ -105,7 +105,6 @@ public class EditPostActivity extends AppCompatActivity {
                                 edtWard.setEnabled(false);
                                 edtDistrict.setEnabled(false);
                                 edtCity.setEnabled(false);
-                                edtArea.setEnabled(false);
                             }
 
                             //set data to view

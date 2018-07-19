@@ -80,6 +80,7 @@ public class ProfileFragment extends Fragment {
                             );
                             profileName.setText(user.getName());
                             if (!user.getImage().isEmpty()){
+                                //load image
                                 Glide.with(getContext()).load(Constant.WEB_SERVER + user.getImage())
                                         .into(profileImage);
 

@@ -30,6 +30,7 @@ public class ErrorActivity extends AppCompatActivity {
         tryingAgainGif.setVisibility(View.GONE);
     }
 
+    //check again
     public void clickToCheckServer(View view) {
         errorLayout.setVisibility(View.GONE);
         tryingAgainGif.setVisibility(View.VISIBLE);
