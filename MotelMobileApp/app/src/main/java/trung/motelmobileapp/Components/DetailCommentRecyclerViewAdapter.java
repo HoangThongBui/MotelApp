@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import trung.motelmobileapp.Models.CommentDTO;
 import trung.motelmobileapp.MyTools.Constant;
 import trung.motelmobileapp.R;
@@ -74,7 +75,8 @@ public class DetailCommentRecyclerViewAdapter extends RecyclerView.Adapter<Detai
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         TextView commentName, commentTime, commentDetail;
-        ImageButton commentImage, btnDelete;
+        ImageButton btnDelete;
+        CircleImageView commentImage;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);

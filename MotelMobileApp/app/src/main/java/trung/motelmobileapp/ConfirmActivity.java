@@ -18,7 +18,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
     public void clickToYes(View view) {
         Intent data = new Intent();
-        if (!getIntent().getStringExtra("comment_id").isEmpty()){
+        if (getIntent().getStringExtra("comment_id") != null){
             data.putExtra("comment_id", getIntent().getStringExtra("comment_id"));
         }
         setResult(Activity.RESULT_OK, data);

@@ -9,13 +9,20 @@
     tools:context=".Components.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ImageButton
+    <!--<ImageButton-->
+        <!--android:id="@+id/profile_image"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:background="@drawable/user"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_gravity="center"/>-->
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_marginTop="50dp"
         android:background="@drawable/user"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/profile_name"

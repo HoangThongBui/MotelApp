@@ -34,7 +34,8 @@
 
     </LinearLayout>
 
-    <ImageButton
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:onClick="clickToChooseNewAvatar"
         android:id="@+id/edit_profile_image"
         android:layout_marginTop="50dp"

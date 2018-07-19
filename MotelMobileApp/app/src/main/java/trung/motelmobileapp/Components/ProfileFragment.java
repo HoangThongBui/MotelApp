@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import trung.motelmobileapp.ConfirmActivity;
 import trung.motelmobileapp.EditProfileActivity;
 import trung.motelmobileapp.Models.UserDTO;
@@ -28,12 +29,12 @@ import trung.motelmobileapp.MyTools.Constant;
 import trung.motelmobileapp.R;
 import trung.motelmobileapp.UserPostActivity;
 
-
 public class ProfileFragment extends Fragment {
 
     LinearLayout layout;
     TextView profileName;
-    ImageButton btnEditProfile, btnUserPost, profileImage;
+    ImageButton btnEditProfile, btnUserPost;
+    CircleImageView profileImage;
     Button btnLogout;
     ViewPager viewPager;
     TabAdapter tabAdapter;

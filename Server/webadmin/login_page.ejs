@@ -3,33 +3,68 @@
 
 <head>
     <%include ./head%>
-        <title>Login Page</title>
+        <title>Login page</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3">
-                    <h1 class="login">Login</h1>
-                    <form action="/admin/login/" method="POST">
-                        <div class="form-group">
-                            <label for="inputEmailExample">Email</label>
-                            <input class="form-control" name="email" type="email" placeholder="Email" />
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper auth-page">
+            <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one">
+                <div class="row w-100">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auto-form-wrapper">
+                            <form method="POST" action="/admin/login">
+                                <div class="form-group">
+                                    <label class="label">Email</label>
+                                    <div class="input-group">
+                                        <input type="email" name="email" class="form-control" placeholder="Email">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="mdi mdi-check-circle-outline"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" name="password" class="form-control" placeholder="*********">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="mdi mdi-check-circle-outline"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary submit-btn btn-block">Login</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="inputEmailExample">Password</label>
-                            <input class="form-control" name="password" type="password" placeholder="Password" />
-                        </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </form>
+                        <p class="footer-text text-center">copyright © 2018 Sweet Motel. All rights reserved.</p>
+                    </div>
                 </div>
             </div>
-            <%if (typeof(error) !== 'undefined') {%>
-                <script>alert('<%=error%>')</script>
-            <%}%>
+            <!-- content-wrapper ends -->
         </div>
+        <!-- page-body-wrapper ends -->
     </div>
+
+    <%if (typeof(error) !== 'undefined') {%>
+        <script>alert('<%=error%>')</script>
+    <%}%>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/templates/vendors/js/vendor.bundle.base.js"></script>
+    <script src="/templates/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="/templates/js/off-canvas.js"></script>
+    <script src="/templates/js/hoverable-collapse.js"></script>
+    <script src="/templates/js/misc.js"></script>
+    <script src="/templates/js/settings.js"></script>
+    <script src="/templates/js/todolist.js"></script>
+    <!-- endinject -->
 </body>
 
 </html>

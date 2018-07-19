@@ -20,13 +20,14 @@ import com.koushikdutta.ion.builder.Builders;
 
 import java.io.File;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import trung.motelmobileapp.MyTools.Constant;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     EditText edtName,edtPhone;
     Button btnSave;
-    ImageButton profileImage;
+    CircleImageView profileImage;
     ImageView saveProfileGif;
     String validationError = "";
     SharedPreferences mySession;
