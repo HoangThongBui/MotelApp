@@ -17,8 +17,8 @@ const
   Comment = require("./models/CommentModel");
 
 // view engine setup (for web admin)
-app.set("views", [path.join(__dirname, "webadmin"),
-                  path.join(__dirname, "webadmin/tools")]);
+app.use(express.static(path.join(__dirname, "public")));
+app.set("views", [path.join(__dirname, "webadmin")]);
 app.set("view engine", "ejs");
 
 //Database connection
@@ -33,7 +33,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use(session({secret : "Admin is coming!"}));
 
 
