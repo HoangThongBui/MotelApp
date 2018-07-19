@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/templates/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/templates/images/favicon.png" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 </head>
 
 <body>
@@ -143,7 +144,7 @@
                                   <div class="card-body">
                                     <h4 class="card-title">Các bài đăng chưa được duyệt</h4> 
                                     <div class="table-responsive">
-                                            <table class="table table-hover">
+                                            <table id="unconfirm-post" class="table table-hover">
                                               <thead>
                                                 <tr>
                                                   <th>Tên nhà trọ</th>
@@ -188,7 +189,7 @@
                                   <div class="card-body">
                                     <h4 class="card-title">Các bài đăng đã được duyệt</h4> 
                                     <div class="table-responsive">
-                                            <table class="table table-hover">
+                                            <table id="confirm-post" class="table table-hover">
                                               <thead>
                                                 <tr>
                                                   <th>Tên nhà trọ</th>
@@ -234,7 +235,7 @@
                                   <div class="card-body">
                                     <h4 class="card-title">Các bài đăng đã bị từ chối</h4> 
                                     <div class="table-responsive">
-                                            <table class="table table-hover">
+                                            <table id="reject-post" class="table table-hover">
                                               <thead>
                                                 <tr>
                                                   <th>Tên nhà trọ</th>
@@ -273,9 +274,8 @@
                     <%}%>
                 </div>
                 <%} else {%>
-
-                <%}%>
-                
+                  <h4 class="card-title">Chưa có bài đăng nào</h4>
+                <%}%> 
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:/templates/partials/_footer.html -->
@@ -307,5 +307,13 @@
   <!-- endinject -->
   <!-- Custom js for this page-->
   <!-- End custom js for this page-->
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#unconfirm-post').DataTable();
+      $('#confirm-post').DataTable();
+      $('#reject-post').DataTable();
+    });
+  </script>
 </body>
 </html>

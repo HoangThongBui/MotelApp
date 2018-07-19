@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/templates/css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="/templates/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 </head>
 
 <body>
@@ -139,51 +140,53 @@
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <!--content here-->
+                    <!--content here-->                    
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
+                                <%if (posts.length !== 0) {%>
                                     <h4 class="card-title">Các bài đăng đang chờ duyệt</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Tên nhà trọ</th>
-                                                <th>Chủ nhà</th>
-                                                <th>Giá (VNĐ)</th>
-                                                <th>Tình trạng</th>
-                                                <th>Được tạo lúc</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%posts.forEach( function (post) {%>
-                                                <tr onclick="location.href = '/admin/post/<%=post._id%>'">
-                                                    <td>
-                                                        <%=post.title%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.user.name%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.room.price%>
-                                                    </td>
-                                                    <td>
-                                                        <label class="badge badge-warning">Đang chờ xét duyệt</label>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.request_date.toString().split('GMT')[0]%>
-                                                    </td>
+                                    <div class="table-responsive">
+                                        <table id="unconfirm-table" class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tên nhà trọ</th>
+                                                    <th>Chủ nhà</th>
+                                                    <th>Giá (VNĐ)</th>
+                                                    <th>Tình trạng</th>
+                                                    <th>Được tạo lúc</th>
                                                 </tr>
-                                                <%});%>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                                <%posts.forEach( function (post) {%>
+                                                    <tr onclick="location.href = '/admin/post/<%=post._id%>'">
+                                                        <td>
+                                                            <%=post.title%>
+                                                        </td>
+                                                        <td>
+                                                            <%=post.user.name%>
+                                                        </td>
+                                                        <td>
+                                                            <%=post.room.price%>
+                                                        </td>
+                                                        <td>
+                                                            <label class="badge badge-warning">Đang chờ xét duyệt</label>
+                                                        </td>
+                                                        <td>
+                                                            <%=post.request_date.toString().split('GMT')[0]%>
+                                                        </td>
+                                                    </tr>
+                                                    <%});%>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <%} else {%>
+                                        <h4 class="card-title">Tất cả bài đăng đã được duyệt</h4>
+                                        <%}%>
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:/templates/partials/_footer.html -->
@@ -215,6 +218,12 @@
     <!-- endinject -->
     <!-- Custom js for this page-->
     <!-- End custom js for this page-->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#unconfirm-table').DataTable();
+        });
+    </script>
 </body>
 
 </html>
