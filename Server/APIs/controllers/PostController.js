@@ -76,6 +76,7 @@ exports.get_posts_nearby = async function (req, res) {
     } catch (error) {
         console.log(error);
         res.send("Server internal error!");
+        
     }
 }
 
