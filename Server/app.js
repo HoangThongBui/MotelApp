@@ -62,15 +62,15 @@ const UserpageRoute = require("./WebAdminMVC/routes/UserpageRoute");
 UserpageRoute(app);
 const PostpageRoute = require("./WebAdminMVC/routes/PostpageRoute");
 PostpageRoute(app);
-const ReportpageRoute = require("./WebAdminMVC/routes/ReportpageRoute");
-ReportpageRoute(app);
+const PostreportpageRoute = require("./WebAdminMVC/routes/PostreportpageRoute");
+PostreportpageRoute(app);
 const PostDetailRoute = require('./WebAdminMVC/routes/PostDetailRoute');
 PostDetailRoute(app);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function(req, res) {
+  res.render('error404');
 });
 
 // error handler
@@ -82,7 +82,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   console.log(err);
-  res.render("error");
+  res.render("error500");
 });
 
 module.exports = app;
