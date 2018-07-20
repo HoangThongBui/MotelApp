@@ -5,11 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -32,8 +31,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -71,9 +68,7 @@ public class PostDetailActivity extends AppCompatActivity {
     EditText commentArea;
     GoogleMap map;
     SupportMapFragment mapFragment;
-    LocationManager locationManager;
-    String locationProvider;
-    LatLng roomLocation, currentLocation;
+    LatLng roomLocation;
 
 
     @Override
@@ -97,7 +92,6 @@ public class PostDetailActivity extends AppCompatActivity {
         commentPart = findViewById(R.id.comment_area);
         mySession = getSharedPreferences(Constant.MY_SESSION, Context.MODE_PRIVATE);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (mySession.getString("user_id", "").isEmpty()) {
             commentLayout.setVisibility(View.GONE);
         } else {
@@ -187,26 +181,6 @@ public class PostDetailActivity extends AppCompatActivity {
                                         map.addMarker(new MarkerOptions().position(roomLocation).title(postDetail.getTitle())
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.house_marker)));
                                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(roomLocation, 16));
-                                        if (checkLocationPermission()) {
-                                            if (!getBestEnabledLocationProvider().equals("passive")) {
-                                                map.setMyLocationEnabled(true);
-                                                map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                                                    @Override
-                                                    public boolean onMyLocationButtonClick() {
-                                                        currentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-                                                        map.addMarker(new MarkerOptions().position(currentLocation));
-                                                        LatLngBounds area;
-                                                        try {
-                                                            area = new LatLngBounds(currentLocation, roomLocation);
-                                                        } catch (Exception e) {
-                                                            area = new LatLngBounds(roomLocation, currentLocation);
-                                                        }
-                                                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(area.getCenter(), 10));
-                                                        return false;
-                                                    }
-                                                });
-                                            }
-                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(getApplicationContext(), "Không xác định được vị trí trên bản đồ!", Toast.LENGTH_LONG).show();
@@ -375,17 +349,4 @@ public class PostDetailActivity extends AppCompatActivity {
         return !comment.isEmpty();
     }
 
-    private boolean checkLocationPermission() {
-        return ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private String getBestEnabledLocationProvider() {
-        String bestProvider;
-        Criteria criteria = new Criteria();
-        bestProvider = locationManager.getBestProvider(criteria, true);
-        return bestProvider;
-    }
 }
