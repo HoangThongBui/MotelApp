@@ -21,8 +21,7 @@ const multerConfig = {
                 next(null, req.params.user_id + '_' + file.fieldname + '_' + new Date().getTime() + '.' + extension); //custom file name
             }
             else {
-                const extension = file.originalname.split('.')[1]//get extension
-                next(null, 'rooms_image' + '_' + new Date().getTime() + '.' + extension); //custom file name
+                next(null, file.originalname);
             }
         }
     })

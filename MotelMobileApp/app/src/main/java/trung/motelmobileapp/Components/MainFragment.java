@@ -49,10 +49,10 @@ public class MainFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, LocationListener {
 
     RecyclerView mainRecyclerView;
-    Double lat = 0.0,lon = 0.0;
+    Double lat = 0.0, lon = 0.0;
     LinearLayout mainLayout, mainGreeting;
     TextView txtGreeting;
-    String api = "/post/api/get_newest_posts/";
+    String api;
     SwipeRefreshLayout refresher;
     Boolean locationPermission = false;
     LocationManager locationManager;
@@ -80,38 +80,38 @@ public class MainFragment extends Fragment
         return mainLayout;
     }
 
-    private void checkLocationServiceAndFetchData(){
-        if (locationPermission){
-            if (usingLocationService()){
+    private void checkLocationServiceAndFetchData() {
+        if (locationPermission) {
+            if (usingLocationService()) {
                 Toast.makeText(getContext(), "Đang tìm nhà trọ gần đây...", Toast.LENGTH_LONG).show();
                 refresher.setRefreshing(true);
-            }
-            else {
+            } else {
                 //location service turn off
+                api = "/post/api/get_newest_posts/";
                 loadDataFromServer();
             }
-        }
-        else {
+        } else {
             //location permission denied
+            api = "/post/api/get_newest_posts/";
             loadDataFromServer();
         }
     }
 
-    private boolean usingLocationService(){
+    private boolean usingLocationService() {
         locationProvider = getBestEnabledLocationProvider();
-        if (locationProvider.equals("passive")){
+        if (locationProvider.equals("passive")) {
             Toast.makeText(getContext(), "Mở dịch vụ định vị để tìm nhà trọ gần đây.", Toast.LENGTH_SHORT).show();
             return false;
         }
         try {
             locationManager.requestLocationUpdates(locationProvider, 0, 5000, this);
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
         return true;
     }
 
-    private void checkLocationAccessPermission(){
+    private void checkLocationAccessPermission() {
         int accessCoarsePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
         int accessFinePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
         if (accessCoarsePermission != PackageManager.PERMISSION_GRANTED || accessFinePermission != PackageManager.PERMISSION_GRANTED) {
@@ -151,6 +151,14 @@ public class MainFragment extends Fragment
     private void loadDataFromServer() {
         //location here
         refresher.setRefreshing(true);
+        switch (api) {
+            case "/post/api/get_posts_nearby/":
+                txtGreeting.setText("Nhà trọ gần đây");
+                break;
+            case "/post/api/get_newest_posts/":
+                txtGreeting.setText("Nhà trọ mới đăng");
+                break;
+        }
         Ion.with(getContext())
                 .load("GET", Constant.WEB_SERVER + api)
                 .setBodyParameter("lat", lat + "")
@@ -171,12 +179,7 @@ public class MainFragment extends Fragment
                                         "\nĐến mục tìm kiếm để tìm nhà trọ ở những thành phố khác";
                                 txtGreeting.setText(res);
                             } else {
-                                if (lat != 0){
-                                    txtGreeting.setText("Nhà trọ gần đây");
-                                }
-                                else {
-                                    txtGreeting.setText("Nhà trọ mới đăng");
-                                }
+
                                 //get data from json and put to arraylist
                                 ArrayList<PostDTO> posts = new ArrayList<>();
                                 for (int i = 0; i < result.size(); i++) {
@@ -228,7 +231,7 @@ public class MainFragment extends Fragment
 
     @Override
     public void onRefresh() {
-        loadDataFromServer();
+        checkLocationServiceAndFetchData();
     }
 
     @Override

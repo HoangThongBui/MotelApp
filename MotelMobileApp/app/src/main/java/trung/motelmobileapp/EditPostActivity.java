@@ -2,6 +2,7 @@ package trung.motelmobileapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.async.http.body.FilePart;
@@ -76,6 +79,11 @@ public class EditPostActivity extends AppCompatActivity {
                         if (e != null) {
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                         } else {
+                            ArrayList<String> images = new ArrayList<>();
+                            JsonArray roomImages = result.get("room").getAsJsonObject().get("images").getAsJsonArray();
+                            for (JsonElement roomImage : roomImages) {
+                                images.add(roomImage.getAsString());
+                            }
                             postDetail = new PostDTO(
                                     result.get("_id").getAsString(),
                                     result.get("title").getAsString(),
@@ -93,7 +101,8 @@ public class EditPostActivity extends AppCompatActivity {
                                             result.get("room").getAsJsonObject().get("ward").getAsString(),
                                             result.get("room").getAsJsonObject().get("price").getAsInt(),
                                             result.get("room").getAsJsonObject().get("area").getAsInt(),
-                                            result.get("room").getAsJsonObject().get("description").getAsString()
+                                            result.get("room").getAsJsonObject().get("description").getAsString(),
+                                            images
                                     ),
                                     DateConverter.getPassedTime(result.get("request_date").getAsString()),
                                     result.get("status").getAsString()
@@ -144,6 +153,8 @@ public class EditPostActivity extends AppCompatActivity {
                                     npiaAdapter.notifyDataSetChanged();
                                 }
                             });
+
+                            loadImageFilesOfPost();
                         }
                     }
                 });
@@ -175,17 +186,59 @@ public class EditPostActivity extends AppCompatActivity {
         startActivityForResult(new Intent(getApplicationContext(), ConfirmActivity.class), Constant.REQUEST_ID_FOR_DELETE_POST);
     }
 
+    private void loadImageFilesOfPost(){
+        ArrayList<String> images = postDetail.getRoom().getImages();
+        for (String image: images) {
+            Ion.with(getApplicationContext())
+               .load("GET", Constant.WEB_SERVER + image)
+               .write(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                       .getAbsolutePath() + "/SweetMotel/", image.split("/")[3]))
+               .setCallback(new FutureCallback<File>() {
+                   @Override
+                   public void onCompleted(Exception e, File result) {
+                        if (e != null){
+                            e.printStackTrace();
+                        }
+                        else {
+                            addImageToAdapter(result.getAbsolutePath());
+                            currentImage++;
+                        }
+                   }
+               });
+        }
+    }
+
+    private void deleteTempImages(){
+        try {
+            ArrayList<String> images = postDetail.getRoom().getImages();
+            for (int i = 0; i < images.size(); i++){
+                images.set(i, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        .getAbsolutePath() + "/SweetMotel/" + images.get(i).split("/")[3]);
+            }
+            for (String image: images) {
+                System.out.println(image);
+                new File(image).getAbsoluteFile().delete();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void addImageToAdapter(String imageSource){
+        npiaAdapter.addImage(imageSource, currentImage);
+        if (currentImage == Constant.MAX_POST_IMAGE - 1) {
+            npiaAdapter.getImages().remove(Constant.MAX_POST_IMAGE);
+        }
+        npiaAdapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Constant.REQUEST_ID_FOR_GO_TO_CHOOSE_IMAGE:
                 if (resultCode == Activity.RESULT_OK) {
-                    npiaAdapter.addImage(data.getStringExtra("Image File"), currentImage);
-                    if (currentImage == Constant.MAX_POST_IMAGE - 1) {
-                        npiaAdapter.getImages().remove(Constant.MAX_POST_IMAGE);
-                    }
-                    npiaAdapter.notifyDataSetChanged();
+                    addImageToAdapter(data.getStringExtra("Image File"));
                 }
                 break;
             case Constant.REQUEST_ID_FOR_UPDATE_POST:
@@ -233,6 +286,7 @@ public class EditPostActivity extends AppCompatActivity {
                                             case "Updated!":
                                                 Toast.makeText(getApplicationContext(), "Bạn đã cập nhật bài đăng thành công!",
                                                         Toast.LENGTH_SHORT).show();
+                                                deleteTempImages();
                                                 setResult(Activity.RESULT_OK);
                                                 finish();
                                             case "Post already confirmed!":

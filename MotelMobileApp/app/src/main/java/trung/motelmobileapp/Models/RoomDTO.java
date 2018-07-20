@@ -33,7 +33,7 @@ public class RoomDTO implements Serializable {
         this.images = images;
     }
 
-    public RoomDTO(String id, String address, String city, String district, String ward, int price, int area, String description) {
+    public RoomDTO(String id, String address, String city, String district, String ward, int price, int area, String description, ArrayList<String> images) {
         this.id = id;
         this.address = address;
         this.city = city;
@@ -42,6 +42,7 @@ public class RoomDTO implements Serializable {
         this.price = price;
         this.area = area;
         this.description = description;
+        this.images = images;
     }
 
     public String getFullAddress(){
