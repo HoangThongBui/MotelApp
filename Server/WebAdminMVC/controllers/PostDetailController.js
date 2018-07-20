@@ -34,7 +34,7 @@ exports.confirm_post = async (req,res) => {
             report_time
         });
         await newReport.save();
-        res.redirect('/admin/post_report');
+        res.redirect('/admin/post/' + req.params.post_id);
     } catch (error) {
         console.log(error);
     }
@@ -57,7 +57,7 @@ exports.reject_post = async (req,res) => {
             report_time
         });
         await newReport.save();
-        res.redirect('/admin/post_report');
+        res.redirect('/admin/post/' + req.params.post_id);
     } catch (error) {
         console.log(error);
     }

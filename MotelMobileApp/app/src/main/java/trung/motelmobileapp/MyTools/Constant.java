@@ -10,6 +10,7 @@ public class Constant {
     private static final String WEBSERVER_HOST = "192.168.150.102";
     private static final String WEBSERVER_PORT = "3000";
     public static final String WEB_SERVER = "http://" + WEBSERVER_HOST + ":" + WEBSERVER_PORT;
+//    public static final String WEB_SERVER = "https://prm391-presentation.herokuapp.com/";
 
     //Session
     public static final String MY_SESSION = "My Session";
