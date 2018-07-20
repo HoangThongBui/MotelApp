@@ -83,7 +83,6 @@ public class MainFragment extends Fragment
     private void checkLocationServiceAndFetchData() {
         if (locationPermission) {
             if (usingLocationService()) {
-                Toast.makeText(getContext(), "Đang tìm nhà trọ gần đây...", Toast.LENGTH_LONG).show();
                 refresher.setRefreshing(true);
             } else {
                 //location service turn off

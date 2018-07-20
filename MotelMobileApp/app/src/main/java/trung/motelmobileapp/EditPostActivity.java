@@ -1,9 +1,13 @@
 package trung.motelmobileapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,10 +52,12 @@ public class EditPostActivity extends AppCompatActivity {
     NewPostImageAreaAdapter npiaAdapter;
     int currentImage = 0;
     String title, address, city, district, ward, price, area, description;
+    boolean storagePermission = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkStoragePermission();
         setContentView(R.layout.activity_edit_post);
         edtTitle = findViewById(R.id.edit_post_title);
         edtAddress = findViewById(R.id.edit_post_address);
@@ -186,45 +192,67 @@ public class EditPostActivity extends AppCompatActivity {
         startActivityForResult(new Intent(getApplicationContext(), ConfirmActivity.class), Constant.REQUEST_ID_FOR_DELETE_POST);
     }
 
-    private void loadImageFilesOfPost(){
-        ArrayList<String> images = postDetail.getRoom().getImages();
-        for (String image: images) {
-            Ion.with(getApplicationContext())
-               .load("GET", Constant.WEB_SERVER + image)
-               .write(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                       .getAbsolutePath() + "/SweetMotel/", image.split("/")[3]))
-               .setCallback(new FutureCallback<File>() {
-                   @Override
-                   public void onCompleted(Exception e, File result) {
-                        if (e != null){
-                            e.printStackTrace();
-                        }
-                        else {
-                            addImageToAdapter(result.getAbsolutePath());
-                            currentImage++;
-                        }
-                   }
-               });
+
+    private void checkStoragePermission() {
+        int readPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
+            //open permission dialog
+            requestPermissions(new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, Constant.REQUEST_ID_FOR_STORAGE_PERMISSION);
+            return;
+        }
+        storagePermission = true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constant.REQUEST_ID_FOR_STORAGE_PERMISSION) {
+            if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                recreate();
+            } else {
+                Toast.makeText(getApplicationContext(), "Cần quyền truy cập để lấy hình!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 
-    private void deleteTempImages(){
-        try {
+    private void loadImageFilesOfPost() {
+        if (storagePermission) {
+            File temp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .getAbsolutePath() + "/SweetMotel");
+            if (!temp.exists()){
+                temp.mkdir();
+            }
             ArrayList<String> images = postDetail.getRoom().getImages();
-            for (int i = 0; i < images.size(); i++){
-                images.set(i, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        .getAbsolutePath() + "/SweetMotel/" + images.get(i).split("/")[3]);
+            for (String image : images) {
+                Ion.with(getApplicationContext())
+                        .load("GET", Constant.WEB_SERVER + image)
+                        .write(new File(temp, image.split("/")[3]))
+                        .setCallback(new FutureCallback<File>() {
+                            @Override
+                            public void onCompleted(Exception e, File result) {
+                                if (e != null) {
+                                    e.printStackTrace();
+                                } else {
+                                    addImageToAdapter(result.getAbsolutePath());
+                                    currentImage++;
+                                }
+                            }
+                        });
             }
-            for (String image: images) {
-                System.out.println(image);
-                new File(image).getAbsoluteFile().delete();
-            }
-        } catch (Exception e){
-            e.printStackTrace();
+        }else {
+            requestPermissions(new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, Constant.REQUEST_ID_FOR_STORAGE_PERMISSION);
         }
     }
 
-    private void addImageToAdapter(String imageSource){
+    private void addImageToAdapter(String imageSource) {
         npiaAdapter.addImage(imageSource, currentImage);
         if (currentImage == Constant.MAX_POST_IMAGE - 1) {
             npiaAdapter.getImages().remove(Constant.MAX_POST_IMAGE);
@@ -286,7 +314,6 @@ public class EditPostActivity extends AppCompatActivity {
                                             case "Updated!":
                                                 Toast.makeText(getApplicationContext(), "Bạn đã cập nhật bài đăng thành công!",
                                                         Toast.LENGTH_SHORT).show();
-                                                deleteTempImages();
                                                 setResult(Activity.RESULT_OK);
                                                 finish();
                                             case "Post already confirmed!":
@@ -302,6 +329,7 @@ public class EditPostActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+
                 }
                 break;
             case Constant.REQUEST_ID_FOR_DELETE_POST:
