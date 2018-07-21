@@ -66,6 +66,8 @@ const PostreportpageRoute = require("./WebAdminMVC/routes/PostreportpageRoute");
 PostreportpageRoute(app);
 const PostDetailRoute = require('./WebAdminMVC/routes/PostDetailRoute');
 PostDetailRoute(app);
+const AdminRoute = require('./WebAdminMVC/routes/AdminRoute');
+AdminRoute(app);
 
 
 // catch 404 and forward to error handler
