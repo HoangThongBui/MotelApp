@@ -6,10 +6,10 @@ const multerConfig = {
         destination: (req, file, next) => {
             // var imagePath = path.dirname(__dirname);
             var imagePath = '';
-            if (req.params.user_id) {
+            if (!req.body.title) {
                 imagePath += '/public/images/users/';
             }
-            if (req.body.title) {
+            else {
                 imagePath += '/public/images/posts/';
             }
             next(null, path.dirname(__dirname) + imagePath);

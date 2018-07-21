@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Home Page</title>
+    <title>All users Page</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="/templates/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/templates/vendors/css/vendor.bundle.base.css">
@@ -96,9 +96,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/user">All Users</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="">User Reports</a>
-                                </li>
                             </ul>
                         </div>
                     </li>
@@ -130,15 +127,15 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Các quản trị viên hiện tại</h4>
+                                <h4 class="card-title">Current administrators</h4>
                                 <div class="table-responsive">
                                     <table id="admin-table" class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                <th>Tên</th>
+                                                <th>Name</th>
                                                 <th>Email</th>
-                                                <th>Số điện thoại</th>
+                                                <th>Phone</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -162,7 +159,7 @@
                                     </table>
                                 </div>
 
-                                <a href="/admin/user/add_more_admin" class="btn btn-primary btn-rounded">Thêm quản trị viên</a>
+                                <a href="/admin/user/add_more_account/admin" class="btn btn-primary btn-rounded">Add more administrator</a>
 
                             </div>
                         </div>
@@ -172,16 +169,16 @@
                         <div class="card">
                             <div class="card-body">
                                 <%if (users.length !== 0) {%>
-                                    <h4 class="card-title">Những người dùng hiện tại</h4>
+                                    <h4 class="card-title">Current users</h4>
                                     <div class="table-responsive">
                                         <table id="user-table" class="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th></th>
-                                                    <th>Tên</th>
+                                                    <th>Name</th>
                                                     <th>Email</th>
-                                                    <th>Số điện thoại</th>
-                                                    <th>Trạng thái</th>
+                                                    <th>Phone</th>
+                                                    <th>Status</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -202,16 +199,16 @@
                                                         </td>
                                                         <td>
                                                             <%if (user.status) {%>
-                                                                <label class="badge badge-success">Đang hoạt động</label>
+                                                                <label class="badge badge-success">Active</label>
                                                                 <%} else {%>
-                                                                    <label class="badge badge-danger">Đang bị chặn</label>
+                                                                    <label class="badge badge-danger">Banned</label>
                                                                     <%}%>
                                                         </td>
                                                         <td>
                                                             <%if (user.status) {%>
-                                                                <a href="/admin/user/ban/<%=user._id%>" class="block-button btn btn-danger btn-rounded">Chặn</a>
+                                                                <a href="/admin/user/ban/<%=user._id%>" class="block-button btn btn-danger btn-rounded">Ban</a>
                                                                 <%} else {%>
-                                                                    <a href="/admin/user/unban/<%=user._id%>" class="allow-button btn btn-success btn-rounded">Bỏ chặn</a>
+                                                                    <a href="/admin/user/unban/<%=user._id%>" class="allow-button btn btn-success btn-rounded">Unban</a>
                                                                     <%}%>
                                                         </td>
                                                     </tr>
@@ -220,9 +217,9 @@
                                         </table>
                                     </div>
                                     <%} else {%>
-                                        <h4 class="card-title">Chưa có người dùng nào đăng ký</h4>
+                                        <h4 class="card-title">There's been no user yet.</h4>
                                         <%}%>
-                                            <a href="/admin/user/add_more_user" class="btn btn-primary btn-rounded">Thêm người dùng</a>
+                                            <a href="/admin/user/add_more_account/user" class="btn btn-primary btn-rounded">Add more user</a>
                             </div>
                         </div>
                     </div>
@@ -264,7 +261,8 @@
             $('#admin-table').DataTable();
             $('#user-table').DataTable();
 
-
+            //send form
+            
         });
     </script>
 </body>

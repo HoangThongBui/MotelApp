@@ -30,7 +30,7 @@ exports.confirm_post = async (req,res) => {
             user : req.body.admin_id,
             from : currentStatus,
             to : "c",
-            description: "Duyệt",
+            description: "This post is confirmed!",
             report_time
         });
         await newReport.save();
@@ -53,7 +53,7 @@ exports.reject_post = async (req,res) => {
             user : req.body.admin_id,
             from : currentStatus,
             to : "r",
-            description: "Từ chối",
+            description: "This post is rejected!",
             report_time
         });
         await newReport.save();
@@ -76,7 +76,7 @@ exports.delete_post = async (req,res) => {
             user : req.body.admin_id,
             from : currentStatus,
             to : "d",
-            description: "Xoá",
+            description: "This post is deleted!",
             report_time
         });
         await newReport.save();

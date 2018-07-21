@@ -93,9 +93,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/admin/user">All Users</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="">User Reports</a>
-                </li>
               </ul>
             </div>
           </li>
@@ -130,16 +127,16 @@
                         <div class="col-lg-12 grid-margin stretch-card">
                                 <div class="card">
                                   <div class="card-body">
-                                    <h4 class="card-title">Các bài đăng chưa được duyệt</h4> 
+                                    <h4 class="card-title">Posts waiting to be confirmed</h4> 
                                     <div class="table-responsive">
                                             <table id="unconfirm-post" class="table table-hover">
                                               <thead>
                                                 <tr>
-                                                  <th>Tên nhà trọ</th>
-                                                  <th>Chủ nhà</th>
-                                                  <th>Giá</th>
-                                                  <th>Tình trạng</th>
-                                                  <th>Được tạo lúc</th>
+                                                  <th>Title</th>
+                                                  <th>Room's owner</th>
+                                                  <th>Price</th>
+                                                  <th>Status</th>
+                                                  <th>Created at</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
@@ -155,7 +152,7 @@
                                                         <%=post.room.price%>
                                                     </td>
                                                     <td>
-                                                        <label class="badge badge-warning">Đang chờ xét duyệt</label>
+                                                        <label class="badge badge-warning">Waiting</label>
                                                     </td>
                                                     <td>
                                                         <%=post.request_date.toString().split('GMT')[0]%>
@@ -175,16 +172,16 @@
                         <div class="col-lg-6 grid-margin stretch-card">
                                 <div class="card">
                                   <div class="card-body">
-                                    <h4 class="card-title">Các bài đăng đã được duyệt</h4> 
+                                    <h4 class="card-title">All confirmed posts</h4> 
                                     <div class="table-responsive">
                                             <table id="confirm-post" class="table table-hover">
                                               <thead>
                                                 <tr>
-                                                  <th>Tên nhà trọ</th>
-                                                  <th>Chủ nhà</th>
-                                                  <th>Giá</th>
-                                                  <th>Tình trạng</th>
-                                                  <th>Được tạo lúc</th>
+                                                  <th>Title</th>
+                                                  <th>Room's owner</th>
+                                                  <th>Price</th>
+                                                  <th>Status</th>
+                                                  <th>Created at</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
@@ -200,7 +197,7 @@
                                                         <%=post.room.price%>
                                                     </td>
                                                     <td>
-                                                        <label class="badge badge-success">Đã được duyệt</label>
+                                                        <label class="badge badge-success">Confirmed</label>
                                                     </td>
                                                     <td>
                                                         <%=post.request_date.toString().split('GMT')[0]%>
@@ -221,16 +218,16 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                                 <div class="card">
                                   <div class="card-body">
-                                    <h4 class="card-title">Các bài đăng đã bị từ chối</h4> 
+                                    <h4 class="card-title">All rejected posts</h4> 
                                     <div class="table-responsive">
                                             <table id="reject-post" class="table table-hover">
                                               <thead>
                                                 <tr>
-                                                  <th>Tên nhà trọ</th>
-                                                  <th>Chủ nhà</th>
-                                                  <th>Giá</th>
-                                                  <th>Tình trạng</th>
-                                                  <th>Được tạo lúc</th>
+                                                  <th>Title</th>
+                                                  <th>Room's owner</th>
+                                                  <th>Price</th>
+                                                  <th>Status</th>
+                                                  <th>Created at</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
@@ -246,7 +243,7 @@
                                                         <%=post.room.price%>
                                                     </td>
                                                     <td>
-                                                        <label class="badge badge-danger">Bị từ chối</label>
+                                                        <label class="badge badge-danger">Rejected</label>
                                                     </td>
                                                     <td>
                                                         <%=post.request_date.toString().split('GMT')[0]%>
@@ -262,7 +259,7 @@
                     <%}%>
                 </div>
                 <%} else {%>
-                  <h4 class="card-title">Chưa có bài đăng nào</h4>
+                  <h4 class="card-title">There's been no post yet.</h4>
                 <%}%> 
         </div>
         <!-- content-wrapper ends -->

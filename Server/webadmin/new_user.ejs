@@ -5,7 +5,9 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Post Report Page</title>
+  <title>Add new
+    <%=type%>
+  </title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/templates/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/templates/vendors/css/vendor.bundle.base.css">
@@ -18,7 +20,6 @@
   <link rel="stylesheet" href="/templates/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/templates/images/favicon.png" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 </head>
 
 <body>
@@ -38,7 +39,7 @@
               <img class="img-xs rounded-circle" src="<%=admin.image%>" alt="Profile image">
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-            
+
               <a class="dropdown-item mt-2">
                 Edit Profile
               </a>
@@ -82,20 +83,20 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/admin/home">
-              <i class="menu-icon mdi mdi-television"></i>
-              <span class="menu-title">Dashboard</span>
+              <i style="color: black" class="menu-icon mdi mdi-television"></i>
+              <span style="color: black" class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#user-list" aria-expanded="false" aria-controls="user-list">
-              <i class="menu-icon mdi mdi-account-circle"></i>
-              <span class="menu-title">User</span>
+              <i  style="color: black" class="menu-icon mdi mdi-account-circle"></i>
+              <span style="color: black"class="menu-title">User</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="user-list">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/user">All Users</a>
+                  <a style="color: black"class="nav-link" href="/admin/user">All Users</a>
                 </li>
               </ul>
             </div>
@@ -103,17 +104,17 @@
 
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#post-list" aria-expanded="false" aria-controls="post-list">
-              <i class="menu-icon mdi mdi-content-copy"></i>
-              <span class="menu-title">Post</span>
+              <i style="color: black" class="menu-icon mdi mdi-content-copy"></i>
+              <span style="color: black" class="menu-title">Post</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="post-list">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/post">All Posts</a>
+                  <a style="color: black" class="nav-link" href="/admin/post">All Posts</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/post_report">Post Reports</a>
+                  <a style="color: black" class="nav-link" href="/admin/post_report">Post Reports</a>
                 </li>
               </ul>
             </div>
@@ -123,87 +124,73 @@
       </nav>
 
       <!-- partial -->
+      <%if (typeof(error) !== 'undefined') {%>
+        <script>alert('<%=error%>')</script>
+        <%}%>
+             
       <div class="main-panel">
         <div class="content-wrapper">
-
-          <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <%if (reports.length !== 0) {%>
-                <h4 class="card-title">Recent reports</h4>
-                <div class="table-responsive">
-                  <table id="report-table" class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>Account's name</th>
-                        <th>Email</th>
-                        <th>Post's title</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Description</th>
-                        <th>Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <%reports.forEach(function (report) {%>
-                        <tr>
-                          <td>
-                            <%=report.user.name%>
-                          </td>
-                          <td>
-                            <%=report.user.email%>
-                          </td>
-                          <td>
-                            <%=report.post.title%>
-                          </td>
-                          <td>
-                            <%if (report.from === 'c') {%>
-                              <label class="badge badge-success">Confirmed</label>
-                              <%}%>
-
-                                <%if (report.from === 'u') {%>
-                                  <label class="badge badge-warning">Waiting</label>
-                                  <%}%>
-
-                                    <%if (report.from === 'r') {%>
-                                      <label class="badge badge-danger">Rejected</label>
-                                      <%}%>
-                          </td>
-                          <td>
-                            <%if (report.to === 'c') {%>
-                              <label class="badge badge-success">Confirmed</label>
-                              <%}%>
-
-                                <%if (report.to === 'u') {%>
-                                  <label class="badge badge-warning">Waiting</label>
-                                  <%}%>
-
-                                    <%if (report.to === 'r') {%>
-                                      <label class="badge badge-danger">Rejected</label>
-                                      <%}%>
-                                        <%if (report.to === 'd') {%>
-                                          <label class="badge badge-secondary">Deleted</label>
-                                          <%}%>
-                          </td>
-                          <td>
-                            <%=report.description%>
-                          </td>
-                          <td>
-                            <%=report.report_time.toString().split('GMT')[0]%>
-                          </td>
-                        </tr>
-                        <%});%>
-                    </tbody>
-                  </table>
+          <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Create new
+                    <%=type%>
+                  </h4>
+                  <p class="card-description">
+                    Fill in all blanks
+                  </p>
+                  <form enctype="multipart/form-data" id="newAccountForm" class="forms-sample" action="/admin/user/add_new_account/<%=type%>" method="POST">
+                    <div class="form-group">
+                      <label for="exampleInputName1">Name</label>
+                      <%if (typeof(error) !== 'undefined') {%>
+                        <input value="<%=fields.name%>" type="text" name="name" required class="form-control" id="exampleInputName1" placeholder="Name">
+                      <%} else {%>
+                        <input type="text" name="name" required class="form-control" id="exampleInputName1" placeholder="Name">
+                      <%}%>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail3">Email</label>
+                      <%if (typeof(error) !== 'undefined') {%>
+                        <input type="email" value="<%=fields.email%>" name="email" required class="form-control" id="exampleInputEmail3" placeholder="Email">
+                        <%} else {%>
+                          <input type="email" name="email" required class="form-control" id="exampleInputEmail3" placeholder="Email">
+                        <%}%>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword4">Password</label>
+                      <input type="password" name="password" required class="form-control" id="exampleInputPassword4" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                      <label>Avatar</label>
+                      <div class="input-group col-xs-12">
+                        <input type="file" accept="image/*" name="avatar" required class="form-control file-upload-info" placeholder="Avatar">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputCity1">Phone</label>
+                      <%if (typeof(error) !== 'undefined') {%>
+                        <input value="<%=fields.phone%>" pattern="[0-9]{1,11}" title="Max 11 number only" type="text" name="phone" required class="form-control" id="exampleInputCity1"
+                        placeholder="Phone">
+                        <%} else {%>
+                          <input pattern="[0-9]{1,11}" title="Max 11 number only" type="text" name="phone" required class="form-control" id="exampleInputCity1"
+                        placeholder="Phone">
+                        <%}%>
+                      
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputCity2">Role</label>
+                      <input type="text" class="form-control" disabled id="exampleInputCity2" value="<%=type%>">
+                    </div>
+                    <button id="btnAddNewAccount" type="submit" class="btn btn-success mr-2">Submit</button>
+                    <a href="/admin/user" class="btn btn-light">Cancel</a>
+                  </form>
                 </div>
-
-                <%} else {%>
-                    <h4 class="card-title">There's been no interaction recently.</h4>   
-                <%}%>  
               </div>
             </div>
+            <div class="col-lg-3"></div>
           </div>
-
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:/templates/partials/_footer.html -->
@@ -232,16 +219,9 @@
   <!-- inject:js -->
   <script src="/templates/js/off-canvas.js"></script>
   <script src="/templates/js/misc.js"></script>
-
   <!-- endinject -->
   <!-- Custom js for this page-->
   <!-- End custom js for this page-->
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function () {
-      $('#report-table').DataTable();
-    });
-  </script>
 </body>
 
 </html>

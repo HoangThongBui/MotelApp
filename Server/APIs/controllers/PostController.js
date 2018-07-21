@@ -247,7 +247,7 @@ exports.delete_post_by_id = async function (req, res) {
             user : req.body.user_id,
             from : req.body.status,
             to: "d",
-            description: "Người dùng xoá bài đăng!",
+            description: "Post was deleted by user!",
             report_time
         });
         await newReport.save();

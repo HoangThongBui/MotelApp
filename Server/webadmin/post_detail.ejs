@@ -97,9 +97,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="/admin/user">All Users</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="">User Reports</a>
-                                </li>
                             </ul>
                         </div>
                     </li>
@@ -175,8 +172,8 @@
                                                 </div>
                                                 <div class="float-right">
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Tên bài
-                                                            <br/> đăng</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">
+                                                            <br/>Title</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -195,8 +192,8 @@
                                                 </div>
                                                 <div class="float-right">
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Chủ nhà
-                                                            <br/>trọ</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">Room's
+                                                            <br/>owner</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -218,13 +215,13 @@
                                                 <div class="float-right">
 
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Giá
-                                                            <br/>tiền</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">
+                                                            <br/>Price</h3>
                                                     </div>
                                                 </div>
                                             </div>
                                             <p class="mt-3 mb-0">
-                                                <%=post.room.price%> VNĐ/tháng
+                                                <%=post.room.price%> VND/month
                                             </p>
                                         </div>
                                     </div>
@@ -239,8 +236,8 @@
                                                 <div class="float-right">
 
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Diện
-                                                            <br/>tích</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">
+                                                            <br/>Area</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -262,8 +259,8 @@
                                                 <div class="float-right">
 
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Số
-                                                            <br/>điện thoại</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">Owner's
+                                                            <br/>phone</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -283,8 +280,8 @@
                                                 <div class="float-right">
 
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Địa
-                                                            <br/>chỉ</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">
+                                                            <br/>Address</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -308,21 +305,21 @@
                                                 </div>
                                                 <div class="float-right">
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Trạng
-                                                            <br/>thái</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">
+                                                            <br/>Status</h3>
                                                     </div>
                                                 </div>
                                             </div>
                                             <%if (post.status === 'c') {%>
-                                                <label class="badge badge-success">Đã duyệt</label>
+                                                <label class="badge badge-success">Confirmed</label>
                                                 <%}%>
 
                                                     <%if (post.status === 'u') {%>
-                                                        <label class="badge badge-warning">Đang chờ</label>
+                                                        <label class="badge badge-warning">Waiting</label>
                                                         <%}%>
 
                                                             <%if (post.status === 'r') {%>
-                                                                <label class="badge badge-danger">Bị từ chối</label>
+                                                                <label class="badge badge-danger">Rejected</label>
                                                                 <%}%>
                                         </div>
                                     </div>
@@ -336,8 +333,8 @@
                                                 </div>
                                                 <div class="float-right">
                                                     <div class="fluid-container">
-                                                        <h3 class="font-weight-medium text-right mb-0">Đăng
-                                                            <br/>vào</h3>
+                                                        <h3 class="font-weight-medium text-right mb-0">Created
+                                                            <br/>at</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -361,7 +358,7 @@
                                             <div class="float-right">
 
                                                 <div class="fluid-container">
-                                                    <h3 class="font-weight-medium text-right mb-0">Chi tiết</h3>
+                                                    <h3 class="font-weight-medium text-right mb-0">Description</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -382,7 +379,7 @@
                                     <div class="col-lg-4">
                                         <form action="/admin/post/delete/<%=post._id%>" method="POST">
                                             <input type="hidden" name="admin_id" value="<%=admin._id%>" />
-                                            <button type="submit" class="btn btn-danger btn-rounded">Xoá</button>
+                                            <button type="submit" class="btn btn-danger btn-rounded">Delete</button>
                                         </form>
                                     </div>
                                     <div class="col-lg-4"></div>
@@ -392,19 +389,19 @@
                                         <div class="col-lg-4">
                                             <form action="/admin/post/confirm/<%=post._id%>" method="POST">
                                                 <input type="hidden" name="admin_id" value="<%=admin._id%>" />
-                                                <button type="submit" class="btn btn-success btn-rounded">Duyệt</button>
+                                                <button type="submit" class="btn btn-success btn-rounded">Confirm</button>
                                             </form>
                                         </div>
                                         <div class="col-lg-4">
                                             <form action="/admin/post/reject/<%=post._id%>" method="POST">
                                                 <input type="hidden" name="admin_id" value="<%=admin._id%>" />
-                                                <button type="submit" class="btn btn-warning btn-rounded">Từ chối</button>
+                                                <button type="submit" class="btn btn-warning btn-rounded">Reject</button>
                                             </form>
                                         </div>
                                         <div class="col-lg-4">
                                             <form action="/admin/post/delete/<%=post._id%>" method="POST">
                                                 <input type="hidden" name="admin_id" value="<%=admin._id%>" />
-                                                <button type="submit" class="btn btn-danger btn-rounded">Xoá</button>
+                                                <button type="submit" class="btn btn-danger btn-rounded">Delete</button>
                                             </form>
                                         </div>
                                     </div>
