@@ -99,7 +99,6 @@ public class MainFragment extends Fragment
     private boolean usingLocationService() {
         locationProvider = getBestEnabledLocationProvider();
         if (locationProvider.equals("passive")) {
-            Toast.makeText(getContext(), "Mở dịch vụ định vị để tìm nhà trọ gần đây.", Toast.LENGTH_SHORT).show();
             return false;
         }
         try {

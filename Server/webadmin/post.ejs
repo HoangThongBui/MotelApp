@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -25,26 +26,27 @@
     <!-- partial:/templates/partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        
+
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center">
         <ul class="navbar-nav navbar-nav-right">
-          
+
           <li class="nav-item dropdown d-none d-xl-inline-block">
             <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-              <span class="profile-text">Hello, <%=admin.name%> !</span>
+              <span class="profile-text">Hello,
+                <%=admin.name%> !</span>
               <img class="img-xs rounded-circle" src="<%=admin.image%>" alt="Profile image">
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-              
-                <a href="/admin/edit_profile" class="dropdown-item mt-2">
-                  Edit Profile
+
+              <a href="/admin/edit_profile" class="dropdown-item mt-2">
+                Edit Profile
               </a>
               <a href="/admin/change_password" class="dropdown-item">
-                  Change Password
+                Change Password
               </a>
               <a href="/admin/logout" class="dropdown-item">
-                  Sign Out
+                Sign Out
               </a>
             </div>
           </li>
@@ -57,7 +59,7 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <!-- partial:/templates/partials/_sidebar.html -->
-      
+
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item nav-profile">
@@ -67,7 +69,9 @@
                   <img src="<%=admin.image%>" alt="profile image">
                 </div>
                 <div class="text-wrapper">
-                  <p class="profile-name"><%=admin.name%></p>
+                  <p class="profile-name">
+                    <%=admin.name%>
+                  </p>
                   <div>
                     <small class="designation text-muted">Administrator</small>
                     <span class="status-indicator online"></span>
@@ -117,150 +121,150 @@
 
         </ul>
       </nav>
-      
+
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
 
-                <%if (length !== 0)  {
+          <%if (length !== 0)  {
                     if (unconfirm.length !== 0) {%>
-                        <div class="col-lg-12 grid-margin stretch-card">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h4 class="card-title">Posts waiting to be confirmed</h4> 
-                                    <div class="table-responsive">
-                                            <table id="unconfirm-post" class="table table-hover">
-                                              <thead>
-                                                <tr>
-                                                  <th>Title</th>
-                                                  <th>Room's owner</th>
-                                                  <th>Price</th>
-                                                  <th>Status</th>
-                                                  <th>Created at</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <%unconfirm.forEach(function (post) {%>
-                                                    <tr onclick="location.href = '/admin/post/<%=post._id%>'">
-                                                        <td>
-                                                        <%=post.title%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.user.name%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.room.price%>
-                                                    </td>
-                                                    <td>
-                                                        <label class="badge badge-warning">Waiting</label>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.request_date.toString().split('GMT')[0]%>
-                                                    </td>
-                                                    </tr>
-                                                <%});%>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                  </div>
-                                </div>
-                              </div>
-                    <%}%>
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Posts waiting to be confirmed</h4>
+                  <div class="table-responsive">
+                    <table id="unconfirm-post" class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Room's owner</th>
+                          <th>Price</th>
+                          <th>Status</th>
+                          <th>Created at</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <%unconfirm.forEach(function (post) {%>
+                          <tr onclick="location.href = '/admin/post/<%=post._id%>'">
+                            <td>
+                              <%=post.title%>
+                            </td>
+                            <td>
+                              <%=post.user.name%>
+                            </td>
+                            <td>
+                              <%=post.room.price%>
+                            </td>
+                            <td>
+                              <label class="badge badge-warning">Waiting</label>
+                            </td>
+                            <td>
+                              <%=post.request_date.toString().split('GMT')[0]%>
+                            </td>
+                          </tr>
+                          <%});%>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%}%>
 
-                    <div class="row">
-                    <%if (confirm.length !== 0) {%>
-                        <div class="col-lg-6 grid-margin stretch-card">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h4 class="card-title">All confirmed posts</h4> 
-                                    <div class="table-responsive">
-                                            <table id="confirm-post" class="table table-hover">
-                                              <thead>
-                                                <tr>
-                                                  <th>Title</th>
-                                                  <th>Room's owner</th>
-                                                  <th>Price</th>
-                                                  <th>Status</th>
-                                                  <th>Created at</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <%confirm.forEach(function (post) {%>
-                                                    <tr onclick="location.href = '/admin/post/<%=post._id%>'"> 
-                                                        <td>
-                                                        <%=post.title%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.user.name%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.room.price%>
-                                                    </td>
-                                                    <td>
-                                                        <label class="badge badge-success">Confirmed</label>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.request_date.toString().split('GMT')[0]%>
-                                                    </td>
-                                                    </tr>
-                                                <%});%>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                  </div>
-                                </div>
-                              </div>
-                   
-                    <%}%>
+              <div class="row">
+                <%if (confirm.length !== 0) {%>
+                  <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">All confirmed posts</h4>
+                        <div class="table-responsive">
+                          <table id="confirm-post" class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th>Title</th>
+                                <th>Room's owner</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Created at</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <%confirm.forEach(function (post) {%>
+                                <tr onclick="location.href = '/admin/post/<%=post._id%>'">
+                                  <td>
+                                    <%=post.title%>
+                                  </td>
+                                  <td>
+                                    <%=post.user.name%>
+                                  </td>
+                                  <td>
+                                    <%=post.room.price%>
+                                  </td>
+                                  <td>
+                                    <label class="badge badge-success">Confirmed</label>
+                                  </td>
+                                  <td>
+                                    <%=post.request_date.toString().split('GMT')[0]%>
+                                  </td>
+                                </tr>
+                                <%});%>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <%}%>
 
                     <%if (reject.length !== 0) {%>
 
-                    <div class="col-lg-6 grid-margin stretch-card">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <h4 class="card-title">All rejected posts</h4> 
-                                    <div class="table-responsive">
-                                            <table id="reject-post" class="table table-hover">
-                                              <thead>
-                                                <tr>
-                                                  <th>Title</th>
-                                                  <th>Room's owner</th>
-                                                  <th>Price</th>
-                                                  <th>Status</th>
-                                                  <th>Created at</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <%reject.forEach(function (post) {%>
-                                                    <tr onclick="location.href = '/admin/post/<%=post._id%>'">
-                                                        <td>
-                                                        <%=post.title%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.user.name%>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.room.price%>
-                                                    </td>
-                                                    <td>
-                                                        <label class="badge badge-danger">Rejected</label>
-                                                    </td>
-                                                    <td>
-                                                        <%=post.request_date.toString().split('GMT')[0]%>
-                                                    </td>
-                                                    </tr>
-                                                <%});%>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                  </div>
-                                </div>
-                              </div>
-                    <%}%>
-                </div>
-                <%} else {%>
-                  <h4 class="card-title">There's been no post yet.</h4>
-                <%}%> 
+                      <div class="col-lg-6 grid-margin stretch-card">
+                        <div class="card">
+                          <div class="card-body">
+                            <h4 class="card-title">All rejected posts</h4>
+                            <div class="table-responsive">
+                              <table id="reject-post" class="table table-hover">
+                                <thead>
+                                  <tr>
+                                    <th>Title</th>
+                                    <th>Room's owner</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Created at</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <%reject.forEach(function (post) {%>
+                                    <tr onclick="location.href = '/admin/post/<%=post._id%>'">
+                                      <td>
+                                        <%=post.title%>
+                                      </td>
+                                      <td>
+                                        <%=post.user.name%>
+                                      </td>
+                                      <td>
+                                        <%=post.room.price%>
+                                      </td>
+                                      <td>
+                                        <label class="badge badge-danger">Rejected</label>
+                                      </td>
+                                      <td>
+                                        <%=post.request_date.toString().split('GMT')[0]%>
+                                      </td>
+                                    </tr>
+                                    <%});%>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <%}%>
+              </div>
+              <%} else {%>
+                <h4 class="card-title">There's been no post yet.</h4>
+                <%}%>
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:/templates/partials/_footer.html -->
@@ -295,10 +299,17 @@
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function () {
-      $('#unconfirm-post').DataTable();
-      $('#confirm-post').DataTable();
-      $('#reject-post').DataTable();
+      $('#unconfirm-post').DataTable({
+        "ordering": false
+      });
+      $('#confirm-post').DataTable({
+        "ordering": false
+      });
+      $('#reject-post').DataTable({
+        "ordering": false
+      });
     });
   </script>
 </body>
+
 </html>

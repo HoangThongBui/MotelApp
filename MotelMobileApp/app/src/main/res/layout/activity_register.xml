@@ -44,11 +44,19 @@
             android:paddingBottom="20dp"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/register_email"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/motelApp"
                 android:layout_gravity="center"
                 android:hint="Email"
@@ -57,11 +65,20 @@
                 android:inputType="textEmailAddress"
                 />
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Tên đầy đủ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
             <EditText
                 android:id="@+id/register_name"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/motelApp"
                 android:layout_gravity="center"
                 android:hint="Tên đầy đủ"
@@ -70,11 +87,19 @@
                 android:inputType="text"
                 />
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Số điện thoại"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/register_phone"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/motelApp"
                 android:layout_gravity="center"
                 android:hint="Số điện thoại"
@@ -83,11 +108,19 @@
                 android:inputType="phone"
                 />
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Mật khẩu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/register_password"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:backgroundTint="@color/motelApp"
                 android:layout_gravity="center"
                 android:hint="Mật khẩu"
@@ -95,6 +128,15 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Xác nhận mật khẩu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/register_confirm"

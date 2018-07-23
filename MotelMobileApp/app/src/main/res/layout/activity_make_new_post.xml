@@ -43,59 +43,100 @@
             android:orientation="vertical"
             >
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Tên bài đăng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:hint="Tên bài đăng"
                 android:id="@+id/new_post_title"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
                 />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Tên đường và số nhà"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:hint="Tên đường và số nhà"
                 android:id="@+id/new_post_address"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
                 />
+
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Phường"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/new_post_ward"
                 android:hint="Phường"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
                 />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Quận"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/new_post_district"
                 android:hint="Quận"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
                 />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Thành phố"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/new_post_city"
                 android:hint="Thành phố"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
@@ -103,11 +144,20 @@
                 android:inputType="text"
                 />
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Giá tiền"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
             <EditText
                 android:id="@+id/new_post_price"
                 android:hint="Giá tiền (VNĐ/tháng)"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
@@ -115,17 +165,34 @@
                 android:inputType="number"
                 />
 
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Diện tích"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/new_post_area"
                 android:hint="Diện tích (mét vuông)"
                 android:backgroundTint="@color/motelApp"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
                 />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Miêu tả"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/new_post_description"

@@ -50,94 +50,99 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_ID_FOR_REGISTER){
-            if (resultCode == Activity.RESULT_OK){
+        if (requestCode == Constant.REQUEST_ID_FOR_REGISTER) {
+            if (resultCode == Activity.RESULT_OK) {
+
                 String txtEmail = edtEmail.getText().toString();
                 String txtName = edtName.getText().toString();
                 String txtPhone = edtPhone.getText().toString();
                 String txtPassword = edtPassword.getText().toString();
-                String txtConfirm = edtConfirm.getText().toString();
-                Boolean isRuleChecked = chkRule.isChecked();
-                if (isValidated(txtEmail, txtName, txtPhone, txtPassword, txtConfirm, isRuleChecked)){
-                    btnRegister.setVisibility(View.GONE);
-                    registerGif.setVisibility(View.VISIBLE);
-                    Ion.with(getApplicationContext())
-                            .load("POST", Constant.WEB_SERVER + "/user/api/register/")
-                            .setBodyParameter("email", txtEmail)
-                            .setBodyParameter("name", txtName)
-                            .setBodyParameter("phone", txtPhone)
-                            .setBodyParameter("password", txtPassword)
-                            .asString()
-                            .setCallback(new FutureCallback<String>() {
-                                @Override
-                                public void onCompleted(Exception e, String result) {
-                                    btnRegister.setVisibility(View.VISIBLE);
-                                    registerGif.setVisibility(View.GONE);
-                                    if (e != null){
-                                        Toast.makeText(getApplicationContext(), "Lỗi kết nối!", Toast.LENGTH_LONG).show();
-                                    }
-                                    else {
-                                        switch (result){
-                                            case "User existed!":
-                                                Toast.makeText(getApplicationContext(), "Email này đã tồn tại! Vui lòng chọn email khác.", Toast.LENGTH_LONG).show();
-                                                break;
-                                            case "Register successfully!":
-                                                Toast.makeText(getApplicationContext(), "Tài khoản được đăng ký thành công!", Toast.LENGTH_LONG).show();
-                                                finish();
-                                                break;
-                                            default:
-                                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                                                break;
-                                        }
+                btnRegister.setVisibility(View.GONE);
+                registerGif.setVisibility(View.VISIBLE);
+                Ion.with(getApplicationContext())
+                        .load("POST", Constant.WEB_SERVER + "/user/api/register/")
+                        .setBodyParameter("email", txtEmail)
+                        .setBodyParameter("name", txtName)
+                        .setBodyParameter("phone", txtPhone)
+                        .setBodyParameter("password", txtPassword)
+                        .asString()
+                        .setCallback(new FutureCallback<String>() {
+                            @Override
+                            public void onCompleted(Exception e, String result) {
+                                btnRegister.setVisibility(View.VISIBLE);
+                                registerGif.setVisibility(View.GONE);
+                                if (e != null) {
+                                    Toast.makeText(getApplicationContext(), "Lỗi kết nối!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    switch (result) {
+                                        case "User existed!":
+                                            Toast.makeText(getApplicationContext(), "Email này đã tồn tại! Vui lòng chọn email khác.", Toast.LENGTH_LONG).show();
+                                            break;
+                                        case "Register successfully!":
+                                            Toast.makeText(getApplicationContext(), "Tài khoản được đăng ký thành công!", Toast.LENGTH_LONG).show();
+                                            finish();
+                                            break;
+                                        default:
+                                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                                            break;
                                     }
                                 }
-                            });
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), validateMessage, Toast.LENGTH_LONG).show();
-                    validateMessage = "";
-                }
+                            }
+                        });
             }
+
         }
     }
 
+
     public void clickToRegister(View view) {
-        startActivityForResult(
-                new Intent(getApplicationContext(), ConfirmActivity.class),
-                Constant.REQUEST_ID_FOR_REGISTER);
+        String txtEmail = edtEmail.getText().toString();
+        String txtName = edtName.getText().toString();
+        String txtPhone = edtPhone.getText().toString();
+        String txtPassword = edtPassword.getText().toString();
+        String txtConfirm = edtConfirm.getText().toString();
+        Boolean isRuleChecked = chkRule.isChecked();
+        if (isValidated(txtEmail, txtName, txtPhone, txtPassword, txtConfirm, isRuleChecked)) {
+            startActivityForResult(
+                    new Intent(getApplicationContext(), ConfirmActivity.class),
+                    Constant.REQUEST_ID_FOR_REGISTER);
+        } else {
+            Toast.makeText(getApplicationContext(), validateMessage, Toast.LENGTH_LONG).show();
+            validateMessage = "";
+        }
     }
 
-    private boolean isValidated(String email, String name, String phone, String password, String confirm, boolean check){
-        return checkEmail(email) && checkName(name) && checkPhone(phone) && checkPassword(password,confirm) && checkRule(check);
+    private boolean isValidated(String email, String name, String phone, String password, String confirm, boolean check) {
+        return checkEmail(email) && checkName(name) && checkPhone(phone) && checkPassword(password, confirm) && checkRule(check);
     }
 
     private boolean checkEmail(String email) {
-        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return true;
         }
         validateMessage += "Email không hợp lệ!";
         return false;
     }
 
-    private boolean checkName(String name){
-        if (!name.trim().isEmpty()){
+    private boolean checkName(String name) {
+        if (!name.trim().isEmpty()) {
             return true;
         }
         validateMessage += "Tên không được để trống!";
         return false;
     }
 
-    private boolean checkPhone(String phone){
-        if (!phone.isEmpty()){
+    private boolean checkPhone(String phone) {
+        if (!phone.isEmpty()) {
             return true;
         }
         validateMessage += "Số điện thoại không được để trống!";
         return false;
     }
 
-    private boolean checkPassword(String password, String confirm){
-        if (!password.isEmpty() && !confirm.isEmpty()){
-            if (confirm.equals(password)){
+    private boolean checkPassword(String password, String confirm) {
+        if (!password.isEmpty() && !confirm.isEmpty()) {
+            if (confirm.equals(password)) {
                 return true;
             }
         }
@@ -145,8 +150,8 @@ public class RegisterActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean checkRule(boolean isChecked){
-        if (isChecked){
+    private boolean checkRule(boolean isChecked) {
+        if (isChecked) {
             return true;
         }
         validateMessage += "Bạn phải đồng ý điều khoản của chúng tôi!";
