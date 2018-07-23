@@ -371,8 +371,44 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-12">
+                                <h4 class="card-title">Comments</h4>
+                        </div>
+                    </div>
+                    <div class="row">                        
+                        <div class="col-lg-12">
+                            <!-- Comment -->
+                            <%if (typeof(comments) !== 'undefined') {%>
+                                <%if (comments.length !== 0) {%>
+                                    <%comments.forEach(function(comment) {%>
+                                        <div class="row">
+                                            <div class="col-lg-1">
+                                                <img class="img-lg rounded-circle" src="<%=comment.user.image%>"/>
+                                            </div>
+                                            <div class="col-lg-11">
+                                                <div class="row">
+                                                    <div class="col-lg-11"><h4 class="card-title"><%=comment.user.name%></h4></div>
+                                                    <div class="col-lg-1"><a class="mdi mdi-delete text-danger"
+                                                         href="/admin/post/comment/delete_comment/<%=comment._id%>/<%=post._id%>">
+
+                                                    </a></div>
+                                                </div>
+                                                
+                                                <p><%=comment.comment_time.toString().split('GMT')[0]%></p>
+                                                <h6 class="card-title"><%=comment.detail%></h6>
+                                            </div>
+                                        </div>
+                                    <%});%>
+                                <%} else {%>
+                                    <h4 class="card-title">There's been no comment yet.</h4>
+                                <%}%>
+                            <%}%>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4"></div>
                         <div class="col-lg-4">
+                            
                             <%if (post.status === 'c' || post.status === 'r') {%>
                                 <div class="row">
                                     <div class="col-lg-4"></div>

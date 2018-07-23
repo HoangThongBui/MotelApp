@@ -14,4 +14,7 @@ module.exports = function(app){
         
     app.route('/admin/post/delete/:post_id')
         .post(PostDetailController.delete_post);
+
+    app.route('/admin/post/comment/delete_comment/:comment_id/:post_id')
+        .get(PostDetailController.delete_comment);
 }
