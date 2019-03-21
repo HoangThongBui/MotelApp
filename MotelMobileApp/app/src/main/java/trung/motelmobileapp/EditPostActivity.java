@@ -231,7 +231,7 @@ public class EditPostActivity extends AppCompatActivity {
             for (String image : images) {
                 Ion.with(getApplicationContext())
                         .load("GET", Constant.WEB_SERVER + image)
-                        .write(new File(temp, image.split("/")[3]))
+                        .write(new File(temp, image.split("/")[2]))
                         .setCallback(new FutureCallback<File>() {
                             @Override
                             public void onCompleted(Exception e, File result) {
