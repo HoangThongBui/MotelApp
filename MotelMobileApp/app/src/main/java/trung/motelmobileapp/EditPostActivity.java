@@ -231,7 +231,7 @@ public class EditPostActivity extends AppCompatActivity {
             for (String image : images) {
                 Ion.with(getApplicationContext())
                         .load("GET", Constant.WEB_SERVER + image)
-                        .write(new File(temp, image.split("/")[3]))
+                        .write(new File(temp, image.split("/")[2]))
                         .setCallback(new FutureCallback<File>() {
                             @Override
                             public void onCompleted(Exception e, File result) {
@@ -293,12 +293,12 @@ public class EditPostActivity extends AppCompatActivity {
                             editImages.add(imageLink);
                         }
                     }
+                    ArrayList<File> images = new ArrayList<>();
                     if (!editImages.isEmpty()) {
-                        ArrayList<Part> images = new ArrayList<>();
                         for (String imageLink : editImages) {
-                            images.add(new FilePart("room_images", new File(imageLink)));
+                            images.add(new File(imageLink));
                         }
-                        multipartBuilder.addMultipartParts(images);
+                        multipartBuilder.setMultipartFile("room_image", images.get(0));
                     }
                     multipartBuilder.asString()
                             .setCallback(new FutureCallback<String>() {

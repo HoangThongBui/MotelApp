@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         //default main tab
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
 
         if (getIntent().getStringExtra("Login Request") != null){
             viewPager.setCurrentItem(0);

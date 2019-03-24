@@ -7,10 +7,11 @@ public class Constant {
     //    private static final String WEBSERVER_HOST = "10.0.2.2";
     /*private static final String WEBSERVER_HOST = "192.168.43.160";*/
 //        private static final String WEBSERVER_HOST= "192.168.0.104";
-    private static final String WEBSERVER_HOST = "192.168.150.126";
-    private static final String WEBSERVER_PORT = "3000";
-    public static final String WEB_SERVER = "http://" + WEBSERVER_HOST + ":" + WEBSERVER_PORT;
-//    public static final String WEB_SERVER = "https://prm391-presentation.herokuapp.com/";
+//    private static final String WEBSERVER_HOST = "192.168.150.126:3000";
+//    private static final String WEBSERVER_PORT = "3000";
+//    public static final String WEB_SERVER = "http://" + WEBSERVER_HOST + ":" + WEBSERVER_PORT;
+    public static final String WEB_SERVER = "https://prc391-sweetmotel.herokuapp.com";
+//    public static final String WEB_SERVER = "http://192.168.0.106:3000";
 
     //Session
     public static final String MY_SESSION = "My Session";
@@ -33,5 +34,5 @@ public class Constant {
     public static final int REQUEST_ID_FOR_DELETE_COMMENT = 15;
 
     //Num of max image
-    public static final int MAX_POST_IMAGE = 3;
+    public static final int MAX_POST_IMAGE = 1;
 }

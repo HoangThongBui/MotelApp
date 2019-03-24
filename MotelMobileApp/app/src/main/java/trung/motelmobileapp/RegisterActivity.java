@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 btnRegister.setVisibility(View.VISIBLE);
                                 registerGif.setVisibility(View.GONE);
                                 if (e != null) {
-                                    Toast.makeText(getApplicationContext(), "Lỗi kết nối!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                 } else {
                                     switch (result) {
                                         case "User existed!":

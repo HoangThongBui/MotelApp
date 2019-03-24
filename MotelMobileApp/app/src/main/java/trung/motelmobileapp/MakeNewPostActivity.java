@@ -121,11 +121,6 @@ public class MakeNewPostActivity extends AppCompatActivity {
                         }
                     }
 
-                    List<Part> images = new ArrayList<>();
-                    for (String imageLink : uploadImages) {
-                        images.add(new FilePart("room_images" , new File(imageLink)));
-                    }
-
                     //make a new post
                     Ion.with(getApplicationContext())
                             .load("POST", Constant.WEB_SERVER + "/post/api/make_new_post/")
@@ -138,7 +133,7 @@ public class MakeNewPostActivity extends AppCompatActivity {
                             .setMultipartParameter("price", price)
                             .setMultipartParameter("area", area)
                             .setMultipartParameter("description", description)
-                            .addMultipartParts(images)
+                            .addMultipartParts(new FilePart("room_image", new File(uploadImages.get(0))))
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override
